@@ -9,6 +9,7 @@ DIST=packages/tokens/dist
 TMP=$(mktemp -d); KEEP_JSON=$TMP/tokens.json; KEEP_CSS=$TMP/tokens.css
 cp "$SRC" "$KEEP_JSON"; cp "$DIST/tokens.css" "$KEEP_CSS"
 pass=0; fail=0
+git status --porcelain > "$TMP/before" 2>/dev/null || : > "$TMP/before"
 restore() { cp "$KEEP_JSON" "$SRC"; cp "$KEEP_CSS" "$DIST/tokens.css"; }
 trap 'restore; rm -rf "$TMP"' EXIT
 
@@ -49,15 +50,30 @@ p.write_text(json.dumps(d,indent=2)+'\n')"
 run "unknown type family rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
-echo 'export const Bad = () => <div style={{ color: "#c93d06" }} />;' > fixtures/app/_bad.tsx
-run "raw hex in TSX rejected" 1 node tools/check-rawcolour.mjs fixtures
-rm -f fixtures/app/_bad.tsx
-
-echo 'export const Bad2 = () => <div className="text-[#ff6a2b]" />;' > fixtures/app/_bad2.tsx
-run "Tailwind arbitrary colour rejected" 1 node tools/check-rawcolour.mjs fixtures
-rm -f fixtures/app/_bad2.tsx
+# Deliberate failures are written OUTSIDE the repo. They used to go into
+# fixtures/ and be removed with `rm -f`, which reports success even when the
+# delete fails -- and it does fail in a sandboxed folder. The debris then
+# tripped the final clean check, so the suite failed for its own leftovers.
+BAD="$TMP/badfixtures"; mkdir -p "$BAD"
+echo 'export const Bad = () => <div style={{ color: "#c93d06" }} />;' > "$BAD/_bad.tsx"
+run "raw hex in TSX rejected" 1 node tools/check-rawcolour.mjs "$BAD"
+echo 'export const Bad2 = () => <div className="text-[#ff6a2b]" />;' > "$BAD/_bad2.tsx"
+run "Tailwind arbitrary colour rejected" 1 node tools/check-rawcolour.mjs "$BAD"
 
 run "clean fixtures pass" 0 node tools/check-rawcolour.mjs fixtures
+
+# The suite must leave the repo exactly as it found it. Compared against the
+# state at START, not against the last commit: uncommitted work in progress is
+# normal and is not this suite's debris.
+git status --porcelain > "$TMP/after" 2>/dev/null || : > "$TMP/after"
+if diff -q "$TMP/before" "$TMP/after" >/dev/null 2>&1; then
+  echo "  PASS  the suite left the tree as it found it"
+  pass=$((pass+1))
+else
+  echo "  FAIL  the suite changed the working tree"
+  diff "$TMP/before" "$TMP/after" | sed 's/^/        /'
+  fail=$((fail+1))
+fi
 
 echo
 echo "  $pass passed, $fail failed"
