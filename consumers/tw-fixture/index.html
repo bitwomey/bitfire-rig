@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BITFire Tailwind 4 fixture</title>
+  <link rel="stylesheet" href="/src/main.css">
+</head>
+<body class="bg-canvas text-ink font-sans min-h-screen p-8">
+
+  <div class="mb-8">
+    <h1 class="text-2xl font-light text-ink mb-1">BITFire · Tailwind 4 mapping fixture</h1>
+    <p class="text-sm text-ink-muted">
+      Dark theme default · toggle light theme by adding <code class="font-mono text-ink-subtle">data-theme="light"</code> to &lt;html&gt;
+    </p>
+    <button
+      class="mt-3 px-3 py-1 rounded-sm bg-surface border border-border text-sm text-ink cursor-pointer"
+      onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'light' ? '' : 'light'"
+    >Toggle theme</button>
+  </div>
+
+  <!-- Surface stack -->
+  <section class="mb-8">
+    <h2 class="text-xs font-mono text-ink-subtle uppercase tracking-widest mb-3">Surface stack</h2>
+    <div class="flex gap-3 flex-wrap">
+      <div class="w-24 h-16 rounded-md bg-canvas border border-border-hairline flex items-end p-1"><span class="text-xs text-ink-muted">canvas</span></div>
+      <div class="w-24 h-16 rounded-md bg-surface border border-border-hairline flex items-end p-1"><span class="text-xs text-ink-muted">surface</span></div>
+      <div class="w-24 h-16 rounded-md bg-surface-raised border border-border-hairline flex items-end p-1"><span class="text-xs text-ink-muted">raised</span></div>
+      <div class="w-24 h-16 rounded-md bg-surface-inset border border-border-hairline flex items-end p-1"><span class="text-xs text-ink-muted">inset</span></div>
+      <div class="w-24 h-16 rounded-md bg-surface-hover border border-border-hairline flex items-end p-1"><span class="text-xs text-ink-muted">hover</span></div>
+    </div>
+  </section>
+
+  <!-- Brand + signal -->
+  <section class="mb-8">
+    <h2 class="text-xs font-mono text-ink-subtle uppercase tracking-widest mb-3">Brand &amp; signal</h2>
+    <div class="flex gap-3 flex-wrap">
+      <div class="w-24 h-16 rounded-md bg-brand-ember flex items-end p-1"><span class="text-xs text-ink-on-warm">ember</span></div>
+      <div class="w-24 h-16 rounded-md bg-signal flex items-end p-1"><span class="text-xs text-on-signal">signal</span></div>
+      <div class="w-24 h-16 rounded-md bg-signal-wash flex items-end p-1"><span class="text-xs text-signal">signal wash</span></div>
+    </div>
+  </section>
+
+  <!-- Status -->
+  <section class="mb-8">
+    <h2 class="text-xs font-mono text-ink-subtle uppercase tracking-widest mb-3">Status</h2>
+    <div class="flex gap-3 flex-wrap">
+      <div class="px-3 py-1 rounded-sm bg-status-ok-wash text-status-ok text-sm">ok</div>
+      <div class="px-3 py-1 rounded-sm bg-status-warn-wash text-status-warn text-sm">warn</div>
+      <div class="px-3 py-1 rounded-sm bg-status-danger-wash text-status-danger text-sm">danger</div>
+    </div>
+  </section>
+
+  <!-- Viz palette -->
+  <section class="mb-8">
+    <h2 class="text-xs font-mono text-ink-subtle uppercase tracking-widest mb-3">Viz palette</h2>
+    <div class="flex gap-2">
+      <div class="w-10 h-10 rounded-sm bg-viz-1"></div>
+      <div class="w-10 h-10 rounded-sm bg-viz-2"></div>
+      <div class="w-10 h-10 rounded-sm bg-viz-3"></div>
+      <div class="w-10 h-10 rounded-sm bg-viz-4"></div>
+      <div class="w-10 h-10 rounded-sm bg-viz-5"></div>
+      <div class="w-10 h-10 rounded-sm bg-viz-6"></div>
+    </div>
+  </section>
+
+  <!-- FDR (unverified values — visual check only) -->
+  <section class="mb-8">
+    <h2 class="text-xs font-mono text-ink-subtle uppercase tracking-widest mb-3">Fire danger (unverified values)</h2>
+    <div class="flex gap-2 flex-wrap">
+      <div class="px-3 py-1 rounded-sm bg-fdr-no-rating text-ink-on-warm text-sm">no rating</div>
+      <div class="px-3 py-1 rounded-sm bg-fdr-moderate text-ink-on-deep text-sm">moderate</div>
+      <div class="px-3 py-1 rounded-sm bg-fdr-high text-ink-on-warm text-sm">high</div>
+      <div class="px-3 py-1 rounded-sm bg-fdr-extreme text-ink-on-deep text-sm">extreme</div>
+      <div class="px-3 py-1 rounded-sm bg-fdr-catastrophic text-ink-on-deep text-sm">catastrophic</div>
+    </div>
+  </section>
+
+  <!-- Typography type scale (using CSS classes from tokens.css, not Tailwind) -->
+  <section class="mb-8">
+    <h2 class="text-xs font-mono text-ink-subtle uppercase tracking-widest mb-3">Type scale (CSS classes)</h2>
+    <div class="space-y-2 bg-surface rounded-md p-4">
+      <p class="display-xl text-ink">display-xl</p>
+      <p class="display-lg text-ink">display-lg</p>
+      <p class="display-md text-ink">display-md</p>
+      <p class="body-lg text-ink">body-lg — The quick brown fox jumps over the lazy dog</p>
+      <p class="body text-ink">body — The quick brown fox jumps over the lazy dog</p>
+      <p class="body-sm text-ink-muted">body-sm — The quick brown fox jumps over the lazy dog</p>
+      <p class="label text-ink-subtle">label — THE QUICK BROWN FOX</p>
+      <p class="eyebrow text-ink-subtle">eyebrow — CATEGORY LABEL</p>
+      <p class="mono text-ink">mono — 0x1F4A9 console.log()</p>
+    </div>
+  </section>
+
+</body>
+</html>

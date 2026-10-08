@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 
-const GENERATOR_VERSION = '1.0.0';
+const GENERATOR_VERSION = '1.0.1';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
 const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|rgba?\(|oklch\(|hsla?\(|\{[a-z0-9.-]+\}|transparent|currentColor)/;
 const LEN_RE  = /^(-?[\d.]+(px|rem|em|%|ch|vh|vw)|0|-?[\d.]+)$/;
@@ -31,6 +31,10 @@ function checkLen(name, v, where) {
   else if (!LEN_RE.test(s)) errors.push(`${where}: "${name}" has unparseable length "${s}"`);
 }
 function esc(n) { return n.replace(/\./g, '\\.'); }
+// Resolve alias syntax {token-name} → var(--token-name)
+function resolveAlias(v) {
+  return typeof v === 'string' ? v.replace(/^\{([a-z0-9.-]+)\}$/, 'var(--$1)') : v;
+}
 
 // ---- colour ----
 const themes = T.color.themes.map(t => t.id);
@@ -40,8 +44,9 @@ for (const tok of T.color.tokens) {
   checkName(tok.name, 'color');
   if (tok.provenance === 'approximate') approximate.push(tok.name);  // none at present
   if (typeof tok.value === 'string') {
-    if (!COLOR_RE.test(tok.value)) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
-    base.push([tok.name, tok.value]);
+    const v = resolveAlias(tok.value);
+    if (!COLOR_RE.test(tok.value) && !v.startsWith('var(')) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
+    base.push([tok.name, v]);
   } else {
     for (const th of themes) {
       const v = tok.value[th];
@@ -57,8 +62,14 @@ const scales = [];
 for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex']) {
   for (const tok of (T[group]?.tokens ?? [])) {
     checkName(tok.name, group);
-    if (['spacing', 'radius', 'stroke'].includes(group)) checkLen(tok.name, tok.value, group);
-    scales.push([tok.name, String(tok.value)]);
+    // Shadow tokens carry per-theme values; route them into the theme blocks
+    // rather than scales so they emit correctly in :root / [data-theme="light"].
+    if (typeof tok.value === 'object' && tok.value !== null && themes.every(th => tok.value[th] !== undefined)) {
+      for (const th of themes) perTheme[th].push([tok.name, tok.value[th]]);
+    } else {
+      if (['spacing', 'radius', 'stroke'].includes(group)) checkLen(tok.name, tok.value, group);
+      scales.push([tok.name, String(tok.value)]);
+    }
   }
 }
 

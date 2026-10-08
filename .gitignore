@@ -6,3 +6,4 @@ node_modules/
 consumers/docs/specimen.pdf
 consumers/docs/out.html
 consumers/*/node_modules/
+consumers/*/dist/

@@ -4,6 +4,8 @@
 # like success. Run from the repo root.
 set -u
 cd "$(dirname "$0")/.." || exit 2
+# On Windows, npm-spawned bash may not inherit the system PATH where node lives.
+export PATH="$PATH:/c/Program Files/nodejs"
 SRC=packages/tokens/src/tokens.json
 DIST=packages/tokens/dist
 TMP=$(mktemp -d); KEEP_JSON=$TMP/tokens.json; KEEP_CSS=$TMP/tokens.css
@@ -18,7 +20,9 @@ run() { local name="$1" want="$2"; shift 2
   if [ "$got" -eq "$want" ]; then printf '  PASS  %-42s (exit %d)\n' "$name" "$got"; pass=$((pass+1))
   else printf '  FAIL  %-42s (exit %d, wanted %d)\n' "$name" "$got" "$want"; sed 's/^/        /' "$TMP/out" | head -3; fail=$((fail+1)); fi; }
 
-mutate() { python3 -I -c "$1" ; }
+mutate() {
+  node -e "const fs=require('fs');const p='$SRC';const d=JSON.parse(fs.readFileSync(p,'utf8'));$1;fs.writeFileSync(p,JSON.stringify(d,null,2)+'\n');"
+}
 
 echo "GATE-FAILURE TESTS"
 sed -i 's/--brand-ember: #[0-9a-f]*;/--brand-ember: #00ff00;/' "$DIST/tokens.css"
@@ -26,27 +30,15 @@ run "stale generated output rejected" 1 node tools/check-stale.mjs "$SRC" "$DIST
 restore
 run "clean tree passes stale check" 0 node tools/check-stale.mjs "$SRC" "$DIST"
 
-mutate "
-import json,pathlib
-p=pathlib.Path('$SRC'); d=json.loads(p.read_text())
-d['spacing']['tokens'].append({'name':'space-bad','value':'10.5pt','usage':'deliberate'})
-p.write_text(json.dumps(d,indent=2)+'\n')"
+mutate "d.spacing.tokens.push({name:'space-bad',value:'10.5pt',usage:'deliberate'})"
 run "pt unit rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
-mutate "
-import json,pathlib
-p=pathlib.Path('$SRC'); d=json.loads(p.read_text())
-d['radius']['tokens'].append({'name':'space-2','value':'8px','usage':'deliberate clash'})
-p.write_text(json.dumps(d,indent=2)+'\n')"
+mutate "d.radius.tokens.push({name:'space-2',value:'8px',usage:'deliberate clash'})"
 run "duplicate token name rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
-mutate "
-import json,pathlib
-p=pathlib.Path('$SRC'); d=json.loads(p.read_text())
-d['type']['groups'][5]['family']='garamond'
-p.write_text(json.dumps(d,indent=2)+'\n')"
+mutate "d.type.groups[5].family='garamond'"
 run "unknown type family rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
