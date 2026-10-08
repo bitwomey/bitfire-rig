@@ -10,13 +10,17 @@ param(
     [Parameter(Mandatory = $true)][string]$Repo
 )
 
-$ErrorActionPreference = 'Stop'
+# 'Continue', not 'Stop': gh writes to stderr in normal operation, and under
+# 'Stop' PowerShell turns that into a thrown error. Exit codes are checked.
+$ErrorActionPreference = 'Continue'
 
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
-    throw "The GitHub CLI (gh) is not on PATH. Install it from https://cli.github.com and run 'gh auth login'."
+    Write-Host "The GitHub CLI (gh) is not on PATH. Install from https://cli.github.com" -ForegroundColor Red
+    exit 1
 }
 
 Write-Host "Seeding $Repo" -ForegroundColor Cyan
+$script:failed = 0
 
 $labels = @(
     @{ name = 'blocked-on-ben';     colour = 'B60205'; desc = 'needs a decision or an input only Ben can supply' },
@@ -26,14 +30,16 @@ $labels = @(
     @{ name = 'research';           colour = 'FBCA04'; desc = 'a trial whose output is a decision, not a feature' }
 )
 foreach ($l in $labels) {
-    gh label create $l.name --repo $Repo --color $l.colour --description $l.desc --force | Out-Null
-    Write-Host "  label  $($l.name)"
+    gh label create $l.name --repo $Repo --color $l.colour --description $l.desc --force 1>$null 2>$null
+    if ($LASTEXITCODE -eq 0) { Write-Host "  label  $($l.name)" }
+    else { Write-Host "  label  $($l.name)  (not created)" -ForegroundColor DarkYellow }
 }
 
 function New-RigIssue {
     param([string]$Title, [string]$Labels, [string]$Body)
-    gh issue create --repo $Repo --title $Title --label $Labels --body $Body | Out-Null
-    Write-Host "  issue  $Title"
+    gh issue create --repo $Repo --title $Title --label $Labels --body $Body 1>$null 2>$null
+    if ($LASTEXITCODE -eq 0) { Write-Host "  issue  $Title" }
+    else { Write-Host "  issue  $Title  (FAILED)" -ForegroundColor Red; $script:failed++ }
 }
 
 # Bodies use single-quoted here-strings so backticks and $ stay literal.
@@ -188,4 +194,8 @@ One is chosen, or Ember is confirmed.
 '@
 
 Write-Host ''
+if ($script:failed -gt 0) {
+    Write-Host "$script:failed issue(s) failed to create." -ForegroundColor Red
+    exit 1
+}
 Write-Host 'Seeded. Suggested next: pick one labelled foundation.' -ForegroundColor Green
