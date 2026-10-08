@@ -21,7 +21,8 @@ run() { local name="$1" want="$2"; shift 2
   else printf '  FAIL  %-42s (exit %d, wanted %d)\n' "$name" "$got" "$want"; sed 's/^/        /' "$TMP/out" | head -3; fail=$((fail+1)); fi; }
 
 mutate() {
-  node -e "const fs=require('fs');const p='$SRC';const d=JSON.parse(fs.readFileSync(p,'utf8'));$1;fs.writeFileSync(p,JSON.stringify(d,null,2)+'\n');"
+  NODE_MUTATE_SRC="$SRC" node -e "const fs=require('fs');const p=process.env.NODE_MUTATE_SRC;const d=JSON.parse(fs.readFileSync(p,'utf8'));$1;fs.writeFileSync(p,JSON.stringify(d,null,2)+'\n');" \
+    || { echo "mutate failed: $1"; exit 1; }
 }
 
 echo "GATE-FAILURE TESTS"
@@ -38,7 +39,7 @@ mutate "d.radius.tokens.push({name:'space-2',value:'8px',usage:'deliberate clash
 run "duplicate token name rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
-mutate "d.type.groups[5].family='garamond'"
+mutate "d.type.groups.find(g=>g.name==='Document').family='garamond'"
 run "unknown type family rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 

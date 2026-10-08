@@ -93,6 +93,10 @@ for (const g of T.type.groups) {
   }
 }
 
+if (themes.length < 2) {
+  console.error('REJECTED — color.themes must declare at least two themes (dark primary, light)');
+  process.exit(1);
+}
 if (errors.length) {
   console.error(`REJECTED — ${errors.length} problem(s):`);
   for (const e of errors) console.error('  ' + e);
