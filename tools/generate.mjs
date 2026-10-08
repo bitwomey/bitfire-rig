@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 
 const GENERATOR_VERSION = '1.0.1';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
-const ALIAS_RE = /^\{[a-z0-9.-]+\}$/;
+const ALIAS_RE = /^\{([a-z0-9.-]+)\}$/;
 const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
 // Shadow layers: lengths, colours, commas. No braces, quotes or semicolons, so a value cannot break out of its declaration.
 const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|[0-9a-zA-Z%.,\s#()\/-]+)$/;
@@ -38,9 +38,20 @@ function checkLen(name, v, where) {
 }
 function esc(n) { return n.replace(/\./g, '\\.'); }
 // Resolve alias syntax {token-name} → var(--token-name). Whole-value only:
-// an alias embedded in a longer string is left as written.
-function resolveAlias(v) {
-  return typeof v === 'string' ? v.replace(/^\{([a-z0-9.-]+)\}$/, 'var(--$1)') : v;
+// an alias embedded in a longer string is left as written. The target is
+// escaped like a declaration, and recorded so checkAliases() can verify it.
+const aliasRefs = [];
+function resolveAlias(v, owner) {
+  const m = typeof v === 'string' ? ALIAS_RE.exec(v) : null;
+  if (!m) return v;
+  aliasRefs.push([owner, m[1]]);
+  return `var(--${esc(m[1])})`;
+}
+function checkAliases() {
+  for (const [owner, target] of aliasRefs) {
+    if (target === owner) errors.push(`alias: "${owner}" refers to itself`);
+    else if (!seen.has(target)) errors.push(`alias: "${owner}" refers to unknown token "${target}"`);
+  }
 }
 
 // ---- colour ----
@@ -51,7 +62,7 @@ for (const tok of T.color.tokens) {
   checkName(tok.name, 'color');
   if (tok.provenance === 'approximate') approximate.push(tok.name);  // none at present
   if (typeof tok.value === 'string') {
-    const v = resolveAlias(tok.value);
+    const v = resolveAlias(tok.value, tok.name);
     if (!COLOR_RE.test(tok.value)) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
     base.push([tok.name, v]);
   } else {
@@ -59,7 +70,7 @@ for (const tok of T.color.tokens) {
       const raw = tok.value[th];
       if (raw === undefined) { errors.push(`color: "${tok.name}" missing theme "${th}"`); continue; }
       if (!COLOR_RE.test(raw)) errors.push(`color: "${tok.name}" bad ${th} value "${raw}"`);
-      perTheme[th].push([tok.name, resolveAlias(raw)]);
+      perTheme[th].push([tok.name, resolveAlias(raw, tok.name)]);
     }
   }
 }
@@ -85,7 +96,7 @@ for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex
         for (const th of themes) {
           const pv = tok.value[th];
           checkScale(group, tok.name, pv);
-          perTheme[th].push([tok.name, resolveAlias(pv)]);
+          perTheme[th].push([tok.name, resolveAlias(pv, tok.name)]);
         }
       } else {
         const missing = themes.filter(th => tok.value[th] === undefined);
@@ -122,6 +133,7 @@ for (const g of T.type.groups) {
   }
 }
 
+checkAliases();
 if (themes.length < 2) errors.push('color.themes must declare at least two themes (dark primary, light)');
 for (const th of themes) if (!NAME_RE.test(th)) errors.push(`color: invalid theme id "${th}"`);
 if (errors.length) {

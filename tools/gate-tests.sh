@@ -100,6 +100,20 @@ mutate "d.color.themes[1].id='light\"] { x:y } [a=\"'"
 run "theme id with CSS injection rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
+mutate "d.color.tokens.push({name:'alias-dangling',value:'{does-not-exist}',usage:'deliberate'})"
+run "dangling alias rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.color.tokens.push({name:'alias-self',value:'{alias-self}',usage:'deliberate'})"
+run "self-referencing alias rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+# Dotted target must be escaped exactly as its declaration is.
+mutate "d.shadow.tokens.push({name:'shadow-dotted',value:{dark:'{space-0.5}',light:'{space-0.5}'},usage:'deliberate'})"
+node tools/generate.mjs "$SRC" "$TMP/g" >/dev/null 2>&1
+run "dotted alias target escaped" 0 grep -qF 'var(--space-0\.5)' "$TMP/g/tokens.css"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.

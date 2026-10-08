@@ -12,6 +12,11 @@
   Without `inline`, Tailwind would emit --color-canvas: var(--canvas) in :root,
   and utilities would reference --color-canvas. With `inline`, utilities
   reference var(--canvas) directly — which is what we want.
+
+  The radius and font entries below name the same variable on both sides
+  (--radius-sm: var(--radius-sm)). Tailwind declares each in its theme layer,
+  where that is a cycle; it resolves only because tokens.css is imported
+  unlayered and so overrides the theme layer. Keep that import unlayered.
 */
 @theme inline {
   /* ── colours ─────────────────────────────────────── */
@@ -99,21 +104,7 @@
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
-  /* ── opacity ──────────────────────────────────────── */
-  --opacity-disabled: var(--opacity-disabled);
-  --opacity-ghost: var(--opacity-ghost);
-  --opacity-overlay: var(--opacity-overlay);
-
-  /* ── stroke widths ────────────────────────────────── */
-  --border-hair: var(--stroke-hair);
-  --border-mark: var(--stroke-mark);
-  --border-heavy: var(--stroke-heavy);
-
-  /* ── z-index ──────────────────────────────────────── */
-  --z-base: var(--z-base);
-  --z-map-overlay: var(--z-map-overlay);
-  --z-sticky: var(--z-sticky);
-  --z-dropdown: var(--z-dropdown);
-  --z-modal: var(--z-modal);
-  --z-alert: var(--z-alert);
+  /* Not mapped: opacity, stroke widths, z-index and shadows. Tailwind has no
+     theme namespace that turns them into utilities, so a mapping here would
+     only declare unused variables. They stay available as plain var(--...). */
 }
