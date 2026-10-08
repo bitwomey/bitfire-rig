@@ -114,6 +114,17 @@ node tools/generate.mjs "$SRC" "$TMP/g" >/dev/null 2>&1
 run "dotted alias target escaped" 0 grep -qF 'var(--space-0\.5)' "$TMP/g/tokens.css"
 restore
 
+# A third theme is rejected for being a third theme, not for missing values:
+# every colour token gains a value for it first.
+mutate "d.color.themes.push({id:'third',name:'Third'});for(const t of d.color.tokens)if(typeof t.value==='object')t.value.third=Object.values(t.value)[0];for(const g of ['shadow','spacing','radius','opacity','stroke','zIndex'])for(const t of d[g].tokens)if(typeof t.value==='object')t.value.third=Object.values(t.value)[0]"
+node tools/generate.mjs "$SRC" "$TMP/g" >/dev/null 2>"$TMP/third"
+run "third theme rejected" 0 grep -q 'extra theme.*third' "$TMP/third"
+restore
+
+mutate "d.shadow.tokens.push({name:'shadow-url',value:{dark:'0 1px url(//example.com/x)',light:'0 1px 2px #000'},usage:'deliberate'})"
+run "url() in shadow rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.

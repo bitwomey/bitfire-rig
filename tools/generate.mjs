@@ -9,8 +9,9 @@ const GENERATOR_VERSION = '1.0.1';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
 const ALIAS_RE = /^\{([a-z0-9.-]+)\}$/;
 const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
-// Shadow layers: lengths, colours, commas. No braces, quotes or semicolons, so a value cannot break out of its declaration.
-const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|[0-9a-zA-Z%.,\s#()\/-]+)$/;
+// Shadow layers: lengths, colours, commas. No braces, quotes or semicolons, so a value cannot
+// break out of its declaration, and no url(), which would make the CSS fetch a resource.
+const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|(?!.*url\()[0-9a-zA-Z%.,\s#()\/-]+)$/i;
 const FAMILY_RE = /^[A-Za-z0-9\s,"'-]+$/;
 const OPACITY_RE = /^(0|1|0?\.\d+|1\.0+)$/;
 const ZINDEX_RE = /^-?\d+$/;
@@ -134,7 +135,9 @@ for (const g of T.type.groups) {
 }
 
 checkAliases();
+// Only themes[0] (primary) and themes[1] are emitted, so a third would be silently dropped.
 if (themes.length < 2) errors.push('color.themes must declare at least two themes (dark primary, light)');
+else if (themes.length > 2) errors.push(`color.themes declares extra theme(s) that would not be emitted: ${themes.slice(2).join(', ')}`);
 for (const th of themes) if (!NAME_RE.test(th)) errors.push(`color: invalid theme id "${th}"`);
 if (errors.length) {
   console.error(`REJECTED — ${errors.length} problem(s):`);
