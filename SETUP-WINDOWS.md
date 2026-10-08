@@ -29,7 +29,7 @@ Choose GitHub.com, HTTPS, and authenticate in the browser.
 That lands the repo at `C:\Projects\bitfire-rig`. If the browser saved the
 zip somewhere other than Downloads, change the `-Path`.
 
-Check the history came across — you should see six commits:
+Check the history came across — you should see 8 commits:
 
     git log --oneline
 
