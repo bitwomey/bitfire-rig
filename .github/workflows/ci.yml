@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Self-hosted runners are a finite, shared resource. Cancel superseded runs
+# on the same branch so a queue cannot build up behind force-pushes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    # Change this label to match the BITFire runner's own labels.
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 10
+
+    # SAFETY: a self-hosted runner executes whatever a PR contains. A PR from
+    # a fork would therefore run untrusted code on BITFire hardware. This
+    # guard refuses fork PRs outright. Keep it even if the repo is private
+    # today, because making a repo public later does not re-ask the question.
+    if: >
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true          # the workspace persists between runs
+
+      - name: Toolchain present
+        run: |
+          command -v node >/dev/null || { echo "::error::node is not installed on this runner"; exit 1; }
+          node -e 'const [maj]=process.versions.node.split(".").map(Number); if (maj<20) { console.error(`::error::node ${process.versions.node} is too old; need >= 20`); process.exit(1) } console.log("node", process.versions.node)'
+
+      - name: Generated output is not stale
+        run: node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist
+
+      - name: No raw colour outside generated files
+        run: node tools/check-rawcolour.mjs packages fixtures
+
+      # The point of this job. A gate never proven to fail is indistinguishable
+      # from no gate, and it fails in the direction that looks like success.
+      - name: The gates still reject what they should
+        run: bash tools/gate-tests.sh
+
+      - name: Checks left the working tree clean
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::a check modified the working tree"
+            git status --porcelain
+            exit 1
+          fi
+
+      # The workspace persists on a self-hosted runner. Leave nothing behind
+      # that could make the next run pass or fail for the wrong reason.
+      - name: Clean up
+        if: always()
+        run: git clean -xdf -e .git || true

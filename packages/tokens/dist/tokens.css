@@ -1,0 +1,173 @@
+/* GENERATED FILE — do not edit.
+   Edit packages/tokens/src/tokens.json and re-run the generator.
+   source 33c94d931273 · generator 1.0.0 */
+
+:root {
+  /* colour · dark (primary) */
+  --canvas: #080c0f;
+  --surface: #10171c;
+  --surface-raised: #1a242b;
+  --surface-inset: #0b1115;
+  --surface-hover: #222e36;
+  --border-hairline: #26323a;
+  --border: #6e818d;
+  --ink: #eef4f7;
+  --ink-muted: #a8b7c0;
+  --ink-subtle: #8fa0ab;
+  --signal: #4aa8ff;
+  --signal-hover: #87c8ff;
+  --signal-wash: #10283d;
+  --on-signal: #04121f;
+  --focus-ring: #8ecdff;
+  --brand-ember: #ff6a2b;
+  --status-ok: #1fd8c0;
+  --status-warn: #9f8a18;
+  --status-danger: #ff7a80;
+  --on-status-danger: #25070a;
+  --status-ok-wash: #082e2c;
+  --status-warn-wash: #32270a;
+  --status-danger-wash: #3a1317;
+  --viz-1: #3b96d9;
+  --viz-2: #008f68;
+  --viz-3: #9f9500;
+  --viz-4: #8b5f00;
+  --viz-5: #0073a2;
+  --viz-6: #e36b1d;
+  --scrim: #04070999;
+  --label-halo: #080c0fd9;
+  --sev-0: #87420b;
+  --sev-1: #ab5511;
+  --sev-2: #cf6917;
+  --sev-3: #f57d1e;
+  --sev-4: #fca671;
+  --div-lo-0: #106a9b;
+  --div-lo-1: #1782bd;
+  --div-lo-2: #1e9de3;
+  --div-hi-0: #a63c0e;
+  --div-hi-1: #ca4b13;
+  --div-hi-2: #f35c1a;
+  --div-mid: #3a4048;
+  --focus: #4ec9f5;
+  --focus-wash: #1b4a5f;
+
+  /* colour · theme-independent */
+  --ink-on-warm: #0a1114;
+  --ink-on-deep: #ffffff;
+  --fdr-no-rating: #dbe2e5;
+  --fdr-moderate: #2c9b4b;
+  --fdr-high: #f5c518;
+  --fdr-extreme: #f2721c;
+  --fdr-catastrophic: #c9141d;
+  --status-info: {signal};
+
+  /* scale */
+  --space-0\.5: 2px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-none: 0;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 999px;
+  --shadow-sm: [object Object];
+  --shadow-md: [object Object];
+  --shadow-lg: [object Object];
+  --shadow-panel: [object Object];
+  --opacity-disabled: 0.45;
+  --opacity-ghost: 0.08;
+  --opacity-overlay: 0.72;
+  --stroke-hair: 1px;
+  --stroke-mark: 2px;
+  --stroke-heavy: 3px;
+  --z-base: 0;
+  --z-map-overlay: 10;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-modal: 300;
+  --z-alert: 400;
+
+  /* type families */
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-condensed: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: "IBM Plex Serif", ui-serif, Georgia, serif;
+}
+
+[data-theme="light"] {
+  --canvas: #e7ebee;
+  --surface: #f5f8f9;
+  --surface-raised: #ffffff;
+  --surface-inset: #dde4e8;
+  --surface-hover: #e9eef1;
+  --border-hairline: #d5dde2;
+  --border: #64757e;
+  --ink: #0b1317;
+  --ink-muted: #45555e;
+  --ink-subtle: #59696f;
+  --signal: #0b5cc4;
+  --signal-hover: #08479a;
+  --signal-wash: #dcebfb;
+  --on-signal: #ffffff;
+  --focus-ring: #0b5cc4;
+  --brand-ember: #c93d06;
+  --status-ok: #04695f;
+  --status-warn: #7d5200;
+  --status-danger: #b3151b;
+  --on-status-danger: #ffffff;
+  --status-ok-wash: #d6f2ef;
+  --status-warn-wash: #fbeed2;
+  --status-danger-wash: #fce3e4;
+  --viz-1: #4ca6ea;
+  --viz-2: #007151;
+  --viz-3: #b6ab00;
+  --viz-4: #8f6100;
+  --viz-5: #006894;
+  --viz-6: #cc5a00;
+  --scrim: #0b1317a6;
+  --label-halo: #ffffffe0;
+  --sev-0: #fc9c5f;
+  --sev-1: #ee7a1c;
+  --sev-2: #cb6716;
+  --sev-3: #a85411;
+  --sev-4: #87420b;
+  --div-lo-0: #00a2ee;
+  --div-lo-1: #007cb7;
+  --div-lo-2: #005884;
+  --div-hi-0: #ff7542;
+  --div-hi-1: #ce4700;
+  --div-hi-2: #923000;
+  --div-mid: #e7e5e2;
+  --focus: #0b6f95;
+  --focus-wash: #cfe8f3;
+}
+
+.display-xl { font-family: var(--font-sans); font-size: 48px; line-height: 48px; font-weight: 200; letter-spacing: -0.022em; }
+.display-lg { font-family: var(--font-sans); font-size: 34px; line-height: 38px; font-weight: 200; letter-spacing: -0.018em; }
+.display-md { font-family: var(--font-sans); font-size: 26px; line-height: 30px; font-weight: 300; letter-spacing: -0.012em; }
+.body-lg { font-family: var(--font-sans); font-size: 17px; line-height: 26px; font-weight: 300; }
+.body { font-family: var(--font-sans); font-size: 15px; line-height: 23px; font-weight: 300; }
+.body-sm { font-family: var(--font-sans); font-size: 13px; line-height: 20px; font-weight: 400; }
+.label { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.eyebrow { font-family: var(--font-sans); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.18em; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 300; }
+.readout-xl { font-family: var(--font-mono); font-size: 40px; line-height: 40px; font-weight: 200; letter-spacing: -0.02em; }
+.readout { font-family: var(--font-mono); font-size: 24px; line-height: 28px; font-weight: 300; }
+.readout-sm { font-family: var(--font-mono); font-size: 16px; line-height: 20px; font-weight: 400; }
+.mono { font-family: var(--font-mono); font-size: 13px; line-height: 20px; font-weight: 400; }
+.mono-sm { font-family: var(--font-mono); font-size: 11px; line-height: 16px; font-weight: 400; }
+.control { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 500; }
+.control-sm { font-family: var(--font-sans); font-size: 12px; line-height: 14px; font-weight: 500; }
+.tab { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 400; }
+.table-header { font-family: var(--font-condensed); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.16em; }
+.map-label { font-family: var(--font-condensed); font-size: 12px; line-height: 14px; font-weight: 500; letter-spacing: 0.02em; }
+.doc-body { font-family: var(--font-serif); font-size: 14px; line-height: 20px; font-weight: 400; }
+.doc-lead { font-family: var(--font-serif); font-size: 16px; line-height: 23px; font-weight: 400; }
+.doc-note { font-family: var(--font-serif); font-size: 12px; line-height: 17px; font-weight: 400; }

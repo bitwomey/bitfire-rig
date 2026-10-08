@@ -1,0 +1,56 @@
+name: Release
+
+# Manual only. A release is a decision, not a consequence of merging.
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package directory, e.g. packages/tokens'
+        required: true
+        type: choice
+        options: [packages/tokens, packages/ui]
+      dry_run:
+        description: 'Run the gate without publishing'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  release:
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 15
+    environment: release        # add required reviewers here if you want a second pair of eyes
+    steps:
+      - uses: actions/checkout@v4
+        with: { clean: true }
+
+      - name: Configure the registry
+        run: |
+          printf '@bitfire:registry=https://npm.pkg.github.com\n' > .npmrc
+          printf '//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}\n' >> .npmrc
+          printf 'strict-peer-deps=true\n' >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # The same script that runs on a laptop. One definition of ready.
+      - name: Release gate
+        run: |
+          node tools/release.mjs "${{ inputs.package }}" https://npm.pkg.github.com \
+            ${{ inputs.dry_run && '--dry-run' || '' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag the released version
+        if: ${{ !inputs.dry_run }}
+        run: |
+          V=$(node -p "require('./${{ inputs.package }}/package.json').version")
+          N=$(node -p "require('./${{ inputs.package }}/package.json').name.replace('@bitfire/','')")
+          git tag "$N-v$V" && git push origin "$N-v$V"
+
+      - name: Clean up
+        if: always()
+        run: rm -f .npmrc; git clean -xdf -e .git || true

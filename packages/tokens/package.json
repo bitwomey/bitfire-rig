@@ -1,0 +1,24 @@
+{
+  "name": "@bitfire/tokens",
+  "version": "2.1.0",
+  "description": "BITFire design tokens: CSS custom properties and typed exports",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node ../../tools/generate.mjs src/tokens.json dist"
+  }
+}

@@ -1,0 +1,18 @@
+storage: ./storage
+auth:
+  htpasswd:
+    file: ./htpasswd
+    max_users: 10
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+packages:
+  '@bitfire/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+  '**':
+    access: $all
+    publish: $authenticated
+    proxy: npmjs
+log: { type: stdout, format: pretty, level: warn }

@@ -1,0 +1,22 @@
+{
+  "name": "@bitfire/ui",
+  "version": "0.3.0",
+  "description": "BITFire React components",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "@bitfire/tokens": "^2.0.0"
+  }
+}

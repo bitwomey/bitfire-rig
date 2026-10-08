@@ -1,0 +1,5 @@
+node_modules/
+.verdaccio/storage/
+.verdaccio/htpasswd
+.verdaccio/*.log
+*.tgz
