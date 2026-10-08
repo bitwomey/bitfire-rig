@@ -45,14 +45,14 @@ for (const tok of T.color.tokens) {
   if (tok.provenance === 'approximate') approximate.push(tok.name);  // none at present
   if (typeof tok.value === 'string') {
     const v = resolveAlias(tok.value);
-    if (!COLOR_RE.test(tok.value) && !v.startsWith('var(')) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
+    if (!COLOR_RE.test(tok.value)) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
     base.push([tok.name, v]);
   } else {
     for (const th of themes) {
-      const v = tok.value[th];
-      if (v === undefined) { errors.push(`color: "${tok.name}" missing theme "${th}"`); continue; }
-      if (!COLOR_RE.test(v)) errors.push(`color: "${tok.name}" bad ${th} value "${v}"`);
-      perTheme[th].push([tok.name, v]);
+      const raw = tok.value[th];
+      if (raw === undefined) { errors.push(`color: "${tok.name}" missing theme "${th}"`); continue; }
+      if (!COLOR_RE.test(raw)) errors.push(`color: "${tok.name}" bad ${th} value "${raw}"`);
+      perTheme[th].push([tok.name, resolveAlias(raw)]);
     }
   }
 }
@@ -67,7 +67,7 @@ for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex
     if (typeof tok.value === 'object' && tok.value !== null && themes.every(th => tok.value[th] !== undefined)) {
       for (const th of themes) perTheme[th].push([tok.name, tok.value[th]]);
     } else {
-      if (['spacing', 'radius', 'stroke'].includes(group)) checkLen(tok.name, tok.value, group);
+      if (group === 'spacing' || group === 'radius' || group === 'stroke') checkLen(tok.name, tok.value, group);
       scales.push([tok.name, String(tok.value)]);
     }
   }
@@ -75,7 +75,7 @@ for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex
 
 // ---- type ----
 const families = Object.entries(T.type.families);
-const familyNames = new Set(Object.keys(T.type.families));
+const familyNames = new Set(families.map(([n]) => n));
 const styles = [];
 for (const g of T.type.groups) {
   // family is declared on the GROUP, not the style. Defaulting it silently

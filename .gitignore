@@ -7,3 +7,5 @@ consumers/docs/specimen.pdf
 consumers/docs/out.html
 consumers/*/node_modules/
 consumers/*/dist/
+# Per-developer shell config (Windows: script-shell=C:\Program Files\Git\bin\bash.exe)
+.npmrc
