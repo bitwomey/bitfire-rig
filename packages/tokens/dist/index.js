@@ -1,7 +1,7 @@
 /* GENERATED FILE — do not edit.
    Edit packages/tokens/src/tokens.json and re-run the generator.
-   source 33c94d931273 · generator 1.0.0 */
-export const sourceHash = "33c94d931273";
+   source 56fe150837ed · generator 1.0.0 */
+export const sourceHash = "56fe150837ed";
 export const generatorVersion = "1.0.0";
 export const themes = ["dark","light"];
 export const tokenNames = [

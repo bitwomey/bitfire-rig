@@ -31,8 +31,15 @@ right.
 | Peer conflicts are caught | Proven — but only with `strict-peer-deps=true`; npm warns and installs otherwise |
 | Every gate rejects what it should | Proven — 8/8 gate-failure tests |
 | Documents and UI share one source | Proven — the specimen renders from the token package |
+| Fire danger values | Reviewed and confirmed by a qualified FBAN |
 | Anything about components | **Not started** |
 | Private registry auth, CI access | **Not proven** |
+
+## Public repo
+
+CI runs on GitHub-hosted runners, which are free and unmetered on public
+repositories. Do not point these workflows at a self-hosted runner while this
+repo is public: a fork can open a pull request that runs arbitrary code on it.
 
 ## Quick start
 

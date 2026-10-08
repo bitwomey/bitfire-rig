@@ -16,27 +16,19 @@ permissions:
 
 jobs:
   gates:
-    # Change this label to match the BITFire runner's own labels.
-    runs-on: [self-hosted, linux]
+    # GitHub-hosted: free and unmetered on public repositories, and ephemeral.
+    # Do NOT point this at a self-hosted runner while the repo is public —
+    # GitHub's own guidance is to use self-hosted runners only with private
+    # repos, because a fork can open a PR that runs arbitrary code on them.
+    runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    # SAFETY: a self-hosted runner executes whatever a PR contains. A PR from
-    # a fork would therefore run untrusted code on BITFire hardware. This
-    # guard refuses fork PRs outright. Keep it even if the repo is private
-    # today, because making a repo public later does not re-ask the question.
-    if: >
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          clean: true          # the workspace persists between runs
 
-      - name: Toolchain present
-        run: |
-          command -v node >/dev/null || { echo "::error::node is not installed on this runner"; exit 1; }
-          node -e 'const [maj]=process.versions.node.split(".").map(Number); if (maj<20) { console.error(`::error::node ${process.versions.node} is too old; need >= 20`); process.exit(1) } console.log("node", process.versions.node)'
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
 
       - name: Generated output is not stale
         run: node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist
@@ -56,9 +48,3 @@ jobs:
             git status --porcelain
             exit 1
           fi
-
-      # The workspace persists on a self-hosted runner. Leave nothing behind
-      # that could make the next run pass or fail for the wrong reason.
-      - name: Clean up
-        if: always()
-        run: git clean -xdf -e .git || true

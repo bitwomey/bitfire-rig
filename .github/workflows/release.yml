@@ -21,12 +21,13 @@ permissions:
 
 jobs:
   release:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     environment: release        # add required reviewers here if you want a second pair of eyes
     steps:
       - uses: actions/checkout@v4
-        with: { clean: true }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', registry-url: 'https://npm.pkg.github.com' }
 
       - name: Configure the registry
         run: |
@@ -53,4 +54,4 @@ jobs:
 
       - name: Clean up
         if: always()
-        run: rm -f .npmrc; git clean -xdf -e .git || true
+        run: rm -f .npmrc

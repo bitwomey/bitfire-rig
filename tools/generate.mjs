@@ -34,9 +34,11 @@ function esc(n) { return n.replace(/\./g, '\\.'); }
 
 // ---- colour ----
 const themes = T.color.themes.map(t => t.id);
-const base = [], perTheme = Object.fromEntries(themes.map(t => [t, []]));
+const base = [], approximate = [];
+const perTheme = Object.fromEntries(themes.map(t => [t, []]));
 for (const tok of T.color.tokens) {
   checkName(tok.name, 'color');
+  if (tok.provenance === 'approximate') approximate.push(tok.name);  // none at present
   if (typeof tok.value === 'string') {
     if (!COLOR_RE.test(tok.value)) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
     base.push([tok.name, tok.value]);
@@ -92,6 +94,12 @@ const L = [];
 L.push(stamp, '', ':root {', `  /* colour · ${DARK} (primary) */`);
 for (const [n, v] of perTheme[DARK]) L.push(`  --${esc(n)}: ${v};`);
 L.push('', '  /* colour · theme-independent */');
+// Kept deliberately: any token marked provenance "approximate" says so in the
+// generated CSS, so a caveat cannot be lost between the source and the artifact.
+if (approximate.length) {
+  L.push(`  /* APPROXIMATE, not authoritative: ${approximate.join(', ')}.`,
+         '     Verify before using on a surface that presents them as official. */');
+}
 for (const [n, v] of base) L.push(`  --${esc(n)}: ${v};`);
 L.push('', '  /* scale */');
 for (const [n, v] of scales) L.push(`  --${esc(n)}: ${v};`);
@@ -129,3 +137,6 @@ writeFileSync(join(outDir, 'tokens.css'), css);
 writeFileSync(join(outDir, 'index.js'), js);
 writeFileSync(join(outDir, 'index.d.ts'), dts);
 console.error(`ok — ${seen.size} tokens, ${styles.length} type styles, source ${sourceHash}`);
+if (approximate.length) {
+  console.error(`note — ${approximate.length} token(s) marked approximate, not authoritative: ${approximate.join(', ')}`);
+}

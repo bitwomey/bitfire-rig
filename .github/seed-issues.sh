@@ -17,18 +17,6 @@ done
 
 mk() { gh issue create --repo "$REPO" --title "$1" --label "$2" --body "$3" >/dev/null && echo "  + $1"; }
 
-mk "Verify the five AFDRS fire danger colours" "blocked-on-ben,verification-debt" \
-'**What**
-All five `fdr-*` tokens are unverified against the AFAC AFDRS Style Guidelines. The current values were derived, not read from the standard.
-
-**Why it matters**
-Scoped: it blocks only surfaces that render a fire danger rating. Nothing else waits on it. But a rating shown in the wrong colour in front of an agency costs credibility out of proportion to the error.
-
-**Blocked on**
-The AFAC PDF. It is blocked by egress policy in a Claude cloud session, so Ben needs to supply it.
-
-**Done when**
-The five values are replaced from the standard, the contrast gate re-run, and the ΔE 4.2 protan collision inside the agency ramp re-measured and recorded.'
 
 mk "Settle the Tailwind 4 token mapping against a running fixture" "foundation,verification-debt" \
 '**What**
