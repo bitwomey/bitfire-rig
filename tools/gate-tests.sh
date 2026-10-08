@@ -125,6 +125,11 @@ mutate "d.shadow.tokens.push({name:'shadow-url',value:{dark:'0 1px url(//example
 run "url() in shadow rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
+# \s is allowed in a shadow, so url( after a newline must be caught too.
+mutate "d.shadow.tokens.push({name:'shadow-url-nl',value:{dark:'0 1px\\nurl(//example.com/x)',light:'0 1px 2px #000'},usage:'deliberate'})"
+run "url() after newline in shadow rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.

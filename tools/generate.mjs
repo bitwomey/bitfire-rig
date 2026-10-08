@@ -11,7 +11,7 @@ const ALIAS_RE = /^\{([a-z0-9.-]+)\}$/;
 const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
 // Shadow layers: lengths, colours, commas. No braces, quotes or semicolons, so a value cannot
 // break out of its declaration, and no url(), which would make the CSS fetch a resource.
-const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|(?!.*url\()[0-9a-zA-Z%.,\s#()\/-]+)$/i;
+const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|(?![\s\S]*url\()[0-9a-zA-Z%.,\s#()\/-]+)$/i;
 const FAMILY_RE = /^[A-Za-z0-9\s,"'-]+$/;
 const OPACITY_RE = /^(0|1|0?\.\d+|1\.0+)$/;
 const ZINDEX_RE = /^-?\d+$/;
