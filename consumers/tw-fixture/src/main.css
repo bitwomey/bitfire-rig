@@ -29,7 +29,10 @@
   --color-signal-hover: var(--signal-hover);
   --color-signal-wash: var(--signal-wash);
   --color-on-signal: var(--on-signal);
+  --color-focus: var(--focus);
+  --color-focus-wash: var(--focus-wash);
   --color-focus-ring: var(--focus-ring);
+  --color-status-info: var(--status-info);
   --color-brand-ember: var(--brand-ember);
   --color-status-ok: var(--status-ok);
   --color-status-warn: var(--status-warn);

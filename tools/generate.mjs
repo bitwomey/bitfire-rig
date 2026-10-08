@@ -64,8 +64,13 @@ for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex
     checkName(tok.name, group);
     // Shadow tokens carry per-theme values; route them into the theme blocks
     // rather than scales so they emit correctly in :root / [data-theme="light"].
-    if (typeof tok.value === 'object' && tok.value !== null && themes.every(th => tok.value[th] !== undefined)) {
-      for (const th of themes) perTheme[th].push([tok.name, tok.value[th]]);
+    if (typeof tok.value === 'object' && tok.value !== null) {
+      if (themes.every(th => tok.value[th] !== undefined)) {
+        for (const th of themes) perTheme[th].push([tok.name, resolveAlias(tok.value[th])]);
+      } else {
+        const missing = themes.filter(th => tok.value[th] === undefined);
+        errors.push(`${group}: "${tok.name}" per-theme value missing theme(s): ${missing.join(', ')}`);
+      }
     } else {
       if (group === 'spacing' || group === 'radius' || group === 'stroke') checkLen(tok.name, tok.value, group);
       scales.push([tok.name, String(tok.value)]);

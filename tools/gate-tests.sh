@@ -55,6 +55,22 @@ run "Tailwind arbitrary colour rejected" 1 node tools/check-rawcolour.mjs "$BAD"
 
 run "clean fixtures pass" 0 node tools/check-rawcolour.mjs fixtures
 
+# themes.length < 2 guard
+mutate "d.color.themes.splice(1)"
+run "single theme rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+# partial-theme shadow token rejected
+mutate "d.shadow.tokens.push({name:'shadow-partial',value:{dark:'0 1px 2px #000'},usage:'deliberate partial'})"
+run "partial-theme shadow token rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+# shadow alias resolves to var() not literal {token}
+mutate "d.shadow.tokens.push({name:'shadow-alias-test',value:{dark:'{canvas}',light:'{canvas}'},usage:'alias test'})"
+node tools/generate.mjs "$SRC" "$TMP/g" 2>/dev/null
+run "shadow alias emits var() not literal" 0 grep -q 'var(--canvas)' "$TMP/g/tokens.css"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.
