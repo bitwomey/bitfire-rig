@@ -23,9 +23,11 @@ Choose GitHub.com, HTTPS, and authenticate in the browser.
 
 ## 1. Unpack
 
-    cd ~\Projects          # or wherever you keep repos; create it if needed
-    Expand-Archive -Path ~\Downloads\bitfire-rig.zip -DestinationPath . -Force
-    cd .\bitfire-rig
+    Expand-Archive -Path "$HOME\Downloads\bitfire-rig.zip" -DestinationPath C:\Projects -Force
+    cd C:\Projects\bitfire-rig
+
+That lands the repo at `C:\Projects\bitfire-rig`. If the browser saved the
+zip somewhere other than Downloads, change the `-Path`.
 
 Check the history came across — you should see six commits:
 
