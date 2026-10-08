@@ -71,6 +71,35 @@ node tools/generate.mjs "$SRC" "$TMP/g" 2>/dev/null
 run "shadow alias emits var() not literal" 0 grep -q 'var(--canvas)' "$TMP/g/tokens.css"
 restore
 
+# Values that merely start like a valid one must not pass through verbatim.
+mutate "d.color.tokens.push({name:'bad-suffix',value:'{signal}garbage',usage:'deliberate'})"
+run "colour with trailing garbage rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.shadow.tokens.push({name:'shadow-bad',value:{dark:'{canvas}garbage',light:'0 1px 2px #000'},usage:'deliberate'})"
+run "per-theme shadow garbage rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.spacing.tokens.push({name:'space-pt-theme',value:{dark:'10pt',light:'4px'},usage:'deliberate'})"
+run "per-theme pt length rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.opacity.tokens.push({name:'opacity-bad',value:'{canvas}',usage:'deliberate'})"
+run "opacity alias rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.zIndex.tokens.push({name:'z-bad',value:'10; color:red',usage:'deliberate'})"
+run "zIndex injection rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.type.families.sans={x:1}"
+run "non-string type family rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+mutate "d.color.themes[1].id='light\"] { x:y } [a=\"'"
+run "theme id with CSS injection rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.

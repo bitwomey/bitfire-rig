@@ -15,8 +15,5 @@
     "check:gates": "bash tools/gate-tests.sh",
     "check": "npm run check:stale && npm run check:colour && npm run check:gates",
     "app": "node consumers/app/src/app.mjs"
-  },
-  "allowScripts": {
-    "esbuild@0.25.12": true
   }
 }

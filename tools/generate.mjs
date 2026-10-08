@@ -7,7 +7,13 @@ import { join, dirname } from 'node:path';
 
 const GENERATOR_VERSION = '1.0.1';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
-const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|rgba?\(|oklch\(|hsla?\(|\{[a-z0-9.-]+\}|transparent|currentColor)/;
+const ALIAS_RE = /^\{[a-z0-9.-]+\}$/;
+const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
+// Shadow layers: lengths, colours, commas. No braces, quotes or semicolons, so a value cannot break out of its declaration.
+const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|[0-9a-zA-Z%.,\s#()\/-]+)$/;
+const FAMILY_RE = /^[A-Za-z0-9\s,"'-]+$/;
+const OPACITY_RE = /^(0|1|0?\.\d+|1\.0+)$/;
+const ZINDEX_RE = /^-?\d+$/;
 const LEN_RE  = /^(-?[\d.]+(px|rem|em|%|ch|vh|vw)|0|-?[\d.]+)$/;
 
 const src = process.argv[2];
@@ -31,7 +37,8 @@ function checkLen(name, v, where) {
   else if (!LEN_RE.test(s)) errors.push(`${where}: "${name}" has unparseable length "${s}"`);
 }
 function esc(n) { return n.replace(/\./g, '\\.'); }
-// Resolve alias syntax {token-name} → var(--token-name)
+// Resolve alias syntax {token-name} → var(--token-name). Whole-value only:
+// an alias embedded in a longer string is left as written.
 function resolveAlias(v) {
   return typeof v === 'string' ? v.replace(/^\{([a-z0-9.-]+)\}$/, 'var(--$1)') : v;
 }
@@ -58,6 +65,15 @@ for (const tok of T.color.tokens) {
 }
 
 // ---- scales ----
+// Returns true when the value is valid; pushes an error otherwise.
+function checkScale(group, name, v) {
+  const before = errors.length;
+  if (group === 'spacing' || group === 'radius' || group === 'stroke') checkLen(name, v, group);
+  else if (group === 'opacity' && !OPACITY_RE.test(String(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
+  else if (group === 'zIndex' && !ZINDEX_RE.test(String(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
+  else if (group === 'shadow' && !(typeof v === 'string' && SHADOW_RE.test(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
+  return errors.length === before;
+}
 const scales = [];
 for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex']) {
   for (const tok of (T[group]?.tokens ?? [])) {
@@ -66,13 +82,17 @@ for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex
     // rather than scales so they emit correctly in :root / [data-theme="light"].
     if (typeof tok.value === 'object' && tok.value !== null) {
       if (themes.every(th => tok.value[th] !== undefined)) {
-        for (const th of themes) perTheme[th].push([tok.name, resolveAlias(tok.value[th])]);
+        for (const th of themes) {
+          const pv = tok.value[th];
+          checkScale(group, tok.name, pv);
+          perTheme[th].push([tok.name, resolveAlias(pv)]);
+        }
       } else {
         const missing = themes.filter(th => tok.value[th] === undefined);
         errors.push(`${group}: "${tok.name}" per-theme value missing theme(s): ${missing.join(', ')}`);
       }
     } else {
-      if (group === 'spacing' || group === 'radius' || group === 'stroke') checkLen(tok.name, tok.value, group);
+      checkScale(group, tok.name, tok.value);
       scales.push([tok.name, String(tok.value)]);
     }
   }
@@ -80,6 +100,10 @@ for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex
 
 // ---- type ----
 const families = Object.entries(T.type.families);
+for (const [n, f] of families) {
+  if (!NAME_RE.test(n)) errors.push(`type: invalid family name "${n}"`);
+  if (typeof f !== 'string' || !FAMILY_RE.test(f)) errors.push(`type: family "${n}" bad value ${JSON.stringify(f)}`);
+}
 const familyNames = new Set(families.map(([n]) => n));
 const styles = [];
 for (const g of T.type.groups) {
@@ -98,10 +122,8 @@ for (const g of T.type.groups) {
   }
 }
 
-if (themes.length < 2) {
-  console.error('REJECTED — color.themes must declare at least two themes (dark primary, light)');
-  process.exit(1);
-}
+if (themes.length < 2) errors.push('color.themes must declare at least two themes (dark primary, light)');
+for (const th of themes) if (!NAME_RE.test(th)) errors.push(`color: invalid theme id "${th}"`);
 if (errors.length) {
   console.error(`REJECTED — ${errors.length} problem(s):`);
   for (const e of errors) console.error('  ' + e);
