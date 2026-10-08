@@ -106,7 +106,7 @@ The adapter configures its own providers explicitly, and a startup assertion fai
 
 mk "Choose map asset sources" "blocked-on-ben,consumer" \
 '**What**
-Terrain, imagery and geocoding for CesiumJS. Australian candidates: Geoscience Australia elevation, state imagery services, OpenStreetMap, plus AEM'"'"'s own imagery pipeline.
+Terrain, imagery and geocoding for CesiumJS. Australian candidates: Geoscience Australia elevation, state imagery services, OpenStreetMap.
 
 **Why it matters**
 The renderer licence settles nothing about assets. Cost, attribution obligations and any agency-mandated basemap are separate questions, and unverified against any specific project.
@@ -133,16 +133,6 @@ Protan and tritan modes stay unavailable, and saying otherwise would be worse th
 
 **Done when**
 The deutan method and scope are inspected and recorded, or the mode is withdrawn. Krzywinski'"'"'s published per-type palettes remain untested — that source was blocked by egress policy.'
-
-mk "Get a host contract for Elements 360 embedding" "blocked-on-ben,consumer" \
-'**What**
-Plan v1 implied that static output meant host compatibility. It does not.
-
-**Why it matters**
-No compatibility claim can be made for that target without this.
-
-**Done when**
-Written down: iframe or in-process, supported runtime, authentication, content security policy, CSS isolation, sizing, and the communication channel.'
 
 mk "Decide the default skin" "blocked-on-ben" \
 '**What**
