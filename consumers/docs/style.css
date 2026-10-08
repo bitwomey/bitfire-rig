@@ -1,0 +1,141 @@
+/* ---- BITFire document stylesheet (light theme tokens) ---- */
+/* Token values come from @bitfire/tokens at build time. They are NOT
+   written here: a hand-copied palette is a drift risk, and documents must
+   provably share one source with the UI. build.py injects the package's
+   generated tokens.css above this file and switches it to the light theme. */
+@page{
+  size:A4; margin:26mm 22mm 20mm 22mm;
+  @bottom-center{ content:counter(page);
+    font-family:'PlexSans'; font-size:8pt; color:#59696f; }
+  @top-right{ content:string(doctitle);
+    font-family:'PlexSans'; font-size:7.5pt; letter-spacing:.4pt;
+    color:#59696f; }
+}
+/* Head and foot rules. position:fixed repeats on every page in WeasyPrint and
+   spans left:0/right:0 = exactly the measure. The @page background-image route
+   was tried first and tinted the whole sheet: background-size did not clip the
+   gradient, so the 'line' filled the page. */
+.rule-head,.rule-foot{position:fixed;left:0;right:0;
+  border-top:.5pt solid var(--border-hairline);}
+.rule-head{top:-9mm;}
+.rule-foot{bottom:-11mm;}
+@page:first{ @top-right{content:none} @bottom-center{content:none} }
+html,body{margin:0;padding:0}
+body{font-family:'PlexSerif',Georgia,serif;font-size:10.5pt;line-height:15pt;
+  color:var(--ink);counter-reset:fig tbl;}
+h1,h2,h3,h4,.sans{font-family:'PlexSans',sans-serif;}
+
+/* ---- title block ---- */
+.eyebrow{font-family:'PlexSans';font-size:8pt;font-weight:600;letter-spacing:1.1pt;
+  text-transform:uppercase;color:var(--brand-ember);margin:0 0 9pt;}
+.rule{height:2pt;background:var(--brand-ember);width:48pt;margin:0 0 16pt;}
+h1{font-size:26pt;font-weight:300;line-height:30pt;margin:0 0 7pt;
+  letter-spacing:-.3pt;string-set:doctitle content();}
+.lead{font-size:12pt;line-height:17pt;color:var(--ink-muted);margin:0 0 12pt;}
+.meta{font-family:'PlexSans';font-size:8.5pt;color:var(--ink-subtle);margin:0 0 4pt;}
+
+h2{font-size:13pt;font-weight:600;line-height:17pt;margin:19pt 0 6pt;
+  break-after:avoid;}
+h3{font-size:10.5pt;font-weight:600;line-height:15pt;margin:14pt 0 4pt;
+  color:var(--ink-muted);break-after:avoid;}
+p{margin:0 0 9pt;}
+a{color:var(--signal);text-decoration:none;}
+
+/* ---- contents and figures lists ---- */
+nav.contents{break-after:page;}
+nav h2{margin-top:0;}
+nav ul{list-style:none;margin:0 0 16pt;padding:0;}
+nav li{margin:0 0 3pt;font-family:'PlexSans';font-size:9.5pt;line-height:14pt;}
+nav li.lvl2{padding-left:14pt;font-size:9pt;color:var(--ink-muted);}
+nav a{color:var(--ink);text-decoration:none;}
+nav a::after{content:leader('.') target-counter(attr(href),page);
+  color:var(--ink-subtle);font-variant-numeric:tabular-nums;
+  font-family:'PlexSans',sans-serif;}
+
+/* ---- BULLETED LIST HIERARCHY ----
+   Strict child chains per level. Descendant selectors bleed: a level-4 item
+   also matches 'ul.b ul ul > li', so it inherited the level-3 ring. */
+ul.b,ul.b ul{list-style:none;margin:0 0 9pt;padding-left:14pt;}
+ul.b ul{margin:3pt 0;}
+ul.b li{position:relative;margin:0 0 3pt;}
+ul.b li::before{position:absolute;left:-14pt;font-family:'PlexSans',sans-serif;
+  color:var(--ink-muted);background:none;border:0;width:auto;height:auto;}
+/* L1 and L3 are drawn, not glyphs: IBM Plex has no U+25CF or U+25CB, so a
+   glyph bullet silently substitutes DejaVu. */
+ul.b > li::before{content:'';width:3.4pt;height:3.4pt;top:5.6pt;
+  border-radius:50%;background:var(--ink-muted);}
+ul.b > li > ul > li::before{content:'\2013';top:0;}
+ul.b > li > ul > li > ul > li::before{content:'';width:3.2pt;height:3.2pt;
+  top:5.7pt;border-radius:50%;background:none;box-sizing:border-box;
+  border:.6pt solid var(--ink-subtle);}
+ul.b > li > ul > li > ul > li > ul > li::before{content:'\2022';top:0;
+  color:var(--ink-subtle);}
+ul.tight li{margin-bottom:0;}
+
+/* LOCKED IN 8 Oct 2026. Type size is identical at every level, by design:
+   indentation encodes depth, size would wrongly encode importance, and the
+   deepest item is usually the actual instruction. Hierarchy comes from role
+   instead -- an item that opens a group is a label (sans semibold), an item
+   that says something is content (serif) -- plus a spacing rhythm.
+   build.py tags parents automatically. */
+ul.b ul{margin:5pt 0 6pt;}            /* air above a nested group */
+ul.b li{margin:0 0 2pt;}              /* siblings sit tighter */
+ul.b li.grp{font-family:'PlexSans',sans-serif;font-weight:600;font-size:10pt;
+  color:var(--ink);}
+ul.b li.grp > ul{font-family:'PlexSerif',Georgia,serif;font-weight:400;
+  font-size:10.5pt;color:var(--ink);}
+/* The depth-3 colour step is deliberately NOT enabled: it made a level-3 leaf
+   sitting beside a level-3 label read as demoted. Re-enable with one rule if
+   wanted: ul.b > li > ul > li > ul{color:var(--ink-muted)} */
+
+ul.b li > strong:first-child{font-family:'PlexSans';font-weight:600;font-size:10pt;}
+
+/* ---- NUMBERED HIERARCHY ---- */
+ol.n,ol.n ol{list-style:none;margin:0 0 9pt;padding-left:20pt;}
+ol.n ol{margin:3pt 0;}
+ol.n li{position:relative;margin:0 0 3pt;}
+ol.n li::before{position:absolute;left:-20pt;width:16pt;text-align:right;
+  font-family:'PlexSans',sans-serif;font-size:9.5pt;color:var(--ink-subtle);}
+ol.n{counter-reset:l1;}
+ol.n > li{counter-increment:l1;}
+ol.n > li::before{content:counter(l1) '.';font-weight:600;color:var(--ink-muted);}
+ol.n > li > ol{counter-reset:l2;}
+ol.n > li > ol > li{counter-increment:l2;}
+ol.n > li > ol > li::before{content:counter(l2,lower-alpha) '.';}
+ol.n > li > ol > li > ol{counter-reset:l3;}
+ol.n > li > ol > li > ol > li{counter-increment:l3;}
+ol.n > li > ol > li > ol > li::before{content:counter(l3,lower-roman) '.';
+  font-size:9pt;}
+
+/* ---- QUOTES ---- */
+blockquote{margin:11pt 0;padding-left:11pt;
+  border-left:2pt solid var(--border-hairline);color:var(--ink-muted);}
+blockquote p{margin:0 0 5pt;}
+blockquote .attrib{font-family:'PlexSans';font-size:8.5pt;color:var(--ink-subtle);}
+.pull{font-family:'PlexSans';font-weight:300;font-size:15pt;line-height:21pt;
+  color:var(--ink);margin:14pt 0;padding:0 0 0 14pt;
+  border-left:3pt solid var(--brand-ember);break-inside:avoid;}
+
+/* ---- FIGURES AND TABLES ---- */
+figure{margin:12pt 0;counter-increment:fig;break-inside:avoid;}
+figure .frame{border:1pt solid var(--border-hairline);border-radius:3pt;
+  padding:10pt;background:var(--surface-raised);}
+figcaption{font-family:'PlexSans';font-size:8.5pt;line-height:12pt;
+  color:var(--ink-subtle);margin-top:5pt;}
+figcaption::before{content:'Figure ' counter(fig) '  ';font-weight:600;
+  color:var(--ink-muted);}
+table{border-collapse:collapse;width:100%;font-family:'PlexSans';font-size:9pt;
+  margin:9pt 0 4pt;}
+th{text-align:left;font-weight:600;font-size:7.5pt;letter-spacing:.6pt;
+  text-transform:uppercase;color:var(--ink-subtle);
+  border-bottom:1pt solid var(--ink);padding:0 8pt 4pt 0;}
+td{padding:5pt 8pt;border-bottom:.5pt solid var(--border-hairline);
+  vertical-align:top;padding-left:0;}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+
+/* ---- CITATIONS AND BIBLIOGRAPHY ---- */
+.citation{white-space:nowrap;}
+#refs{font-size:9.5pt;line-height:13.5pt;}
+#refs .csl-entry{padding-left:16pt;text-indent:-16pt;margin:0 0 7pt;
+  color:var(--ink-muted);}
+h2#references,h2#bibliography{break-before:page;}
