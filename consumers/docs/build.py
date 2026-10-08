@@ -57,6 +57,20 @@ m = re.search(r'\[data-theme="light"\]\s*\{(.*?)\n\}', tokens_css, re.S)
 if not m:
     sys.exit("REJECTED: light theme block not found in the generated tokens")
 own = (here / "style.css").read_text()
+# @page margin boxes cannot resolve :root custom properties, so their colours
+# must be literal in the output. They still come from the package: style.css
+# writes __TOKEN_<name>__ and we substitute from the light-theme block here.
+light_vals = dict(re.findall(r'--([A-Za-z0-9_.-]+):\s*([^;]+);', m.group(1)))
+def _sub(mo):
+    name = mo.group(1)
+    if name not in light_vals:
+        sys.exit("REJECTED: style.css asks for __TOKEN_%s__ but the package does not define it" % name)
+    return light_vals[name].strip()
+own, n_sub = re.subn(r'__TOKEN_([A-Za-z0-9_.-]+)__', _sub, own)
+if "__TOKEN_" in own:
+    sys.exit("REJECTED: unsubstituted token placeholder remains in style.css")
+print("substituted %d literal token placeholder(s)" % n_sub, file=sys.stderr)
+
 tpl = tokens_css + "\n:root {" + m.group(1) + "\n}\n" + own
 
 # GATE: every token this stylesheet uses must actually be defined. Without

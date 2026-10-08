@@ -3,3 +3,6 @@ node_modules/
 .verdaccio/htpasswd
 .verdaccio/*.log
 *.tgz
+consumers/docs/specimen.pdf
+consumers/docs/out.html
+consumers/*/node_modules/

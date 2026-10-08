@@ -6,10 +6,10 @@
 @page{
   size:A4; margin:26mm 22mm 20mm 22mm;
   @bottom-center{ content:counter(page);
-    font-family:'PlexSans'; font-size:8pt; color:#59696f; }
+    font-family:'PlexSans'; font-size:8pt; color:__TOKEN_ink-subtle__; }
   @top-right{ content:string(doctitle);
     font-family:'PlexSans'; font-size:7.5pt; letter-spacing:.4pt;
-    color:#59696f; }
+    color:__TOKEN_ink-subtle__; }
 }
 /* Head and foot rules. position:fixed repeats on every page in WeasyPrint and
    spans left:0/right:0 = exactly the measure. The @page background-image route

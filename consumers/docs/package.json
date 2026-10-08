@@ -1,1 +1,1 @@
-{"name":"bitfire-docs","version":"0.0.0","private":true,"dependencies":{"@bitfire/tokens":"^2.0.0"}}
+{"name":"bitfire-docs","version":"0.0.0","private":true,"dependencies":{"@bitfire/tokens":"^2.1.0"}}
