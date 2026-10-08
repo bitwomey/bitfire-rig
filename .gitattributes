@@ -1,0 +1,5 @@
+# The generator hashes tokens.json byte for byte, so a CRLF checkout (Windows,
+# core.autocrlf=true) changes the source hash and fails the stale check.
+packages/tokens/src/tokens.json eol=lf
+packages/tokens/dist/* eol=lf
+tools/*.sh eol=lf
