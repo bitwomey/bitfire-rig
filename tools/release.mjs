@@ -6,10 +6,11 @@ import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, mkdtempSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const pkgDir = resolve(process.argv[2] ?? '.');
 const registry = process.argv[3] ?? 'http://localhost:4873/';
-const root = resolve(new URL('..', import.meta.url).pathname);
+const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const dry = process.argv.includes('--dry-run');
 
 const steps = [];

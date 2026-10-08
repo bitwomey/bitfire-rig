@@ -4,11 +4,22 @@
 import { mkdtempSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 const [src, dist] = process.argv.slice(2);
 const tmp = mkdtempSync(join(tmpdir(), 'bf-'));
-try { execFileSync('node', [new URL('./generate.mjs', import.meta.url).pathname, src, tmp], { stdio: 'pipe' }); }
-catch (e) { console.error('STALE-CHECK: generator rejected the source'); process.exit(1); }
+try {
+  execFileSync('node', [fileURLToPath(new URL('./generate.mjs', import.meta.url)), src, tmp],
+               { stdio: 'pipe' });
+} catch (e) {
+  // Surface what the generator actually said. Reporting only "rejected the
+  // source" hid a missing-module error behind a plausible-looking message,
+  // which sent the diagnosis the wrong way entirely.
+  const out = [e.stderr, e.stdout].map(b => (b ? b.toString().trim() : '')).filter(Boolean).join('\n');
+  console.error('STALE-CHECK: the generator did not complete.');
+  console.error(out || `(no output; node exited ${e.status ?? '?'}: ${e.message})`);
+  process.exit(1);
+}
 let bad = 0;
 for (const f of readdirSync(tmp)) {
   const a = readFileSync(join(tmp, f), 'utf8');
