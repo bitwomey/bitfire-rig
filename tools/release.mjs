@@ -41,7 +41,7 @@ step('generated output is not stale', () => {
 });
 
 step('no raw colour outside generated files', () => {
-  sh('node', [join(root, 'tools/check-rawcolour.mjs'), join(root, 'packages'), join(root, 'fixtures')]);
+  sh('node', [join(root, 'tools/check-rawcolour.mjs'), join(root, 'packages'), join(root, 'fixtures'), join(root, 'consumers')]);
   return 'clean';
 });
 

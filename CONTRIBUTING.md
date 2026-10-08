@@ -6,7 +6,7 @@ here serves that.
 ## Before you push
 
     node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist
-    node tools/check-rawcolour.mjs packages fixtures
+    node tools/check-rawcolour.mjs packages fixtures consumers
     bash tools/gate-tests.sh
 
 CI runs exactly these. There is no check that only exists in CI, and none that
