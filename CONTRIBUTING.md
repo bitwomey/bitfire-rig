@@ -36,3 +36,18 @@ prints a warning and installs an incompatible pair anyway, exit 0.
 An issue is durable context for a future session, not ceremony. Three lines:
 what, why it matters, and the check that settles it. Anything an agent would
 otherwise have to rediscover belongs in one.
+
+## Why nothing is published yet
+
+Consumers resolve `@bitfire/tokens` and `@bitfire/ui` through npm workspaces,
+so no registry is involved during development. `npm install` at the repo root
+links everything.
+
+Publishing waits for the move to the BITFire organisation. GitHub Packages
+scopes a package to the account hosting it, and the `@bitfire` scope wants
+that org. Publishing from a personal repo would mean either the wrong scope
+now or a rename later, and a rename breaks every consumer.
+
+The distribution model itself is already proven — clean install, upgrade,
+rollback, immutable versions and peer-conflict detection were all demonstrated
+against a real registry. See the Phase 3 notes in README.md.

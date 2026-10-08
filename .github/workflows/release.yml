@@ -1,6 +1,12 @@
 name: Release
 
 # Manual only. A release is a decision, not a consequence of merging.
+#
+# NOT IN USE YET. Nothing needs publishing while the consumers resolve through
+# npm workspaces. The @bitfire scope on GitHub Packages wants the BITFire org
+# to host it, so publishing waits until this repo is transferred there. Until
+# then the workspace is the distribution mechanism and this file is a stub
+# kept in step with tools/release.mjs.
 on:
   workflow_dispatch:
     inputs:

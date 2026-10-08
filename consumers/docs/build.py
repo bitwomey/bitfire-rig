@@ -47,9 +47,16 @@ for i, m in enumerate(re.finditer(r'<figure id="([^"]+)".*?<figcaption>(.*?)</fi
                % (fid, i, html.escape(cap)))
 
 # Documents are a real consumer of @bitfire/tokens, not a copy of it.
-tokpath = here / "node_modules/@bitfire/tokens/dist/tokens.css"
+# Resolve through Node rather than a hard-coded path: npm workspaces hoist
+# dependencies to the repo root, so node_modules may not be beside this file.
+try:
+    tokpath = pathlib.Path(subprocess.run(
+        ["node", "-p", "require.resolve('@bitfire/tokens/tokens.css')"],
+        cwd=here, capture_output=True, text=True, check=True).stdout.strip())
+except subprocess.CalledProcessError:
+    sys.exit("REJECTED: @bitfire/tokens is not resolvable - run npm install at the repo root")
 if not tokpath.exists():
-    sys.exit("REJECTED: @bitfire/tokens is not installed - run npm install")
+    sys.exit("REJECTED: @bitfire/tokens resolved to a path that does not exist: %s" % tokpath)
 tokens_css = tokpath.read_text()
 # Print uses the light theme whatever the screen default, so promote the
 # [data-theme="light"] block to :root rather than relying on an attribute.

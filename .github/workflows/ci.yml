@@ -41,6 +41,12 @@ jobs:
       - name: The gates still reject what they should
         run: bash tools/gate-tests.sh
 
+      - name: Install the workspace
+        run: npm ci || npm install
+
+      - name: The app consumer resolves and runs
+        run: node consumers/app/src/app.mjs
+
       - name: Checks left the working tree clean
         run: |
           if [ -n "$(git status --porcelain)" ]; then
