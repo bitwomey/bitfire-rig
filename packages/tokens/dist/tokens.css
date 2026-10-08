@@ -1,6 +1,6 @@
 /* GENERATED FILE — do not edit.
    Edit packages/tokens/src/tokens.json and re-run the generator.
-   source 56fe150837ed · generator 1.0.0 */
+   source 56fe150837ed · generator 1.0.1 */
 
 :root {
   /* colour · dark (primary) */
@@ -49,6 +49,10 @@
   --div-mid: #3a4048;
   --focus: #4ec9f5;
   --focus-wash: #1b4a5f;
+  --shadow-sm: 0 1px 2px 0 #00000080;
+  --shadow-md: 0 4px 12px -2px #00000099;
+  --shadow-lg: 0 16px 40px -8px #000000b3;
+  --shadow-panel: 0 0 0 1px #26323a, 0 8px 24px -6px #000000a6;
 
   /* colour · theme-independent */
   --ink-on-warm: #0a1114;
@@ -58,7 +62,7 @@
   --fdr-high: #f5c518;
   --fdr-extreme: #f2721c;
   --fdr-catastrophic: #c9141d;
-  --status-info: {signal};
+  --status-info: var(--signal);
 
   /* scale */
   --space-0\.5: 2px;
@@ -77,10 +81,6 @@
   --radius-md: 6px;
   --radius-lg: 10px;
   --radius-full: 999px;
-  --shadow-sm: [object Object];
-  --shadow-md: [object Object];
-  --shadow-lg: [object Object];
-  --shadow-panel: [object Object];
   --opacity-disabled: 0.45;
   --opacity-ghost: 0.08;
   --opacity-overlay: 0.72;
@@ -147,6 +147,10 @@
   --div-mid: #e7e5e2;
   --focus: #0b6f95;
   --focus-wash: #cfe8f3;
+  --shadow-sm: 0 1px 2px 0 #0b131714;
+  --shadow-md: 0 4px 12px -2px #0b13171f;
+  --shadow-lg: 0 16px 40px -8px #0b131729;
+  --shadow-panel: 0 0 0 1px #d5dde2, 0 8px 24px -6px #0b13171a;
 }
 
 .display-xl { font-family: var(--font-sans); font-size: 48px; line-height: 48px; font-weight: 200; letter-spacing: -0.022em; }

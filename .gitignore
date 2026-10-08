@@ -6,3 +6,8 @@ node_modules/
 consumers/docs/specimen.pdf
 consumers/docs/out.html
 consumers/*/node_modules/
+consumers/*/dist/
+# Per-developer shell config (Windows: script-shell=C:\Program Files\Git\bin\bash.exe)
+.npmrc
+# Per-developer local Claude Code settings (env vars, keys)
+.claude/settings.local.json
