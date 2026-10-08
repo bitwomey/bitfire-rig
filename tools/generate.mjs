@@ -5,9 +5,15 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 
-const GENERATOR_VERSION = '1.0.0';
+const GENERATOR_VERSION = '1.0.1';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
-const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|rgba?\(|oklch\(|hsla?\(|\{[a-z0-9.-]+\}|transparent|currentColor)/;
+const ALIAS_RE = /^\{([a-z0-9.-]+)\}$/;
+const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
+// Shadow layers: lengths, colours, commas. No braces, quotes or semicolons, so a value cannot break out of its declaration.
+const SHADOW_RE = /^(none|\{[a-z0-9.-]+\}|[0-9a-zA-Z%.,\s#()\/-]+)$/;
+const FAMILY_RE = /^[A-Za-z0-9\s,"'-]+$/;
+const OPACITY_RE = /^(0|1|0?\.\d+|1\.0+)$/;
+const ZINDEX_RE = /^-?\d+$/;
 const LEN_RE  = /^(-?[\d.]+(px|rem|em|%|ch|vh|vw)|0|-?[\d.]+)$/;
 
 const src = process.argv[2];
@@ -31,6 +37,22 @@ function checkLen(name, v, where) {
   else if (!LEN_RE.test(s)) errors.push(`${where}: "${name}" has unparseable length "${s}"`);
 }
 function esc(n) { return n.replace(/\./g, '\\.'); }
+// Resolve alias syntax {token-name} → var(--token-name). Whole-value only:
+// an alias embedded in a longer string is left as written. The target is
+// escaped like a declaration, and recorded so checkAliases() can verify it.
+const aliasRefs = [];
+function resolveAlias(v, owner) {
+  const m = typeof v === 'string' ? ALIAS_RE.exec(v) : null;
+  if (!m) return v;
+  aliasRefs.push([owner, m[1]]);
+  return `var(--${esc(m[1])})`;
+}
+function checkAliases() {
+  for (const [owner, target] of aliasRefs) {
+    if (target === owner) errors.push(`alias: "${owner}" refers to itself`);
+    else if (!seen.has(target)) errors.push(`alias: "${owner}" refers to unknown token "${target}"`);
+  }
+}
 
 // ---- colour ----
 const themes = T.color.themes.map(t => t.id);
@@ -40,31 +62,60 @@ for (const tok of T.color.tokens) {
   checkName(tok.name, 'color');
   if (tok.provenance === 'approximate') approximate.push(tok.name);  // none at present
   if (typeof tok.value === 'string') {
+    const v = resolveAlias(tok.value, tok.name);
     if (!COLOR_RE.test(tok.value)) errors.push(`color: "${tok.name}" bad value "${tok.value}"`);
-    base.push([tok.name, tok.value]);
+    base.push([tok.name, v]);
   } else {
     for (const th of themes) {
-      const v = tok.value[th];
-      if (v === undefined) { errors.push(`color: "${tok.name}" missing theme "${th}"`); continue; }
-      if (!COLOR_RE.test(v)) errors.push(`color: "${tok.name}" bad ${th} value "${v}"`);
-      perTheme[th].push([tok.name, v]);
+      const raw = tok.value[th];
+      if (raw === undefined) { errors.push(`color: "${tok.name}" missing theme "${th}"`); continue; }
+      if (!COLOR_RE.test(raw)) errors.push(`color: "${tok.name}" bad ${th} value "${raw}"`);
+      perTheme[th].push([tok.name, resolveAlias(raw, tok.name)]);
     }
   }
 }
 
 // ---- scales ----
+// Returns true when the value is valid; pushes an error otherwise.
+function checkScale(group, name, v) {
+  const before = errors.length;
+  if (group === 'spacing' || group === 'radius' || group === 'stroke') checkLen(name, v, group);
+  else if (group === 'opacity' && !OPACITY_RE.test(String(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
+  else if (group === 'zIndex' && !ZINDEX_RE.test(String(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
+  else if (group === 'shadow' && !(typeof v === 'string' && SHADOW_RE.test(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
+  return errors.length === before;
+}
 const scales = [];
 for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex']) {
   for (const tok of (T[group]?.tokens ?? [])) {
     checkName(tok.name, group);
-    if (['spacing', 'radius', 'stroke'].includes(group)) checkLen(tok.name, tok.value, group);
-    scales.push([tok.name, String(tok.value)]);
+    // Shadow tokens carry per-theme values; route them into the theme blocks
+    // rather than scales so they emit correctly in :root / [data-theme="light"].
+    if (typeof tok.value === 'object' && tok.value !== null) {
+      if (themes.every(th => tok.value[th] !== undefined)) {
+        for (const th of themes) {
+          const pv = tok.value[th];
+          checkScale(group, tok.name, pv);
+          perTheme[th].push([tok.name, resolveAlias(pv, tok.name)]);
+        }
+      } else {
+        const missing = themes.filter(th => tok.value[th] === undefined);
+        errors.push(`${group}: "${tok.name}" per-theme value missing theme(s): ${missing.join(', ')}`);
+      }
+    } else {
+      checkScale(group, tok.name, tok.value);
+      scales.push([tok.name, String(tok.value)]);
+    }
   }
 }
 
 // ---- type ----
 const families = Object.entries(T.type.families);
-const familyNames = new Set(Object.keys(T.type.families));
+for (const [n, f] of families) {
+  if (!NAME_RE.test(n)) errors.push(`type: invalid family name "${n}"`);
+  if (typeof f !== 'string' || !FAMILY_RE.test(f)) errors.push(`type: family "${n}" bad value ${JSON.stringify(f)}`);
+}
+const familyNames = new Set(families.map(([n]) => n));
 const styles = [];
 for (const g of T.type.groups) {
   // family is declared on the GROUP, not the style. Defaulting it silently
@@ -82,6 +133,9 @@ for (const g of T.type.groups) {
   }
 }
 
+checkAliases();
+if (themes.length < 2) errors.push('color.themes must declare at least two themes (dark primary, light)');
+for (const th of themes) if (!NAME_RE.test(th)) errors.push(`color: invalid theme id "${th}"`);
 if (errors.length) {
   console.error(`REJECTED — ${errors.length} problem(s):`);
   for (const e of errors) console.error('  ' + e);

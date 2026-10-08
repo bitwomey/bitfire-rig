@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "description": "BITFire design system: tokens, components, and the checks that keep them honest",
   "license": "MIT",
-  "workspaces": ["packages/*", "consumers/*"],
+  "workspaces": [
+    "packages/*",
+    "consumers/*"
+  ],
   "scripts": {
     "generate": "node tools/generate.mjs packages/tokens/src/tokens.json packages/tokens/dist",
     "check:stale": "node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist",

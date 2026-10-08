@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "@bitfire/tokens/tokens.css";
+
+/*
+  Map BITFire tokens to Tailwind 4 utility namespaces.
+
+  `@theme inline` tells Tailwind to use var() references directly in utility
+  rules rather than re-declaring values under --color-* in :root. This is the
+  correct approach for tokens whose values change at runtime via the
+  [data-theme="light"] attribute.
+
+  Without `inline`, Tailwind would emit --color-canvas: var(--canvas) in :root,
+  and utilities would reference --color-canvas. With `inline`, utilities
+  reference var(--canvas) directly — which is what we want.
+
+  The radius and font entries below name the same variable on both sides
+  (--radius-sm: var(--radius-sm)). Tailwind declares each in its theme layer,
+  where that is a cycle; it resolves only because tokens.css is imported
+  unlayered and so overrides the theme layer. Keep that import unlayered.
+*/
+@theme inline {
+  /* ── colours ─────────────────────────────────────── */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-hover: var(--surface-hover);
+  --color-border-hairline: var(--border-hairline);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-signal: var(--signal);
+  --color-signal-hover: var(--signal-hover);
+  --color-signal-wash: var(--signal-wash);
+  --color-on-signal: var(--on-signal);
+  --color-focus: var(--focus);
+  --color-focus-wash: var(--focus-wash);
+  --color-focus-ring: var(--focus-ring);
+  --color-status-info: var(--status-info);
+  --color-brand-ember: var(--brand-ember);
+  --color-status-ok: var(--status-ok);
+  --color-status-warn: var(--status-warn);
+  --color-status-danger: var(--status-danger);
+  --color-on-status-danger: var(--on-status-danger);
+  --color-status-ok-wash: var(--status-ok-wash);
+  --color-status-warn-wash: var(--status-warn-wash);
+  --color-status-danger-wash: var(--status-danger-wash);
+  --color-viz-1: var(--viz-1);
+  --color-viz-2: var(--viz-2);
+  --color-viz-3: var(--viz-3);
+  --color-viz-4: var(--viz-4);
+  --color-viz-5: var(--viz-5);
+  --color-viz-6: var(--viz-6);
+  --color-scrim: var(--scrim);
+  --color-label-halo: var(--label-halo);
+  --color-sev-0: var(--sev-0);
+  --color-sev-1: var(--sev-1);
+  --color-sev-2: var(--sev-2);
+  --color-sev-3: var(--sev-3);
+  --color-sev-4: var(--sev-4);
+  --color-div-lo-0: var(--div-lo-0);
+  --color-div-lo-1: var(--div-lo-1);
+  --color-div-lo-2: var(--div-lo-2);
+  --color-div-hi-0: var(--div-hi-0);
+  --color-div-hi-1: var(--div-hi-1);
+  --color-div-hi-2: var(--div-hi-2);
+  --color-div-mid: var(--div-mid);
+  --color-ink-on-warm: var(--ink-on-warm);
+  --color-ink-on-deep: var(--ink-on-deep);
+  --color-fdr-no-rating: var(--fdr-no-rating);
+  --color-fdr-moderate: var(--fdr-moderate);
+  --color-fdr-high: var(--fdr-high);
+  --color-fdr-extreme: var(--fdr-extreme);
+  --color-fdr-catastrophic: var(--fdr-catastrophic);
+
+  /* ── spacing ──────────────────────────────────────── */
+  /* Tailwind 4 spacing uses a multiplier by default; we override
+     the named steps we want. Naming avoids clashing with Tailwind's
+     numeric scale (1 = 4px in BITFire; 1 = 0.25rem = 4px in Tailwind —
+     they agree, so these simply re-map the token to the Tailwind slot). */
+  --spacing-px5: var(--space-0\.5);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+
+  /* ── border radius ────────────────────────────────── */
+  --radius-none: var(--radius-none);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+
+  /* ── font families ────────────────────────────────── */
+  --font-sans: var(--font-sans);
+  --font-condensed: var(--font-condensed);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  /* Not mapped: opacity, stroke widths, z-index and shadows. Tailwind has no
+     theme namespace that turns them into utilities, so a mapping here would
+     only declare unused variables. They stay available as plain var(--...). */
+}
