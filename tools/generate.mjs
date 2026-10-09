@@ -143,7 +143,7 @@ for (const th of themes) if (!NAME_RE.test(th)) errors.push(`color: invalid them
 const TW_PREFIX = { spacing: 'space-', radius: 'radius-' };
 for (const [group, prefix] of Object.entries(TW_PREFIX)) {
   for (const tok of (T[group]?.tokens ?? [])) {
-    if (!tok.name.startsWith(prefix)) errors.push(`${group}: "${tok.name}" must start with "${prefix}" to map to a Tailwind utility`);
+    if (!tok.name.startsWith(prefix) || tok.name.length === prefix.length) errors.push(`${group}: "${tok.name}" must be "${prefix}" followed by a key to map to a Tailwind utility`);
   }
 }
 if (errors.length) {

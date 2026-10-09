@@ -146,6 +146,10 @@ mutate "d.radius.tokens.push({name:'round-x',value:'5px',usage:'deliberate'})"
 run "radius token without its prefix rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
+mutate "d.spacing.tokens.push({name:'space-',value:'5px',usage:'deliberate'})"
+run "spacing token with an empty key rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.
