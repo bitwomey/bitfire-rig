@@ -59,8 +59,8 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       # Same npm script as the local `npm run check`: all stories pass axe in
-      # both themes, and the deliberately broken proof story must fail on an
-      # axe rule.
+      # both themes, and each deliberately broken proof story must fail on the
+      # axe rule it was written to trip.
       - name: Accessibility gate
         run: npm run check:a11y
 
