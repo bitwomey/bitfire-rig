@@ -25,10 +25,10 @@ const field = (
   </TextField>
 );
 
-const render = (modal: (p: { close?: boolean }) => React.ReactElement): Story['render'] => () => (
+const render = (modal: () => React.ReactElement): Story['render'] => () => (
   <DialogTrigger>
     <Button>Open dialog</Button>
-    {modal({})}
+    {modal()}
   </DialogTrigger>
 );
 
@@ -38,7 +38,8 @@ const closeBtn = (autoFocus = false) => (
 
 const Basic = () => (
   <Modal title="Archive this run" description="The run stays in the history and can be restored later." actions={<>{closeBtn(true)}<Button slot="close">Archive</Button></>}>
-    <p className="body text-ink">Archived runs are hidden from the default view.</p>  </Modal>
+    <p className="body text-ink">Archived runs are hidden from the default view.</p>
+  </Modal>
 );
 const WithForm = () => (
   <Modal title="Rename region" actions={<>{closeBtn()}<Button slot="close">Save</Button></>}>
@@ -66,6 +67,8 @@ export const Open: Story = {
     const { t, dialog } = await openIt(canvasElement);
     await waitFor(() => expect(document.activeElement).toBe(within(dialog).getByRole('button', { name: 'Cancel' })));
     await expect(document.activeElement).not.toBe(dialog);
+    // The description is tied to the dialog, so assistive technology reads it on open.
+    await expect(dialog).toHaveAccessibleDescription('The run stays in the history and can be restored later.');
     // Background inert: React Aria 1.22 marks everything outside the dialog `inert` (not aria-hidden),
     // so testing-library's role queries still see the trigger; assert the attribute itself.
     await waitFor(() => expect(t.closest('[inert]')).not.toBeNull());
