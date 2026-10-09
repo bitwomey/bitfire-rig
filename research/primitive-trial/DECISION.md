@@ -1,6 +1,6 @@
 # Primitive trial: result and proposed choice (issue #2)
 
-**Proposed: React Aria Components.** Not yet confirmed by Ben; this file records the reasoning so the choice can be accepted or overturned.
+**Decision: React Aria Components.** Accepted by Ben on 2026-10-09. This file records the reasoning so the choice can be revisited if the evidence below changes.
 
 Both candidates built the same page from `SPEC.md` in Chromium: a validated form, a searchable selector, a modal and a sortable table, in both themes and at 360 px. Full detail is in `rac/RESULTS.md` and `shadcn/RESULTS.md`. Figures marked "re-run" were re-measured by the coordinating session, not only taken from the builder's report.
 
