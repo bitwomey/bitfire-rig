@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch({ channel: 'msedge' });
+const p = await b.newPage();
+await p.goto('http://localhost:4173/');
+await p.click('button:has-text("Submit")');
+const st = () => p.$eval('input[name=name]', (i) => i.getAttribute('aria-invalid') + ' | ' + [...document.querySelectorAll('[slot=errorMessage]')][0]?.textContent);
+console.log('after submit', await st());
+await p.fill('input[name=name]', 'ab'); await p.waitForTimeout(500); console.log('typed ab (focused)', await st());
+await p.keyboard.press('Tab'); await p.waitForTimeout(300); console.log('ab then blur', await st());
+await p.fill('input[name=name]', 'Test Fire'); await p.waitForTimeout(500); console.log('typed valid (focused)', await st());
+await p.keyboard.press('Tab'); await p.waitForTimeout(300); console.log('valid then blur', await st());
+await p.focus('input[name=name]'); await p.keyboard.press('Control+a'); await p.keyboard.type('x'); await p.waitForTimeout(300); console.log('real typing x', await st());
+await p.keyboard.type('yz'); await p.waitForTimeout(300); console.log('real typing xyz', await st());
+await b.close();
