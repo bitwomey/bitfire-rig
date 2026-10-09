@@ -36,6 +36,25 @@ export const Disabled: Story = {
     }
   },
 };
+// A caller's own description must survive alongside the error message.
+export const InvalidKeepsCallerDescription: Story = {
+  args: { children: 'I accept the terms', error: 'Accept the terms to continue.', 'aria-describedby': 'terms-help' },
+  render: (args) => (
+    <div>
+      <p id="terms-help" className="body-sm text-ink-muted">
+        Terms apply to every site you manage.
+      </p>
+      <Checkbox {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const b of boxes(canvasElement)) {
+      await expect(b).toHaveAccessibleDescription(/Terms apply to every site you manage\./);
+      await expect(b).toHaveAccessibleDescription(/Accept the terms to continue\./);
+    }
+  },
+};
+
 export const Invalid: Story = {
   args: { children: 'I accept the terms', error: 'Accept the terms to continue.' },
   play: async ({ canvasElement }) => {

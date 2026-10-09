@@ -11,7 +11,7 @@ export function Checkbox({ children, error, className, ...props }: BitCheckboxPr
       <RACCheckbox
         {...props}
         isInvalid={props.isInvalid || !!error}
-        aria-describedby={error ? errorId : props['aria-describedby']}
+        aria-describedby={[props['aria-describedby'], error && errorId].filter(Boolean).join(' ') || undefined}
         className={`group flex items-center gap-2 ${dim}`}
       >
         {({ isSelected, isIndeterminate }) => (
