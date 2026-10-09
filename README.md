@@ -29,8 +29,9 @@ right.
 | Rollback works | Proven on a local registry only |
 | Versions are immutable | Proven — republish returns 409 |
 | Peer conflicts are caught | Proven — but only with `strict-peer-deps=true`; npm warns and installs otherwise |
-| Every gate rejects what it should | Proven — 8/8 gate-failure tests |
+| Every gate rejects what it should | Proven — the gate-failure suite passes (28 tests at the time of writing; `npm run check` prints the live count) |
 | Documents and UI share one source | Proven — the specimen renders from the token package |
+| The Tailwind 4 mapping is generated, not copied | Proven — `@bitfire/tokens/tailwind.css` is generated from `tokens.json`, covered by the stale check, and a new colour token reaches it with no other edit (gate tests). Swapping the fixture's hand-written mapping for it left the built CSS byte-identical (same file hash), measured once when it was swapped; no gate guards that. A dotted key such as `p-0.5` compiles to `var(--space-0\.5)` |
 | Fire danger values | Reviewed and confirmed by a qualified FBAN |
 | The workbench builds and runs every Button story | Proven locally — `storybook build` succeeds and lists the 12 stories; the interactive `storybook dev` server was not run |
 | Accessibility violations fail the gate, per theme | Proven — committed proof stories fail on axe rules `button-name` and `label`, and on `color-contrast` in the light container only (a token pair that fails in light and passes in dark). Removing the global `a11y` setting makes the gate fail. A dark-only failure has not been demonstrated, because no token pair fails only in dark |

@@ -1,0 +1,89 @@
+/* GENERATED FILE — do not edit.
+   Edit packages/tokens/src/tokens.json and re-run the generator.
+   source 56fe150837ed · generator 1.1.0 */
+
+/* Import after tokens.css and keep tokens.css unlayered: the radius and font
+   entries below name the same variable on both sides and resolve only because
+   the unlayered token file overrides Tailwind's theme layer. */
+@theme inline {
+  /* colour */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-hover: var(--surface-hover);
+  --color-border-hairline: var(--border-hairline);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-ink-on-warm: var(--ink-on-warm);
+  --color-ink-on-deep: var(--ink-on-deep);
+  --color-signal: var(--signal);
+  --color-signal-hover: var(--signal-hover);
+  --color-signal-wash: var(--signal-wash);
+  --color-on-signal: var(--on-signal);
+  --color-focus-ring: var(--focus-ring);
+  --color-brand-ember: var(--brand-ember);
+  --color-fdr-no-rating: var(--fdr-no-rating);
+  --color-fdr-moderate: var(--fdr-moderate);
+  --color-fdr-high: var(--fdr-high);
+  --color-fdr-extreme: var(--fdr-extreme);
+  --color-fdr-catastrophic: var(--fdr-catastrophic);
+  --color-status-ok: var(--status-ok);
+  --color-status-warn: var(--status-warn);
+  --color-status-danger: var(--status-danger);
+  --color-status-info: var(--status-info);
+  --color-on-status-danger: var(--on-status-danger);
+  --color-status-ok-wash: var(--status-ok-wash);
+  --color-status-warn-wash: var(--status-warn-wash);
+  --color-status-danger-wash: var(--status-danger-wash);
+  --color-viz-1: var(--viz-1);
+  --color-viz-2: var(--viz-2);
+  --color-viz-3: var(--viz-3);
+  --color-viz-4: var(--viz-4);
+  --color-viz-5: var(--viz-5);
+  --color-viz-6: var(--viz-6);
+  --color-scrim: var(--scrim);
+  --color-label-halo: var(--label-halo);
+  --color-sev-0: var(--sev-0);
+  --color-sev-1: var(--sev-1);
+  --color-sev-2: var(--sev-2);
+  --color-sev-3: var(--sev-3);
+  --color-sev-4: var(--sev-4);
+  --color-div-lo-0: var(--div-lo-0);
+  --color-div-lo-1: var(--div-lo-1);
+  --color-div-lo-2: var(--div-lo-2);
+  --color-div-hi-0: var(--div-hi-0);
+  --color-div-hi-1: var(--div-hi-1);
+  --color-div-hi-2: var(--div-hi-2);
+  --color-div-mid: var(--div-mid);
+  --color-focus: var(--focus);
+  --color-focus-wash: var(--focus-wash);
+
+  /* spacing */
+  --spacing-0\.5: var(--space-0\.5);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+
+  /* radius */
+  --radius-none: var(--radius-none);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+
+  /* type families */
+  --font-sans: var(--font-sans);
+  --font-condensed: var(--font-condensed);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+}

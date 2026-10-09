@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 
-const GENERATOR_VERSION = '1.0.1';
+const GENERATOR_VERSION = '1.1.0';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
 const ALIAS_RE = /^\{([a-z0-9.-]+)\}$/;
 const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
@@ -139,6 +139,13 @@ checkAliases();
 if (themes.length < 2) errors.push('color.themes must declare at least two themes (dark primary, light)');
 else if (themes.length > 2) errors.push(`color.themes declares extra theme(s) that would not be emitted: ${themes.slice(2).join(', ')}`);
 for (const th of themes) if (!NAME_RE.test(th)) errors.push(`color: invalid theme id "${th}"`);
+// The Tailwind mapping derives its utility key from the token name, so the name must carry the expected prefix.
+const TW_PREFIX = { spacing: 'space-', radius: 'radius-' };
+for (const [group, prefix] of Object.entries(TW_PREFIX)) {
+  for (const tok of (T[group]?.tokens ?? [])) {
+    if (!tok.name.startsWith(prefix) || tok.name.length === prefix.length) errors.push(`${group}: "${tok.name}" must be "${prefix}" followed by a key to map to a Tailwind utility`);
+  }
+}
 if (errors.length) {
   console.error(`REJECTED — ${errors.length} problem(s):`);
   for (const e of errors) console.error('  ' + e);
@@ -176,6 +183,25 @@ for (const s of styles) {
 }
 const css = L.join('\n') + '\n';
 
+// Tailwind 4 mapping. `inline` makes utilities reference var(--token) directly,
+// so they follow data-theme at runtime. Radius and font entries name the same
+// variable on both sides, so they resolve only because tokens.css is imported
+// unlayered and overrides Tailwind's theme layer.
+const TW = [stamp, '',
+  '/* Import after tokens.css and keep tokens.css unlayered: the radius and font',
+  '   entries below name the same variable on both sides and resolve only because',
+  "   the unlayered token file overrides Tailwind's theme layer. */",
+  '@theme inline {', '  /* colour */'];
+for (const tok of T.color.tokens) TW.push(`  --color-${esc(tok.name)}: var(--${esc(tok.name)});`);
+TW.push('', '  /* spacing */');
+for (const tok of (T.spacing?.tokens ?? [])) TW.push(`  --spacing-${esc(tok.name.slice(TW_PREFIX.spacing.length))}: var(--${esc(tok.name)});`);
+TW.push('', '  /* radius */');
+for (const tok of (T.radius?.tokens ?? [])) TW.push(`  --radius-${esc(tok.name.slice(TW_PREFIX.radius.length))}: var(--${esc(tok.name)});`);
+TW.push('', '  /* type families */');
+for (const [n] of families) TW.push(`  --font-${esc(n)}: var(--font-${esc(n)});`);
+TW.push('}', '');
+const tailwind = TW.join('\n');
+
 const allNames = [...perTheme[DARK].map(x => x[0]), ...base.map(x => x[0]), ...scales.map(x => x[0])].sort();
 const js = `${stamp}\nexport const sourceHash = ${JSON.stringify(sourceHash)};\n`
   + `export const generatorVersion = ${JSON.stringify(GENERATOR_VERSION)};\n`
@@ -191,6 +217,7 @@ const dts = `${stamp}\nexport declare const sourceHash: string;\n`
 
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, 'tokens.css'), css);
+writeFileSync(join(outDir, 'tailwind.css'), tailwind);
 writeFileSync(join(outDir, 'index.js'), js);
 writeFileSync(join(outDir, 'index.d.ts'), dts);
 console.error(`ok — ${seen.size} tokens, ${styles.length} type styles, source ${sourceHash}`);
