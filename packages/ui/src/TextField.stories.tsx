@@ -22,7 +22,7 @@ const boxes = (c: HTMLElement) => within(c).getAllByRole('textbox');
 
 export const Default: Story = {};
 export const Filled: Story = { args: { defaultValue: 'Mt Buller' } };
-export const FocusVisible: Story = { play: ({ canvasElement }) => expectFocusRing(canvasElement) };
+export const FocusVisible: Story = { play: () => expectFocusRing() };
 export const Invalid: Story = {
   args: { defaultValue: 'x', error: 'Enter at least 3 characters.' },
   play: async ({ canvasElement }) => {

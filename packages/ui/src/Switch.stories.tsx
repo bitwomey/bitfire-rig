@@ -27,7 +27,7 @@ export const On: Story = {
     }
   },
 };
-export const FocusVisible: Story = { play: ({ canvasElement }) => expectFocusRing(canvasElement, indicatorOf) };
+export const FocusVisible: Story = { play: () => expectFocusRing(indicatorOf) };
 export const Disabled: Story = {
   args: { isDisabled: true },
   play: async ({ canvasElement }) => {

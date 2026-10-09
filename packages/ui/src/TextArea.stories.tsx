@@ -23,7 +23,7 @@ const note = 'Wind easing from the south west.';
 
 export const Default: Story = {};
 export const Filled: Story = { args: { defaultValue: note } };
-export const FocusVisible: Story = { play: ({ canvasElement }) => expectFocusRing(canvasElement) };
+export const FocusVisible: Story = { play: () => expectFocusRing() };
 export const Invalid: Story = {
   args: { defaultValue: 'ok', error: 'Enter at least 20 characters.' },
   play: async ({ canvasElement }) => {

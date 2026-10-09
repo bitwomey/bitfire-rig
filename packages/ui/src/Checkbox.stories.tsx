@@ -26,7 +26,7 @@ export const Indeterminate: Story = {
     for (const b of boxes(canvasElement)) await expect((b as HTMLInputElement).indeterminate).toBe(true);
   },
 };
-export const FocusVisible: Story = { play: ({ canvasElement }) => expectFocusRing(canvasElement, indicatorOf) };
+export const FocusVisible: Story = { play: () => expectFocusRing(indicatorOf) };
 export const Disabled: Story = {
   args: { isDisabled: true },
   play: async ({ canvasElement }) => {

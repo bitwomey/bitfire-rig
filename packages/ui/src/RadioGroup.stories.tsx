@@ -27,7 +27,7 @@ export const Selected: Story = {
     for (const r of radios(canvasElement).filter((r) => (r as HTMLInputElement).value === 'email')) await expect(r).toBeChecked();
   },
 };
-export const FocusVisible: Story = { play: ({ canvasElement }) => expectFocusRing(canvasElement, indicatorOf) };
+export const FocusVisible: Story = { play: () => expectFocusRing(indicatorOf) };
 export const Disabled: Story = {
   args: { isDisabled: true, defaultValue: 'sms' },
   play: async ({ canvasElement }) => {
