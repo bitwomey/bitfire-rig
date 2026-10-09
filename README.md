@@ -32,8 +32,38 @@ right.
 | Every gate rejects what it should | Proven — 8/8 gate-failure tests |
 | Documents and UI share one source | Proven — the specimen renders from the token package |
 | Fire danger values | Reviewed and confirmed by a qualified FBAN |
-| Anything about components | **Not started** |
+| The workbench builds and runs every Button story | Proven locally — `storybook build` succeeds and lists the 12 stories; the interactive `storybook dev` server was not run |
+| Accessibility violations fail locally, in both themes | Proven locally — a deliberately broken story fails on axe rules `button-name` and `label`; a dark-only and a light-only contrast failure each failed the run |
+| CI fails on an accessibility violation | **Not proven** — the step is in `ci.yml` and runs the same `npm run check:a11y`, but no CI run has been seen yet |
+| Anything about components beyond one Button | **Not started** — Button exists only to prove the workbench and is not exported |
 | Private registry auth, CI access | **Not proven** |
+
+## The workbench
+
+Storybook 10 lives in `packages/ui/.storybook`. Run it with
+`npm run storybook --workspace @bitfire/ui`.
+
+It holds one component, `Button` (React Aria Components, Tailwind 4 mapped to
+the tokens), to prove the workbench. The Button is deliberately not exported
+and not built; the build and export design belong to issue #5.
+
+How the themes work. The toolbar (`@storybook/addon-themes`) sets
+`data-theme` on the document, dark by default or `light`. Under Vitest the
+mode is `test`, and then a decorator renders each story twice, once inside a
+`data-theme="dark"` container and once inside `data-theme="light"`, so a
+single axe run checks both. Adding `?globals=bothThemes:true` to a story URL
+should show the same side-by-side view in the workbench (not tried).
+
+How accessibility fails. `parameters.a11y.test` is `'error'` globally in
+`preview.tsx`, and `@storybook/addon-vitest` runs every story as a test in
+headless Chromium (Playwright), so a violation fails the test.
+
+`npm run check:a11y` does two things. It runs every real story and requires a
+pass. Then it runs `packages/ui/proof/`, a story with a nameless button and an
+unlabelled input that is kept out of the workbench (set `A11Y_PROOF=1` to
+select it), and requires it to fail with the axe rules `button-name` and
+`label` in the output. Playwright needs its browser once:
+`npx playwright install chromium`.
 
 ## Public repo
 

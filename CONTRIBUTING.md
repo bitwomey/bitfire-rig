@@ -8,8 +8,10 @@ here serves that.
     node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist
     node tools/check-rawcolour.mjs packages fixtures consumers
     bash tools/gate-tests.sh
+    npm run check:a11y
 
-CI runs exactly these. There is no check that only exists in CI, and none that
+`npm run check` runs all four. The accessibility gate needs Chromium once:
+`npx playwright install chromium`. CI runs exactly these. There is no check that only exists in CI, and none that
 only exists locally.
 
 ## Releasing
