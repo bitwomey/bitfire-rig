@@ -10,7 +10,6 @@ type Story = StoryObj<typeof meta>;
 
 // The dialog is portalled to <body>, outside the story canvas.
 const body = () => within(document.body);
-// In test mode every story renders twice (dark + light), so there are two triggers; use the first.
 const trigger = async (canvasElement: HTMLElement) => within(canvasElement).getAllByRole('button', { name: /open/i })[0];
 const openIt = async (canvasElement: HTMLElement) => {
   const t = await trigger(canvasElement);
