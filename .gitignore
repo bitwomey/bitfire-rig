@@ -14,3 +14,10 @@ consumers/*/dist/
 research/*/*/dist/
 research/*/*/shots-tmp/
 research/*/*/shots/
+
+# Storybook / Vitest output and Playwright artefacts
+packages/ui/storybook-static/
+packages/ui/test-results/
+packages/ui/playwright-report/
+packages/ui/.vitest-attachments/
+debug-storybook.log

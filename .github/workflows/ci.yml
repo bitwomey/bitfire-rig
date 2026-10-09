@@ -47,6 +47,23 @@ jobs:
       - name: The app consumer resolves and runs
         run: node consumers/app/src/app.mjs
 
+      - name: Cache Playwright's Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      # The cache holds the browser but not its OS libraries, so --with-deps
+      # runs every time; it is quick when they are already present.
+      - name: Install Chromium for the accessibility gate
+        run: npx playwright install --with-deps chromium
+
+      # Same npm script as the local `npm run check`: all stories pass axe in
+      # both themes, and each deliberately broken proof story must fail on the
+      # axe rule it was written to trip.
+      - name: Accessibility gate
+        run: npm run check:a11y
+
       - name: Checks left the working tree clean
         run: |
           if [ -n "$(git status --porcelain)" ]; then
