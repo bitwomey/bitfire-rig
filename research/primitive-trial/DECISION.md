@@ -14,13 +14,13 @@ Both candidates built the same page from `SPEC.md` in Chromium: a validated form
 | CSS, gzip (re-run) | 9.7 kB | 5.9 kB |
 | Authored app code, excluding vendored (re-run, lines) | 486 | 489 |
 | Vendored component source | 13 files, 1,376 lines, edited by `sed` | none |
-| Styling exceptions recorded | 13 | 9 |
+| Styling exceptions (entries the results files themselves mark "no exception" are dropped) | 10 to 11 | 8 |
 | Library defects found | CLI left packages missing; dialog loses focus without a trigger; combobox needs a second primitive library | native validation re-validates only on blur; combobox shows nothing when empty; no `aria-busy` on a pending button |
 | `check-rawcolour` on the folder (re-run) | ok | ok |
 
 ## Why React Aria Components
 
-1. **It fits the governing rule.** BITFire's rule is that design values live in `tokens.json` and nowhere else. shadcn copies Tailwind default values (sizes, radii, opacities, z-index, `dark:` variants, a 50 percent focus ring) into the repo as component source, so the tokens cannot own them. The builder had to rewrite them with `sed` and grep for leftovers, and nothing stops a later `shadcn add` from putting them back. React Aria ships no styles, so every value in the page comes from a token.
+1. **It fits the governing rule.** BITFire's rule is that design values live in `tokens.json` and nowhere else. shadcn copies Tailwind default values (sizes, radii, opacities, z-index, `dark:` variants, a 50 percent focus ring) into the repo as component source, so the tokens cannot own them. The builder had to rewrite them with `sed` and grep for leftovers, and nothing stops a later `shadcn add` from putting them back. React Aria ships no styles, so no vendored defaults need scrubbing. It is not exception-free: its builder used `font-normal!` to beat the unlayered type roles, arbitrary-value syntax (`opacity-(--opacity-disabled)`) for opacity, z-index and shadow, and Tailwind's default `max-w-*` scale for page and dialog widths. Most of those come from gaps in the tokens, which both candidates share.
 2. **A smaller dependency surface.** 58 installed packages against 129, and one primitive library against two. The shadcn combobox is built on Base UI, not Radix, so choosing shadcn means choosing both.
 3. **Behaviour and accessibility were close to free.** Focus trap and restore, listbox and combobox keyboard handling, `aria-sort`, grid navigation in the table and an inert background all worked without code.
 
@@ -38,6 +38,10 @@ The `bitfire-design` skill says to use shadcn/ui, themed through the BITFire var
 ## Limits of this evidence
 
 - One run per candidate, each built by a separate Sonnet agent, so effort figures (about 45 and 38 tool calls) are noisy and not a fair measure of the libraries.
+- **The two builds are not like for like.** RAC was tested in Microsoft Edge and shadcn in Playwright's headless Chromium. RAC built a segmented date field, while shadcn used the browser's native date input, which is less work and looks different. Authored line counts are close (489 and 486) but cover different scope.
+- RAC defects D1 and D2 (native validation re-validating only on blur, and the browser's own message on empty Select and Date) are the builder's report of an earlier build. The committed `probe.mjs` targets the fixed build, so they cannot be reproduced from this repo.
+- Screenshots are not in git (no binaries in the repo); regenerate them with each folder's test script.
+- Both trial builds import the committed `packages/tokens/dist/tokens.css`, so they break if its path changes.
 - Chromium only. No Firefox, WebKit, touch, forced-colours or reduced-motion run.
 - **No screen reader was run for either candidate.** Accessibility claims are from attributes and keyboard behaviour, not from announced speech.
 - The agents captured only the tail of each `npm install`, so the absence of install warnings is unverified for both.
