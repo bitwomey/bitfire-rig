@@ -3,7 +3,7 @@ import { Button as RACButton, composeRenderProps, type ButtonProps } from 'react
 export type BitButtonProps = ButtonProps & { variant?: 'primary' | 'secondary' };
 
 const focusRing =
-  'outline-none data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[focus-visible]:outline-focus-ring';
+  'outline-none data-[focus-visible]:outline-solid data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[focus-visible]:outline-focus-ring';
 
 const variants = {
   primary: 'bg-signal text-on-signal border-signal data-[hovered]:bg-signal-hover data-[pressed]:bg-signal-hover',

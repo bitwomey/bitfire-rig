@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { userEvent, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { Button } from './Button';
 
 const meta = {
@@ -18,8 +18,12 @@ const button = (canvasElement: HTMLElement) => within(canvasElement).getAllByRol
 const hover: Story['play'] = async ({ canvasElement }) => {
   await userEvent.hover(button(canvasElement));
 };
-const focusVisible: Story['play'] = async () => {
+// The focus ring must actually paint: the data attribute alone does not prove it.
+const focusVisible: Story['play'] = async ({ canvasElement }) => {
   await userEvent.tab();
+  const { outlineStyle, outlineWidth } = getComputedStyle(button(canvasElement));
+  await expect(outlineStyle).not.toBe('none');
+  await expect(outlineWidth).not.toBe('0px');
 };
 const pressed: Story['play'] = async ({ canvasElement }) => {
   await userEvent.pointer({ keys: '[MouseLeft>]', target: button(canvasElement) });
