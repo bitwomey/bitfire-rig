@@ -19,16 +19,15 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const block = canvasElement.querySelector('.animate-pulse') as HTMLElement;
     await expect(getComputedStyle(block).animationName).toContain('pulse');
-    // Per theme: 1 block + 3 text lines + 15 table cells; the harness renders two themes.
-    await expect(canvasElement.querySelectorAll('.animate-pulse')).toHaveLength(2 * (1 + 3 + 15));
+    // 1 block + 3 text lines + 15 table cells.
+    await expect(canvasElement.querySelectorAll('.animate-pulse')).toHaveLength(1 + 3 + 15);
   },
 };
 
-// useId keeps ids unique when the test harness renders the story in two themes.
 function Box() {
   const id = useId();
   return (
-    <div role="group" aria-labelledby={id} className="max-w-md rounded-lg border border-border bg-surface p-4">
+    <section aria-labelledby={id} className="max-w-md rounded-lg border border-border bg-surface p-4">
       <h2 id={id} className="body-lg mb-3 text-ink">
         Incident history
       </h2>
@@ -36,7 +35,7 @@ function Box() {
         <SkeletonText />
         <SkeletonTable />
       </SkeletonRegion>
-    </div>
+    </section>
   );
 }
 

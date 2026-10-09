@@ -23,10 +23,6 @@ const meta = {
   component: Pagination,
   render: (args) => <Controlled {...args} />,
   args: { page: 1, pageCount: 40, onChange: fn() },
-  // The test harness renders every story twice (dark + light), so two identical
-  // <nav aria-label="Pagination"> landmarks exist at once. That is a harness artefact, not a
-  // component defect; only this one rule is off, and only for this component's stories.
-  parameters: { a11y: { config: { rules: [{ id: 'landmark-unique', enabled: false }] } } },
 } satisfies Meta<typeof Pagination>;
 export default meta;
 

@@ -22,11 +22,10 @@ export const Default: Story = {
 export const Small: Story = { args: { size: 'sm', label: 'Saving' } };
 
 // Panel-like bordered box with a heading, proving the busy container pattern.
-// useId keeps ids unique when the test harness renders the story in two themes.
 function Box(props: SpinnerProps) {
   const id = useId();
   return (
-    <div role="group" aria-busy="true" aria-labelledby={id} className="max-w-sm rounded-lg border border-border bg-surface p-4">
+    <section aria-busy="true" aria-labelledby={id} className="max-w-sm rounded-lg border border-border bg-surface p-4">
       <h2 id={id} className="body-lg mb-3 text-ink">
         Fire weather
       </h2>
@@ -36,7 +35,7 @@ function Box(props: SpinnerProps) {
           Fetching latest readings
         </span>
       </div>
-    </div>
+    </section>
   );
 }
 
