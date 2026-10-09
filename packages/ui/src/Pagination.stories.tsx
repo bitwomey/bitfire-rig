@@ -1,6 +1,6 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Pagination, type PaginationProps } from './Pagination';
 
 // Controlled wrapper so the stories behave like a real page; the spy sees every change.
@@ -77,6 +77,28 @@ export const FocusVisible: Story = {
     const { outlineStyle, outlineWidth } = getComputedStyle(focused);
     await expect(outlineStyle).not.toBe('none');
     await expect(outlineWidth).not.toBe('0px');
+  },
+};
+
+// Pressing Next into the last page (or Previous into the first) disables the pressed
+// button. Keyboard focus must move to the current page, not fall to <body>.
+export const FocusSurvivesLastPage: Story = {
+  args: { page: 4, pageCount: 5 },
+  play: async ({ canvasElement }) => {
+    const n = within(nav(canvasElement));
+    n.getByRole('button', { name: 'Next' }).focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(document.activeElement).toBe(n.getByRole('button', { name: 'Page 5' })));
+  },
+};
+
+export const FocusSurvivesFirstPage: Story = {
+  args: { page: 2, pageCount: 5 },
+  play: async ({ canvasElement }) => {
+    const n = within(nav(canvasElement));
+    n.getByRole('button', { name: 'Previous' }).focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(document.activeElement).toBe(n.getByRole('button', { name: 'Page 1' })));
   },
 };
 

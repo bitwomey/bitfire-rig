@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Button } from './Button';
 
 export type PaginationProps = {
@@ -24,11 +25,31 @@ function items(page: number, count: number): (number | 'gap')[] {
 }
 
 export function Pagination({ page, pageCount, onChange, className }: PaginationProps) {
+  const nav = useRef<HTMLElement>(null);
+  const stepped = useRef(false);
+
+  // Pressing Previous or Next into the first or last page disables the pressed
+  // button, and the browser then drops focus to <body>. Move it to the current
+  // page so a keyboard user keeps their place.
+  useEffect(() => {
+    if (!stepped.current) return;
+    stepped.current = false;
+    const active = document.activeElement;
+    if (active === document.body || !nav.current?.contains(active)) {
+      nav.current?.querySelector<HTMLElement>('[aria-current="page"]')?.focus();
+    }
+  }, [page]);
+
+  const step = (to: number) => {
+    stepped.current = true;
+    onChange(to);
+  };
+
   return (
-    <nav aria-label="Pagination" className={className}>
+    <nav ref={nav} aria-label="Pagination" className={className}>
       <ul className="flex flex-wrap items-center gap-1">
         <li>
-          <Button variant="secondary" isDisabled={page <= 1} onPress={() => onChange(page - 1)}>
+          <Button variant="secondary" isDisabled={page <= 1} onPress={() => step(page - 1)}>
             Previous
           </Button>
         </li>
@@ -54,7 +75,7 @@ export function Pagination({ page, pageCount, onChange, className }: PaginationP
           ),
         )}
         <li>
-          <Button variant="secondary" isDisabled={page >= pageCount} onPress={() => onChange(page + 1)}>
+          <Button variant="secondary" isDisabled={page >= pageCount} onPress={() => step(page + 1)}>
             Next
           </Button>
         </li>
