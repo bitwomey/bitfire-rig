@@ -34,7 +34,7 @@ right.
 | Fire danger values | Reviewed and confirmed by a qualified FBAN |
 | The workbench builds and runs every Button story | Proven locally — `storybook build` succeeds and lists the 12 stories; the interactive `storybook dev` server was not run |
 | Accessibility violations fail locally, in both themes | Proven locally — a deliberately broken story fails on axe rules `button-name` and `label`; a dark-only and a light-only contrast failure each failed the run |
-| CI fails on an accessibility violation | **Not proven** — the step is in `ci.yml` and runs the same `npm run check:a11y`, but no CI run has been seen yet |
+| CI fails on an accessibility violation | Proven — in the CI run for PR #22 the proof story failed on axe rules `button-name` and `label` and the gate reported it as intended. A CI run turned red by a real component violation has not been seen, because no component has one |
 | Anything about components beyond one Button | **Not started** — Button exists only to prove the workbench and is not exported |
 | Private registry auth, CI access | **Not proven** |
 
