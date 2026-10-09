@@ -8,11 +8,11 @@ cd "$(dirname "$0")/.." || exit 2
 export PATH="$PATH:/c/Program Files/nodejs"
 SRC=packages/tokens/src/tokens.json
 DIST=packages/tokens/dist
-TMP=$(mktemp -d); KEEP_JSON=$TMP/tokens.json; KEEP_CSS=$TMP/tokens.css
-cp "$SRC" "$KEEP_JSON"; cp "$DIST/tokens.css" "$KEEP_CSS"
+TMP=$(mktemp -d); KEEP_JSON=$TMP/tokens.json; KEEP_CSS=$TMP/tokens.css; KEEP_TW=$TMP/tailwind.css
+cp "$SRC" "$KEEP_JSON"; cp "$DIST/tokens.css" "$KEEP_CSS"; cp "$DIST/tailwind.css" "$KEEP_TW"
 pass=0; fail=0
 git status --porcelain > "$TMP/before" 2>/dev/null || : > "$TMP/before"
-restore() { cp "$KEEP_JSON" "$SRC"; cp "$KEEP_CSS" "$DIST/tokens.css"; }
+restore() { cp "$KEEP_JSON" "$SRC"; cp "$KEEP_CSS" "$DIST/tokens.css"; cp "$KEEP_TW" "$DIST/tailwind.css"; }
 trap 'restore; rm -rf "$TMP"' EXIT
 
 run() { local name="$1" want="$2"; shift 2
@@ -128,6 +128,22 @@ restore
 # \s is allowed in a shadow, so url( after a newline must be caught too.
 mutate "d.shadow.tokens.push({name:'shadow-url-nl',value:{dark:'0 1px\\nurl(//example.com/x)',light:'0 1px 2px #000'},usage:'deliberate'})"
 run "url() after newline in shadow rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
+restore
+
+# The Tailwind mapping is generated, so a hand edit of it is stale output.
+sed -i 's/--color-canvas: var(--canvas);/--color-canvas: var(--ink);/' "$DIST/tailwind.css"
+run "hand-edited Tailwind mapping rejected" 1 node tools/check-stale.mjs "$SRC" "$DIST"
+restore
+
+# A new colour token must reach the mapping with no other edit.
+mutate "d.color.tokens.push({name:'zz-new',value:'#123456',usage:'deliberate'})"
+node tools/generate.mjs "$SRC" "$TMP/g" >/dev/null 2>&1
+run "new colour token reaches the Tailwind mapping" 0 grep -qF -- '--color-zz-new: var(--zz-new);' "$TMP/g/tailwind.css"
+restore
+
+# The utility key comes from the token name, so a name without its prefix is refused.
+mutate "d.radius.tokens.push({name:'round-x',value:'5px',usage:'deliberate'})"
+run "radius token without its prefix rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
 # The suite must leave the repo exactly as it found it. Compared against the
