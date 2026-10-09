@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Breadcrumbs, Link, Nav } from './Navigation';
 
 const meta = { title: 'Navigation', component: Link, args: { href: '#runs', children: 'All runs' } } satisfies Meta<typeof Link>;
@@ -12,8 +12,9 @@ export const LinkDefault: Story = {};
 export const LinkHovered: Story = {
   play: async ({ canvasElement }) => {
     await userEvent.hover(link(canvasElement));
-    await expect(link(canvasElement)).toHaveAttribute('data-hovered', 'true');
-    await expect(getComputedStyle(link(canvasElement)).textDecorationThickness).toBe('2px');
+    // React Aria applies hover from a pointer event, which can land a tick after hover() returns.
+    await waitFor(() => expect(link(canvasElement)).toHaveAttribute('data-hovered', 'true'));
+    await waitFor(() => expect(getComputedStyle(link(canvasElement)).textDecorationThickness).toBe('2px'));
   },
 };
 export const LinkFocusVisible: Story = {
