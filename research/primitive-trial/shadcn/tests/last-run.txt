@@ -1,0 +1,67 @@
+PREVIEW_PID 38156
+fonts: ["IBM Plex Mono400","IBM Plex Sans300","IBM Plex Sans400","IBM Plex Sans500"]
+tab-forward: ["button#t-theme[]","button#t-disabled[]","input#f-name[]","button#f-band[Choose a band]","input#f-date[]","input#f-date[]","input#f-date[]","input#f-date[]","input#f-email[]","textarea#f-notes[]","button#f-share[]","input#f-region[Type to search regions]","button[Submit]","button#t-loading[]","button#t-empty[]","button[Name]","button[Danger band]","button[Area (ha)]","button[Updated]","body[Incident intakeLight the]","button#t-theme[]","button#t-disabled[]","input#f-name[]","button#f-band[Choose a band]"]
+tab-backward-6: ["input#f-name[]","button#t-disabled[]","button#t-theme[]","body[Incident intakeLight the]","button[Updated]","button[Area (ha)]"]
+after-invalid-submit focus: input#f-name[]
+error-alerts: ["e-name:Enter an incident name.","e-band:Choose a danger band.","e-date:Enter a start date.","e-email:Enter a contact email.","e-region:Choose a region."]
+name aria: {"invalid":"true","desc":"h-name e-name"}
+band aria: {"invalid":"true","desc":"e-band"}
+region aria: {"invalid":"true","desc":"h-region e-region"}
+revalidate on change (2 chars): Incident name must be 3 to 60 characters.
+revalidate on change (valid): error cleared
+future date: Start date cannot be in the future.
+bad email: Enter an email like name@example.org.
+short notes: Notes must be at least 10 characters if you add any.
+select open after Enter: ["No rating","Moderate","High","Extreme","Catastrophic"]
+select focus in open list: option:No rating
+select focus after 2x ArrowDown: No rating
+select value after Enter: No rating
+select focus after choose: button#f-band[No rating]
+select open after Space: 5
+select after Escape: 0 options, focus button#f-band[No rating]
+select ArrowDown on closed trigger -> options: 5
+select typeahead Ext on closed trigger: Extreme
+combobox hu: ["Hunter","Upper Hunter"]
+combobox value after 2x ArrowDown+Enter: Upper Hunter
+combobox ZZZ: {"options":0,"empty":true}
+combobox after Escape: {"listbox":0,"input":""}
+combobox hunter case-insensitive: ["Hunter","Upper Hunter"]
+combobox value: Hunter
+combobox aria: {"role":"combobox","expanded":"false","desc":"h-region","label":"Region"}
+dialog open: yes
+dialog focus on open: button[Cancel]
+dialog Tab x6: ["button[Submit] IN","button[Cancel] IN","button[Submit] IN","button[Cancel] IN","button[Submit] IN","button[Cancel] IN"]
+dialog Shift+Tab x3: ["button[Submit] IN","button[Cancel] IN","button[Submit] IN"]
+dialog a11y: {"labelledby":"radix-_r_6_","describedby":"radix-_r_7_","title":"Submit incident?"}
+background hidden: true
+after Escape: {"dialog":false,"focus":"button[Submit]"}
+after Cancel: {"dialog":false,"focus":"button[Submit]"}
+loading state: {"text":"Submitting","disabled":true,"busy":"true","spinner":true}
+Escape during loading: still open
+after success: {"dialog":false,"banner":"Incident submitted.","focus":"button[Submit]","nameValue":""}
+table initial: ["Black Creek","Corryong Ridge","Dunmore Flat","Eagle Gully","Frenchmans Track","Granite Spur","Hawker Reserve","Ironbark Creek","Jarrah Gully","Kookaburra Bend","Lyrebird Track","Mount Terrible"]
+Area click 1: {"aria":["none","none","ascending","none"],"first3":["Frenchmans Track","Kookaburra Bend","Dunmore Flat"]}
+Area click 2: {"aria":["none","none","descending","none"],"first3":["Eagle Gully","Corryong Ridge","Mount Terrible"]}
+Area click 3: {"aria":["none","none","none","none"],"first3":["Black Creek","Corryong Ridge","Dunmore Flat"]}
+Band Enter: {"aria":["none","ascending","none","none"],"first3":["Frenchmans Track","Kookaburra Bend","Dunmore Flat"]}
+Band Space: {"aria":["none","descending","none","none"],"first3":["Eagle Gully","Corryong Ridge","Ironbark Creek"]}
+Band Space (3rd): {"aria":["none","none","none","none"]}
+Updated asc first/last: ["Kookaburra Bend","Ironbark Creek"]
+Name desc first: Mount Terrible
+area cell style: {"align":"right","font":"\"IBM Plex Mono\", ui-monospace,","tnum":"tabular-nums","text":"412"}
+loading table: {"busy":"true","skeletons":20}
+empty table: No incidents to show
+disabled demo: ["f-name:true","f-band:true","f-date:true","f-email:true","f-notes:true","f-share:true","INPUT:true","f-region:true","BUTTON:true","base-ui-_r_1_-hidden-input:true","BUTTON:true"]
+font audit dark (<14px): []
+weight audit dark: ["div 15px w300 (>=14px, light weight; allowed by rule): Incident submitted.","td 14px w300 (>=14px, light weight; allowed by rule): 412"]
+contrast dark: {"heading_vs_canvas":17.68,"helper_vs_surface":8.78,"input_border_vs_surface":7.19,"label_vs_surface":16.29,"primary_button":7.5,"placeholder":8.78,"error_text_vs_surface":null,"chip High":11.68,"chip Extreme":6.53,"chip Moderate":5.35,"chip Catastrophic":5.83,"chip No rating":14.52}
+error text contrast dark: 7.19
+theme attr: light
+contrast light: {"heading_vs_canvas":15.64,"helper_vs_surface":7.25,"input_border_vs_surface":6.47,"label_vs_surface":17.57,"primary_button":6.28,"placeholder":7.25,"error_text_vs_surface":null,"chip High":11.68,"chip Extreme":6.53,"chip Moderate":5.35,"chip Catastrophic":5.83,"chip No rating":14.52}
+error text contrast light: 6.47
+font audit light: []
+360 dark overflow: {"sw":360,"cw":360,"tableContainer":{"sw":462,"cw":294}}
+360 light overflow: {"sw":360,"cw":360}
+360 dialog box: {"left":16,"right":344,"top":202,"bottom":598,"vw":360,"vh":800}
+console: []
+killed 38156

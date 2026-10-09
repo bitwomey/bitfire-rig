@@ -1,0 +1,34 @@
+dark data-theme= dark
+{
+ "chip High": "11.68 text/fill",
+ "chip Extreme": "6.53 text/fill",
+ "chip Moderate": "5.35 text/fill",
+ "chip Catastrophic": "5.83 text/fill",
+ "chip No rating": "14.52 text/fill",
+ "label": "17.68 (16px/400)",
+ "helper text": "8.78 (13px/400)",
+ "error text": "7.19 (13px/400)",
+ "input text vs inset": "17.12 (15px/300)",
+ "date placeholder segment": "7.04 (15px/300)",
+ "select placeholder": "7.04 (15px/300)",
+ "primary button": "7.50 (13px/400)",
+ "table header": "8.78 (13px/400)",
+ "input border vs surface (3:1 needed)": "7.19"
+}
+light data-theme= light
+{
+ "chip High": "11.68 text/fill",
+ "chip Extreme": "6.53 text/fill",
+ "chip Moderate": "5.35 text/fill",
+ "chip Catastrophic": "5.83 text/fill",
+ "chip No rating": "14.52 text/fill",
+ "label": "15.64 (16px/400)",
+ "helper text": "7.25 (13px/400)",
+ "error text": "6.47 (13px/400)",
+ "input text vs inset": "14.59 (15px/300)",
+ "date placeholder segment": "4.45 (15px/300)",
+ "select placeholder": "4.45 (15px/300)",
+ "primary button": "6.28 (13px/400)",
+ "table header": "7.25 (13px/400)",
+ "input border vs surface (3:1 needed)": "6.47"
+}

@@ -1,0 +1,103 @@
+## 1 Tab order (forward)
+input[checkbox]{switch} "Dark theme"
+input[checkbox]{switch} "Disabled demo"
+input[text] "Incident name"
+button[button] "Choose a band"
+span{spinbutton} "day, "
+span{spinbutton} "month, "
+span{spinbutton} "year, "
+input[email] "Contact email"
+input[text]{combobox} "Region"
+textarea[textarea] "Notes"
+input[checkbox] "Share with the regional team"
+button[submit] "Submit"
+input[checkbox]{switch} "Show loading"
+input[checkbox]{switch} "Show empty"
+tr{row} "Black CreekHigh4122026-10-08"
+BODY
+input[checkbox]{switch} "Dark theme"
+input[checkbox]{switch} "Disabled demo"
+input[text] "Incident name"
+button[button] "Choose a band"
+span{spinbutton} "day, "
+span{spinbutton} "month, "
+## 1b Shift+Tab x5 from there
+span{spinbutton} "day, "
+button[button] "Choose a band"
+input[text] "Incident name"
+input[checkbox]{switch} "Disabled demo"
+input[checkbox]{switch} "Dark theme"
+## 2 Submit empty form
+focused after failed submit: input[text] "Incident name"
+error messages: ["DIV:Enter an incident name","INPUT:","DIV:Choose a danger band","DIV:Enter a start date","DIV:","SPAN:","SPAN:","SPAN:","SPAN:","SPAN:","DIV:Enter a contact email","INPUT:","DIV:Choose a region from the list","INPUT:"]
+errorMessage slots: ["Enter an incident name","Choose a danger band","Enter a start date","Enter a contact email","Choose a region from the list"]
+aria-describedby on name input resolves to: 3 to 60 characters | Enter an incident name
+## 3 Revalidate on change
+after typing "ab": true / Incident name must be 3 to 60 characters
+after typing "Test Fire": aria-invalid= null
+## 4 Select keyboard
+Enter opens listbox: 1
+focused option: High
+Escape closes: 0 focus: button[button] "Choose a band"
+Space opens: 1
+focused option after 3 downs: Extreme
+selected value: Extreme | listbox open: 0
+## 5 Date field
+segments: 3
+future date typed (15/10/2026) -> text: 15/10/2026 | invalid: data-invalid
+start error text: ["Start date cannot be in the future","Enter a contact email","Choose a region from the list"]
+segment order/labels: ["day, =08","month, =10","year, =2026"]
+email error: ["Enter an email like name@example.com","Choose a region from the list"]
+## 6 Combobox
+options on focus/click (menuTrigger=focus): 30
+"hun" -> ["Hunter","Upper Hunter"]
+ArrowDown active option (aria-activedescendant): Hunter
+Enter -> input value: Hunter | open: 0
+"zzz" -> ["No regions match"] | options: 1
+Escape: listbox count 0 | input value now: ""
+case-insensitive PILB -> Pilbara
+## 7 Notes validation
+notes short error: ["Notes must be at least 10 characters if you add any"]
+## 8 Dialog
+dialog open. focus: section{dialog} "Submit incident?Incident nameT"
+dialog labelledby text: Submit incident?
+summary: Incident name / Test Fire / Danger band / Extreme / Start date / 2026-10-08 / Contact email / a@example.org / Region / Pilbara / Notes / Not given / Shared with the regional team / No
+trap Tab x6: button[button] "Cancel" > button[button] "Submit" > button[button] "Cancel" > button[button] "Submit" > button[button] "Cancel" > button[button] "Submit"
+trap Shift+Tab x3: button[button] "Cancel" > button[button] "Submit" > button[button] "Cancel"
+Escape closes: 0 focus restored to: button[submit] "Submit"
+Cancel closes: 0 focus restored to: button[submit] "Submit"
+outside page inert while open? aria-hidden siblings: DIV,DIV[inert],DIV[inert],DIV[inert],SPAN[inert],DIV,SPAN[inert]
+during loading: text= "Submitting" aria-busy= null aria-disabled= true data-pending= true
+after 1.2s: dialog count 0 | banner: Submitted.
+The incident was sent to the regional team. | focus: button[submit] "Submit"
+## 9 Table keyboard
+columnheaders: 4
+area header Enter: Name:none | Danger band:none | Area (ha):descending | Updated:none | Eagle Gully,Corryong Ridge,Mount Terrible
+area header Enter: Name:none | Danger band:none | Area (ha):none | Updated:none | Black Creek,Corryong Ridge,Dunmore Flat
+area header Enter: Name:none | Danger band:none | Area (ha):ascending | Updated:none | Frenchmans Track,Kookaburra Bend,Dunmore Flat
+area header Space: Name:none | Danger band:none | Area (ha):descending | Updated:none | Eagle Gully,Corryong Ridge,Mount Terrible
+area header Space: Name:none | Danger band:none | Area (ha):none | Updated:none | Black Creek,Corryong Ridge,Dunmore Flat
+area header Space: Name:none | Danger band:none | Area (ha):ascending | Updated:none | Frenchmans Track,Kookaburra Bend,Dunmore Flat
+focus on header after: th{columnheader} "Area (ha)"
+ArrowLeft -> th{columnheader} "Danger band"
+ArrowDown -> td{gridcell} "No rating"
+Tab from table -> BODY ; Shift+Tab -> td{gridcell} "No rating"
+tab stops inside table: 1
+band asc: Frenchmans Track,Kookaburra Bend,Dunmore Flat
+band desc: Eagle Gully,Mount Terrible,Ironbark Creek
+band none: Name:none | Danger band:none | Area (ha):none | Updated:none
+## 10 table loading / empty
+loading rows: 5 text: Loading 	 Loading 	 Loading 	 Loading   Loading 	 Loading 	 Loading 	 Loading   
+empty body: "No incidents to show"
+## 11 Disabled demo
+disabled controls: 10/10
+segments disabled: true,true,true
+select btn disabled: true
+Tab through form while disabled: input[checkbox]{switch} "Show loading" > input[checkbox]{switch} "Show empty" > tr{row} "Black CreekHigh4122026-10-08" > BODY > input[checkbox]{switch} "Dark theme" > input[checkbox]{switch} "Disabled demo" > input[checkbox]{switch} "Show loading" > input[checkbox]{switch} "Show empty"
+## 12 Screenshots
+1280px dark: scrollWidth/clientWidth 1280/1280
+1280px light: scrollWidth/clientWidth 1280/1280
+360px dark: scrollWidth/clientWidth 360/360
+360px light: scrollWidth/clientWidth 360/360
+table container scrolls inside itself: true
+console/page errors: []

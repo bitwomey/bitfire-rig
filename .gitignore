@@ -11,3 +11,6 @@ consumers/*/dist/
 .npmrc
 # Per-developer local Claude Code settings (env vars, keys)
 .claude/settings.local.json
+research/*/*/dist/
+research/*/*/shots-tmp/
+research/*/*/shots/

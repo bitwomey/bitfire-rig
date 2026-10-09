@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import "../../../../packages/tokens/dist/tokens.css";
+
+/*
+  BITFire tokens -> Tailwind 4, same pattern as consumers/tw-fixture.
+  tokens.css stays unlayered so it overrides the theme-layer cycles below.
+*/
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-hover: var(--surface-hover);
+  --color-border-hairline: var(--border-hairline);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-signal: var(--signal);
+  --color-signal-hover: var(--signal-hover);
+  --color-signal-wash: var(--signal-wash);
+  --color-on-signal: var(--on-signal);
+  --color-focus: var(--focus);
+  --color-focus-ring: var(--focus-ring);
+  --color-status-ok: var(--status-ok);
+  --color-status-warn: var(--status-warn);
+  --color-status-danger: var(--status-danger);
+  --color-on-status-danger: var(--on-status-danger);
+  --color-status-ok-wash: var(--status-ok-wash);
+  --color-status-danger-wash: var(--status-danger-wash);
+  --color-scrim: var(--scrim);
+  --color-ink-on-warm: var(--ink-on-warm);
+  --color-ink-on-deep: var(--ink-on-deep);
+  --color-fdr-no-rating: var(--fdr-no-rating);
+  --color-fdr-moderate: var(--fdr-moderate);
+  --color-fdr-high: var(--fdr-high);
+  --color-fdr-extreme: var(--fdr-extreme);
+  --color-fdr-catastrophic: var(--fdr-catastrophic);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-condensed: var(--font-condensed);
+
+  /*
+    shadcn bridge: the semantic names the generated components expect, pointed
+    at BITFire tokens. Defined here, not as :root variables, so no second copy
+    of any value exists and nothing needs a .dark block.
+  */
+  --color-background: var(--canvas);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface-raised);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--signal);
+  --color-primary-foreground: var(--on-signal);
+  --color-secondary: var(--surface-raised);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--surface-inset);
+  --color-muted-foreground: var(--ink-muted);
+  --color-accent: var(--surface-hover);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--status-danger);
+  --color-input: var(--border);
+  --color-ring: var(--focus-ring);
+}
+
+@layer base {
+  * { border-color: var(--border-hairline); }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+  }
+  /* Nothing under 14px below weight 400: form text is 14px+ at 400. */
+  input, textarea, button, [role="combobox"] { font-weight: 400; }
+}
