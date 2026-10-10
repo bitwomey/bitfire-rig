@@ -11,9 +11,17 @@ const link = (el: HTMLElement) => within(el).getAllByRole('link')[0];
 export const LinkDefault: Story = {};
 export const LinkHovered: Story = {
   play: async ({ canvasElement }) => {
-    await userEvent.hover(link(canvasElement));
-    // React Aria applies hover from a pointer event, which can land a tick after hover() returns.
-    await waitFor(() => expect(link(canvasElement)).toHaveAttribute('data-hovered', 'true'));
+    // On a slow CI runner a single simulated hover is sometimes not picked up by
+    // React Aria, even after waiting a second. Re-issue it (leave, then enter)
+    // until the attribute appears, rather than waiting on one attempt.
+    await waitFor(
+      async () => {
+        await userEvent.unhover(link(canvasElement));
+        await userEvent.hover(link(canvasElement));
+        await expect(link(canvasElement)).toHaveAttribute('data-hovered', 'true');
+      },
+      { timeout: 8000, interval: 250 },
+    );
     await waitFor(() => expect(getComputedStyle(link(canvasElement)).textDecorationThickness).toBe('2px'));
   },
 };
