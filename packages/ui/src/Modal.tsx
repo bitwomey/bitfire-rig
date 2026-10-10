@@ -23,10 +23,10 @@ export function Modal({ title, description, actions, children, className, ...pro
     >
       <RACModal className="w-full max-w-md rounded-lg border border-border-hairline bg-surface-raised shadow-[var(--shadow-lg)]">
         <Dialog aria-describedby={description ? descriptionId : undefined} className="flex flex-col gap-4 p-6 outline-none">
-          <Heading slot="title" className="body-lg font-normal! text-ink">
+          <Heading slot="title" className="body-lg m-0 font-normal! text-ink">
             {title}
           </Heading>
-          {description && <p id={descriptionId} className="body text-ink-muted">{description}</p>}
+          {description && <p id={descriptionId} className="body m-0 text-ink-muted">{description}</p>}
           {children}
           <div className="flex justify-end gap-2">{actions}</div>
         </Dialog>

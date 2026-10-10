@@ -21,7 +21,7 @@ export type Crumb = { label: string; href?: string };
 // The last crumb is the current page: plain text with aria-current, not a link.
 export function Breadcrumbs({ items, ...props }: Omit<BreadcrumbsProps<object>, 'children' | 'items'> & { items: Crumb[] }) {
   return (
-    <RACBreadcrumbs {...props} className="flex items-center gap-2">
+    <RACBreadcrumbs {...props} className="m-0 flex list-none items-center gap-2 p-0">
       {items.map((c, i) => {
         const last = i === items.length - 1;
         return (
@@ -40,7 +40,7 @@ export type NavItem = { label: string; href: string; current?: boolean };
 export function Nav({ label, items, orientation = 'horizontal' }: { label: string; items: NavItem[]; orientation?: 'horizontal' | 'stacked' }) {
   return (
     <nav aria-label={label}>
-      <ul className={`flex ${orientation === 'stacked' ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
+      <ul className={`m-0 flex list-none p-0 ${orientation === 'stacked' ? 'flex-col gap-2' : 'flex-row gap-4'}`}>
         {items.map((i, n) => (
           <li key={`${n}-${i.href}`}>
             <Link href={i.href} aria-current={i.current ? 'page' : undefined}>{i.label}</Link>

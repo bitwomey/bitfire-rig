@@ -12,7 +12,7 @@ function NoMatches() {
   const state = useContext(ComboBoxStateContext);
   return (
     <div role="status">
-      {state?.collection.size === 0 && <p className="body px-3 py-2 text-ink-muted">No matches</p>}
+      {state?.collection.size === 0 && <p className="body m-0 px-3 py-2 text-ink-muted">No matches</p>}
     </div>
   );
 }
@@ -23,7 +23,7 @@ export function ComboBox({ label, description, error, className, items, ...props
       <FieldParts label={label} description={description} error={error}>
         <div className="relative">
           <Input className={`${controlCls} pr-10`} />
-          <Button className={`absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-sm text-ink ${dim} ${focusRing}`}>
+          <Button className={`absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-sm border-0 bg-transparent p-0 text-ink ${dim} ${focusRing}`}>
             <Caret />
           </Button>
         </div>

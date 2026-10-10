@@ -16,7 +16,7 @@ export const dim = 'data-[disabled]:opacity-(--opacity-disabled) data-[disabled]
 export const fieldCls = 'group flex flex-col gap-1';
 // ink-muted, not ink-subtle: ink-subtle on the inset fill is 4.44:1 in light (axe), below 4.5.
 // Invalid is the danger border at double width, so colour is not the only carrier.
-export const controlCls = `body h-10 w-full rounded-sm border border-border bg-surface-inset px-3 text-ink placeholder:text-ink-muted data-[hovered]:bg-surface-hover group-data-[invalid]:border-2 group-data-[invalid]:border-status-danger group-data-[readonly]:border-dashed group-data-[readonly]:bg-surface ${dim} ${focusRing}`;
+export const controlCls = `body box-border h-10 w-full rounded-sm border border-border bg-surface-inset px-3 text-ink placeholder:text-ink-muted data-[hovered]:bg-surface-hover group-data-[invalid]:border-2 group-data-[invalid]:border-status-danger group-data-[readonly]:border-dashed group-data-[readonly]:bg-surface ${dim} ${focusRing}`;
 
 export type FieldText = { label: ReactNode; description?: ReactNode; error?: string; className?: string };
 
