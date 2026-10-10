@@ -1,7 +1,7 @@
 /* GENERATED FILE — do not edit.
    Edit packages/tokens/src/tokens.json and re-run the generator.
-   source 56fe150837ed · generator 1.1.0 */
-export const sourceHash = "56fe150837ed";
+   source 976f85633630 · generator 1.1.0 */
+export const sourceHash = "976f85633630";
 export const generatorVersion = "1.1.0";
 export const themes = ["dark","light"];
 export const tokenNames = [
@@ -32,6 +32,7 @@ export const tokenNames = [
   "label-halo",
   "on-signal",
   "on-status-danger",
+  "opacity-context-dim",
   "opacity-disabled",
   "opacity-ghost",
   "opacity-overlay",

@@ -1,6 +1,6 @@
 /* GENERATED FILE — do not edit.
    Edit packages/tokens/src/tokens.json and re-run the generator.
-   source 56fe150837ed · generator 1.1.0 */
+   source 976f85633630 · generator 1.1.0 */
 
 :root {
   /* colour · dark (primary) */
@@ -82,6 +82,7 @@
   --radius-lg: 10px;
   --radius-full: 999px;
   --opacity-disabled: 0.45;
+  --opacity-context-dim: 0.28;
   --opacity-ghost: 0.08;
   --opacity-overlay: 0.72;
   --stroke-hair: 1px;
