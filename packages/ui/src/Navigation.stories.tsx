@@ -52,7 +52,7 @@ export const BreadcrumbsDefault: Story = {
   render: () => <Breadcrumbs aria-label="Breadcrumb" items={[{ label: 'Runs', href: '#runs' }, { label: 'Region 12', href: '#r12' }, { label: 'Spread output' }]} />,
   play: async ({ canvasElement }) => {
     const c = within(canvasElement);
-    await expect(c.getAllByRole('link').length).toBe(2); // the current crumb is not a link
+    await waitFor(() => expect(c.getAllByRole('link').length).toBe(2)); // the current crumb is not a link; waits for the collection (production build)
     const cur = c.getByText('Spread output');
     await expect(cur).toHaveAttribute('aria-current', 'page');
     await expect(cur.closest('a')).toBeNull();
