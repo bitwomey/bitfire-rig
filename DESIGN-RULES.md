@@ -39,7 +39,10 @@ tokens is not in the skill.
 - **Emphasis charts** dim everything but the focus with `opacity-context-dim`
   applied to `ink-subtle`.
 
-## Open (needs a ruling, not decided here)
+## Brand colour is not decoration
 
-- `consumers/docs/style.css` uses `brand-ember` for the eyebrow, the cover rule
-  and a pull-quote border. The pull-quote border looks like decoration.
+Ben, 2026-10-10: the brand is important and is not sprinkled around. If a use of
+`brand-ember` looks like decoration, it goes. The documents consumer currently
+uses it on the pull-quote bar (`.pull` in `consumers/docs/style.css`), which is
+decoration and is to be changed to a neutral token. The title-block eyebrow and
+short rule are on the cover, so they stay.
