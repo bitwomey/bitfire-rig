@@ -16,8 +16,10 @@
     "build:ui": "npm run build --workspace @bitfire/ui",
     "check:build": "npm run check:build --workspace @bitfire/ui",
     "check:app": "node consumers/app/src/app.mjs",
-    "check": "npm run check:stale && npm run check:colour && npm run check:gates && npm run build:ui && npm run check:build && npm run check:app && npm run check:a11y",
+    "check": "npm run check:stale && npm run check:colour && npm run check:gates && npm run build:ui && npm run check:build && npm run check:app && npm run check:a11y && npm run check:visual",
     "app": "node consumers/app/src/app.mjs",
-    "check:a11y": "npm run check:a11y --workspace @bitfire/ui"
+    "check:a11y": "npm run check:a11y --workspace @bitfire/ui",
+    "check:visual": "npm run check:visual --workspace @bitfire/ui",
+    "visual:update": "npm run visual:update --workspace @bitfire/ui"
   }
 }
