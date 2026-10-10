@@ -11,18 +11,18 @@ const link = (el: HTMLElement) => within(el).getAllByRole('link')[0];
 export const LinkDefault: Story = {};
 export const LinkHovered: Story = {
   play: async ({ canvasElement }) => {
-    // On a slow CI runner a single simulated hover is sometimes not picked up by
-    // React Aria, even after waiting a second. Re-issue it (leave, then enter)
-    // until the attribute appears, rather than waiting on one attempt.
+    // On a slow runner a simulated hover is sometimes not picked up by React Aria.
+    // Re-issue it only while the attribute is missing, and assert the attribute and
+    // the underline together in the same retry, so a stale or flickering
+    // data-hovered cannot pass the first check and leave the second to fail.
     await waitFor(
       async () => {
-        await userEvent.unhover(link(canvasElement));
-        await userEvent.hover(link(canvasElement));
+        if (link(canvasElement).getAttribute('data-hovered') !== 'true') await userEvent.hover(link(canvasElement));
         await expect(link(canvasElement)).toHaveAttribute('data-hovered', 'true');
+        await expect(getComputedStyle(link(canvasElement)).textDecorationThickness).toBe('2px');
       },
       { timeout: 8000, interval: 250 },
     );
-    await waitFor(() => expect(getComputedStyle(link(canvasElement)).textDecorationThickness).toBe('2px'));
   },
 };
 export const LinkFocusVisible: Story = {
