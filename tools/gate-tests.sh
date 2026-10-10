@@ -150,6 +150,16 @@ mutate "d.spacing.tokens.push({name:'space-',value:'5px',usage:'deliberate'})"
 run "spacing token with an empty key rejected" 1 node tools/generate.mjs "$SRC" "$TMP/g"
 restore
 
+# The design system artifact is published from the repo. A copy that differs, even
+# by one token value, is drift; an identical copy, and the exporter's own output, pass.
+node tools/design-system.mjs export "$TMP/ds" >/dev/null 2>&1
+run "design-system export is byte-identical to the repo tokens" 0 cmp "$SRC" "$TMP/ds/tokens.json"
+run "identical artifact copy passes the drift check" 0 node tools/design-system.mjs check "$TMP/ds/tokens.json"
+node -e "const fs=require('fs');const d=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));d.color.tokens.find(t=>t.name==='canvas').value.dark='#000001';fs.writeFileSync(process.argv[2],JSON.stringify(d,null,2)+'\n');" "$TMP/ds/tokens.json" "$TMP/ds/drifted.json" || { echo "could not write the drifted copy"; exit 1; }
+node tools/design-system.mjs check "$TMP/ds/drifted.json" 2>"$TMP/dsout"
+run "a changed artifact value is reported as drift" 1 node tools/design-system.mjs check "$TMP/ds/drifted.json"
+run "the drift report names the token that differs" 0 grep -q "canvas" "$TMP/dsout"
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.
