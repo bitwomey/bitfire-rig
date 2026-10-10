@@ -45,6 +45,20 @@ for (const theme of ['dark', 'light']) {
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.getAttribute('data-theme'))).toBe(theme);
 
+      // Pointer state must not depend on timing. A play function drives hover with
+      // simulated events, and Chromium's own fake mouse move (after layout) can
+      // clear that state before the screenshot, so the same story gave a hovered
+      // image in one run and a plain one in the next. So: hover is baselined only
+      // by the *-hovered stories, with a REAL mouse over the control, and
+      // incidental hover left by any other story is removed.
+      if (/hovered/.test(s.id)) {
+        const target = page.locator('#storybook-root').locator('button, a').first();
+        await target.hover();
+        await expect(target).toHaveAttribute('data-hovered', 'true');
+      } else {
+        await page.evaluate(() => document.querySelectorAll('[data-hovered]').forEach((e) => e.removeAttribute('data-hovered')));
+      }
+
       // Deliberate-change proof (scripts/check-visual.mjs): must be caught.
       if (process.env.VISUAL_PROOF === '1') await page.addStyleTag({ content: '* { border-radius: 9px !important; }' });
 
