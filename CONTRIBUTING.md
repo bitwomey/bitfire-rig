@@ -79,7 +79,8 @@ caret hidden, UTC and fixed locale, the play function finished (Storybook's
 `storyRendered` event) and `document.fonts.ready` awaited before each shot,
 self-hosted IBM Plex loaded in the workbench only, full-page captures. If a
 screenshot is flaky, find out why (a diff-image artifact is uploaded when the
-gate fails). Do not widen the 20-pixel tolerance, retry, or regenerate: a
+gate fails). Known limit: hover is baselined only by the `*-hovered` stories, so
+an element that wrongly stays hovered in another story is not caught. Do not widen the 20-pixel tolerance, retry, or regenerate: a
 looser limit hides small real changes such as a corner radius.
 
 ## Releasing

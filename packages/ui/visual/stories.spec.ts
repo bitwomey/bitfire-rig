@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // One test per story per theme, generated from the static build's index.json.
@@ -33,6 +33,15 @@ const hook = () => {
     },
   });
 };
+
+// A deleted or renamed story must not leave an orphan baseline behind: nothing
+// else would ever fail on it, and a stale PNG is a wrong claim about what is guarded.
+test('baselines: every committed PNG belongs to a story', () => {
+  const expected = new Set(stories.flatMap((s) => ['dark', 'light'].map((t) => `${s.id}--${t}-${process.platform}.png`)));
+  const dir = fileURLToPath(new URL('./__screenshots__/', import.meta.url));
+  const orphans = readdirSync(dir).filter((f) => f.endsWith(`-${process.platform}.png`) && !expected.has(f));
+  expect(orphans, `baselines with no story: ${orphans.join(', ')}`).toEqual([]);
+});
 
 for (const theme of ['dark', 'light']) {
   for (const s of stories) {

@@ -87,7 +87,7 @@ try {
 
   console.log('1/2 every story, both themes, against the baselines: must pass');
   const real = play({});
-  const n = tests(real.report).length;
+  const n = tests(real.report).filter((t) => !t.title.startsWith('baselines:')).length; // story screenshots only
   console.log(`${n} screenshots compared`);
   if (real.code !== 0 || !n) {
     const hint = /snapshot.*(doesn't|does not) exist|A snapshot/i.test(real.out)
