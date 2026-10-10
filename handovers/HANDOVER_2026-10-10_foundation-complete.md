@@ -1,9 +1,15 @@
 # Handover -- Session 3: foundation complete (issues #1 to #7)
-**Written 2026-10-10. Progressive: updated at each milestone. Last updated after #15 and #11 were triaged as blocked on Ben; PR #36 (issue #30) was ready but not yet merged.**
+**Written 2026-10-10 at session end. Final.** Everything below is merged to `main` (head `5d5a53e`, after PR #36) except this handover (docs PR #35).
 
 ## TL;DR
 
-The foundation work for the BITFire build rig (`bitwomey/bitfire-rig`) is done and on `main` (head `070f950` when written): generator, Tailwind mapping, the React Aria component set exported as `@bitfire/ui` 0.4.0, a Storybook workbench with a per-theme accessibility gate, and a Linux-pinned visual regression gate. No PRs are open, no worktrees or stashes, one local branch (`main`).
+The foundation work for the BITFire build rig (`bitwomey/bitfire-rig`) is done: generator, generated Tailwind mapping, the React Aria component set exported as `@bitfire/ui` 0.4.0, a Storybook workbench with a per-theme accessibility gate, and a Linux-pinned visual regression gate. No PRs are open except this docs PR, no worktrees or stashes, one local branch (`main`).
+
+| Status | Item |
+|---|---|
+| Done | #1 Tailwind mapping, #2 primitive trial, #5 components + build/export, #6 Storybook + a11y gate, #7 visual regression, #13 skin (Ember), #17, #18, #23, #25, #30, #31, #12 (closed) |
+| Blocked on Ben | #15 brand assets (files + structure choice), #11 colour-vision palettes (palettes, method, validator) |
+| Deferred | #3 publish, #4 rollback on the real registry, #8 Cesium adapter, #9 map asset sources, #10 hatching channel |
 
 ## Decisions made this session (Ben)
 
@@ -62,9 +68,55 @@ Known small debts: README/release-gate counts were stale (fixed in #33); `npm ci
 
 `packages/tokens/src/tokens.json` (authoritative), `packages/tokens/dist/` (generated, incl. `tailwind.css`), `packages/ui/src` (components + stories, `index.ts` exports), `packages/ui/.storybook`, `packages/ui/visual` (Playwright spec, baselines in `__screenshots__`), `packages/ui/proof` (deliberately broken stories that prove gates fail), `research/primitive-trial` (the trial and its decision), `tools/` (generator, gates, release gate).
 
-## Next
+## Most useful next action
 
-1. Merge PR #36 (Ben), then remove its local branch; this handover PR #35 is a draft docs PR, mark it ready when finalised.
-2. Run `bit:session-end` properly (journal, memory, docs PR under `bit-author`).
-3. #15 and #11 when Ben supplies the assets and palettes; the deferred items (#3, #4, #8 to #10) when he decides.
-4. Nothing else is live: the foundation is complete and no unblocked issue remains once #36 merges.
+**Ask Ben for the two things that unblock work:** the eight brand-asset files and a structure choice for #15 (suggestion: top-level `assets/`, no new package), and the colour-vision palettes, method and validator invocation for #11. Nothing else is live. If he would rather push the epic forward, the next real decisions are the deferred ones (#3 package scope `@bitfire` vs `@bitfire-org`, then the repo transfer).
+
+## Read these first
+
+1. This handover, then `memory/journal/2026-10-10_issue7_session-3-foundation-complete_b56105.md`.
+2. The decision logs `memory/decision_logs/2026-10-10_issue2_*`, `issue25_*`, `issue7_*`, `issue3_*`.
+3. `research/primitive-trial/DECISION.md` (why React Aria), CONTRIBUTING.md "Visual baselines", README.md "What is proven".
+4. `handovers/HANDOVER_2026-10-08_issue1-review-fixes.md` (the earlier session).
+
+## Phased plan for the next piece of work (#15, when Ben supplies the assets)
+
+1. **Decide and confirm** the structure with Ben (top-level `assets/` vs `packages/brand/`). Gate: his answer in the issue.
+2. **Add the files** exactly as supplied; keep the PNGs small; note the STD-0013 binaries trade-off in the PR. Gate: `npm run check` (Git Bash) green.
+3. **Use them in `consumers/tw-fixture` only if Ben says so**; look at the render (both themes). Gate: a screenshot read, and the visual gate if a story changes (regenerate baselines through the workflow, never to make a red check green).
+4. Cold `bit:pr-review`, then ready and request Ben as `bit-author`.
+
+## What NOT to do
+
+- Do not start #3 or #4 (publish, registry rollback) or any map work (#8 to #10): deferred by Ben. Do not touch the repo's visibility or propose a transfer yet.
+- Do not add employer product names to the repo or issues.
+- Do not widen the 20-pixel visual tolerance, retry, or regenerate baselines to make a red check green.
+- Do not edit `packages/tokens/dist/` by hand, or add another hand-written copy of the Tailwind mapping.
+- Do not use shadcn/ui for new components (the `bitfire-design` skill still says to; that skill is wrong here and needs updating).
+- Do not assume a check passes because the code looks right: run it (Git Bash with Node on PATH) and show a new assertion failing on the old code.
+
+## Predecessor work (do not redo)
+
+Session 1 and 2 (2026-10-08): #1 fixture and generator fixes, PR #14. Session 3 (this one): everything under "What shipped".
+
+## Copy-paste resume prompt
+
+```
+I'm continuing work on `bitwomey/bitfire-rig` (the BITFire build rig; design tokens, React Aria components exported as @bitfire/ui, Storybook, gates).
+
+Last session (2026-10-09 to 10-10) finished the foundation and merged PRs #14 to #36 to `main` (head 5d5a53e): generator and generated Tailwind mapping, the React Aria component set built and exported as @bitfire/ui 0.4.0, a Storybook workbench with a per-theme accessibility gate, and a Linux-only visual regression gate (180 baselines, 20-pixel tolerance, 8 consecutive green CI runs on one runner image). Proof: CI `gates` green on every merged PR; see memory/journal/2026-10-10_issue7_session-3-foundation-complete_b56105.md.
+
+Key decisions (Ben): React Aria over shadcn/ui; the repo stays public on bitwomey until refined, then it moves to BITFire-org (package scope @bitfire vs @bitfire-org is open); publishing (#3, #4) and all map work (#8 to #10) are deferred; Ember is the default skin; no employer product names in the repo.
+
+This session's mission: unblock the two issues waiting on me. #15 (brand assets) needs the eight logo files from the Claude Design system and a structure choice (suggest top-level `assets/`). #11 (colour-vision palettes) needs the deutan/protan/tritan palettes, the method and the validator invocation: a repo-wide search found none of it in the repo. Nothing else is live.
+
+Open questions to resolve BEFORE acting: where do the brand assets go; does the tw-fixture use them; where are the palettes and the validator. An unanswered question is a stop, not consent.
+
+Required reading: handovers/HANDOVER_2026-10-10_foundation-complete.md, the journal above, memory/decision_logs/2026-10-10_*, research/primitive-trial/DECISION.md, CONTRIBUTING.md ("Visual baselines"), README.md ("What is proven").
+
+Context: run `npm run check` from Git Bash with `export PATH="$PATH:/c/Program Files/nodejs"` (PowerShell cannot find node in the gate suite); `check:visual` is Linux-only and prints SKIPPED on Windows, CI runs it. Open PRs as `bit-author` (GH_TOKEN from skills/pr/gh_app_token.py --app author) and request @bitwomey; every PR gets a cold bit:pr-review; baselines change only through the Visual baselines workflow in a reviewed PR. Windows worktree removal needs the `\\?\` long-path trick.
+
+Guardrails: one issue per branch; never commit to main; do not hand-edit packages/tokens/dist; do not widen the visual tolerance; show any new assertion failing on the old code.
+
+Start with /bit:session-start.
+```

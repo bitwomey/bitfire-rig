@@ -4,6 +4,12 @@ Newest first.
 
 ---
 
+## 2026-10-10 — Session 3: foundation complete (issues #1 to #7)
+
+Merged PRs #14 to #36 to `main`: the generator and a generated Tailwind mapping, the React Aria primitive trial and decision, a Storybook workbench with a per-theme accessibility gate and proofs, all the components exported as `@bitfire/ui` 0.4.0, and a Linux-pinned visual regression gate with 180 baselines. Deferred by Ben: publishing and registry rollback (#3, #4) and all map work (#8 to #10), with the repo staying public until refined. Blocked on Ben: #15 (brand assets) and #11 (colour-vision palettes). See `handovers/HANDOVER_2026-10-10_foundation-complete.md`.
+
+---
+
 ## 2026-10-08 — Issue #1 session 2 (cold review fixes)
 
 **Shipped:** Commit `5247755` on `issue-1-tailwind-4-mapping`. Fixed shadow per-theme alias resolution bug (`generate.mjs:68`), added partial-theme validation, expanded gate suite to 12 tests (all pass), added 3 missing colour tokens to `@theme inline` (now 53/53 as claimed). PR #14 updated.
