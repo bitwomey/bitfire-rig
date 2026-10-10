@@ -13,7 +13,10 @@
     "check:stale": "node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist",
     "check:colour": "node tools/check-rawcolour.mjs packages fixtures consumers",
     "check:gates": "bash tools/gate-tests.sh",
-    "check": "npm run check:stale && npm run check:colour && npm run check:gates && npm run check:a11y",
+    "build:ui": "npm run build --workspace @bitfire/ui",
+    "check:build": "npm run check:build --workspace @bitfire/ui",
+    "check:app": "node consumers/app/src/app.mjs",
+    "check": "npm run check:stale && npm run check:colour && npm run check:gates && npm run build:ui && npm run check:build && npm run check:app && npm run check:a11y",
     "app": "node consumers/app/src/app.mjs",
     "check:a11y": "npm run check:a11y --workspace @bitfire/ui"
   }

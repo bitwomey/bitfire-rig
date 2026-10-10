@@ -8,11 +8,17 @@ here serves that.
     node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist
     node tools/check-rawcolour.mjs packages fixtures consumers
     bash tools/gate-tests.sh
+    npm run build:ui
+    npm run check:build
+    npm run check:app
     npm run check:a11y
 
-`npm run check` runs all four. The accessibility gate needs Chromium once:
-`npx playwright install chromium`. CI runs exactly these. There is no check that only exists in CI, and none that
-only exists locally.
+`npm run check` runs all of them, in that order. The build comes before the
+app consumer because the consumer imports the built `packages/ui/dist/`.
+`check:build` loads that build under plain Node and inspects `dist/styles.css`
+(see `packages/ui/scripts/check-build.mjs`). The accessibility gate needs
+Chromium once: `npx playwright install chromium`. CI runs exactly these. There
+is no check that only exists in CI, and none that only exists locally.
 
 ## Releasing
 

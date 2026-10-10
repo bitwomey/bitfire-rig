@@ -6,7 +6,8 @@ design tokens, components, and the checks that keep them honest.
 ## Layout
 
     packages/tokens      @bitfire/tokens — generated CSS variables + typed exports
-    packages/ui          @bitfire/ui     — authored React components
+    packages/ui          @bitfire/ui     — authored React components (src/ is source;
+                                           dist/ is a build output, not in git)
     tools/               generator, gates, release gate
     consumers/app        a fixture application consuming both packages
     consumers/docs       the document pipeline (markdown + bib -> PDF)
@@ -29,14 +30,16 @@ right.
 | Rollback works | Proven on a local registry only |
 | Versions are immutable | Proven — republish returns 409 |
 | Peer conflicts are caught | Proven — but only with `strict-peer-deps=true`; npm warns and installs otherwise |
-| Every gate rejects what it should | Proven — the gate-failure suite passes (28 tests at the time of writing; `npm run check` prints the live count) |
+| Every gate rejects what it should | Proven — the gate-failure suite passes (`npm run check` and the release gate print the live count) |
 | Documents and UI share one source | Proven — the specimen renders from the token package |
 | The Tailwind 4 mapping is generated, not copied | Proven — `@bitfire/tokens/tailwind.css` is generated from `tokens.json`, covered by the stale check, and a new colour token reaches it with no other edit (gate tests). Swapping the fixture's hand-written mapping for it left the built CSS byte-identical (same file hash), measured once when it was swapped; no gate guards that. A dotted key such as `p-0.5` compiles to `var(--space-0\.5)` |
 | Fire danger values | Reviewed and confirmed by a qualified FBAN |
 | The workbench builds and runs every Button story | Proven locally — `storybook build` succeeds and lists the 12 stories; the interactive `storybook dev` server was not run |
 | Accessibility violations fail the gate, per theme | Proven — committed proof stories fail on axe rules `button-name` and `label`, and on `color-contrast` under the light theme only (a token pair that fails in light and passes in dark), both in the page and inside a portalled dialog. Removing the global `a11y` setting makes the gate fail. A dark-only failure has not been demonstrated, because no token pair fails only in dark |
 | CI fails on an accessibility violation | Proven — in the CI run for PR #22 the proof story failed on axe rules `button-name` and `label` and the gate reported it as intended; the later CI run on the same PR also showed the light-only `color-contrast` proof failing in light (that run predates the per-theme harness, which replaced the light container with a per-theme run). A CI run turned red by a real component violation has not been seen, because no component has one |
-| Anything about components beyond one Button | **Not started** — Button exists only to prove the workbench and is not exported |
+| `@bitfire/ui` builds and exports its components | Proven locally — `npm run build:ui` emits `dist/index.js` (ESM), `dist/*.d.ts` (tsc) and `dist/styles.css`; `check:build` loads the build under plain Node, confirms all 27 exports, server-renders a Button, and was shown to fail for a missing export, a throwing Button, a missing token utility, a preflight reset in the CSS, and tokens.css leaking into the CSS. CI runs the same npm scripts. The release gate now builds the package and runs `check:build` before it checks that the declared files exist |
+| The compiled CSS works without Tailwind or preflight in the consumer | Proven for Button, TextField, Checkbox, Modal (plus a spot check of the other components) — a Tailwind-free Vite page was screenshotted in Edge, dark and light. That showed preflight had been hiding real defects, now fixed in the component classes. One browser, one page; a different reset in a consumer's own CSS has not been tried |
+| Components beyond that: behaviour and accessibility | Axe-checked per theme in the workbench (the accessibility gate above). Not exercised inside a real consumer application |
 | Private registry auth, CI access | **Not proven** |
 
 ## The workbench
@@ -44,9 +47,34 @@ right.
 Storybook 10 lives in `packages/ui/.storybook`. Run it with
 `npm run storybook --workspace @bitfire/ui`.
 
-It holds one component, `Button` (React Aria Components, Tailwind 4 mapped to
-the tokens), to prove the workbench. The Button is deliberately not exported
-and not built; the build and export design belong to issue #5.
+Components are React Aria Components styled with Tailwind 4 utilities mapped to
+the tokens. Every component has stories here.
+
+## The package
+
+`npm run build:ui` builds `packages/ui/dist/` (not committed):
+
+- `index.js` — ESM from Vite library mode (`vite.lib.config.ts`). `react`,
+  `react-dom`, `react/jsx-runtime`, `react-aria-components` and
+  `@bitfire/tokens` are external, so they are peer dependencies.
+- `index.d.ts` and friends — declarations from tsc (`tsconfig.build.json`).
+- `styles.css` — the Tailwind utilities the components use and the theme
+  mapping, compiled from `src/styles.entry.css`. It does **not** include
+  Tailwind's preflight reset (it would restyle the consumer's page) and does
+  **not** include the token variables. Components therefore must not rely on
+  preflight; give an element its own `box-border`, margins and borders.
+
+A consumer needs no Tailwind. It imports both stylesheets, the tokens first:
+
+    import '@bitfire/tokens/tokens.css';   // the variables, themes via data-theme
+    import '@bitfire/ui/styles.css';       // the compiled utilities
+    import { Button } from '@bitfire/ui';
+
+`tokens.css` is the consumer's to import because the variables are the
+consumer's to theme, and the Tailwind mapping reads them at runtime. Without
+it the components render with no colour or type. The public entry point is
+`packages/ui/src/index.ts`; `statusBadgeStyle` and friends live in
+`src/statusBadge.ts`.
 
 How the themes work. The toolbar (`@storybook/addon-themes`) sets
 `data-theme` on the document, dark by default or `light`. Under Vitest the

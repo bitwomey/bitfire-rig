@@ -22,8 +22,8 @@ export function EmptyState({ icon, heading, description, action, headingLevel = 
           {icon}
         </span>
       )}
-      <Heading className={`text-ink ${compact ? 'body-lg' : 'display-md'}`}>{heading}</Heading>
-      {description && <p className="body max-w-prose text-ink-muted">{description}</p>}
+      <Heading className={`m-0 text-ink ${compact ? 'body-lg' : 'display-md'}`}>{heading}</Heading>
+      {description && <p className="body m-0 max-w-prose text-ink-muted">{description}</p>}
       {action && <div className={compact ? 'pt-1' : 'pt-2'}>{action}</div>}
     </div>
   );

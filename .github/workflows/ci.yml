@@ -44,8 +44,16 @@ jobs:
       - name: Install the workspace
         run: npm ci || npm install
 
+      # Same npm scripts as the local `npm run check`. The app consumer
+      # imports the built dist/, so the build must come first.
+      - name: Build @bitfire/ui
+        run: npm run build:ui
+
+      - name: The built package exports, loads under Node and ships the right CSS
+        run: npm run check:build
+
       - name: The app consumer resolves and runs
-        run: node consumers/app/src/app.mjs
+        run: npm run check:app
 
       - name: Cache Playwright's Chromium
         uses: actions/cache@v4

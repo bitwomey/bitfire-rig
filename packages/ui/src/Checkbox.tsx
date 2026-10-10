@@ -27,7 +27,7 @@ export function Checkbox({ children, error, className, ...props }: BitCheckboxPr
         )}
       </RACCheckbox>
       {error && (
-        <p id={errorId} className="body-sm text-status-danger">
+        <p id={errorId} className="body-sm m-0 text-status-danger">
           {error}
         </p>
       )}

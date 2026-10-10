@@ -47,7 +47,7 @@ export function Pagination({ page, pageCount, onChange, className }: PaginationP
 
   return (
     <nav ref={nav} aria-label="Pagination" className={className}>
-      <ul className="flex flex-wrap items-center gap-1">
+      <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
         <li>
           <Button variant="secondary" isDisabled={page <= 1} onPress={() => step(page - 1)}>
             Previous
