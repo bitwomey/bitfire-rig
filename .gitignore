@@ -21,3 +21,6 @@ packages/ui/test-results/
 packages/ui/playwright-report/
 packages/ui/.vitest-attachments/
 debug-storybook.log
+
+# Library build output (npm run build --workspace @bitfire/ui)
+packages/ui/dist/
