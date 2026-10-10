@@ -46,6 +46,17 @@ step('no raw colour outside generated files', () => {
   return 'clean';
 });
 
+// A package whose dist/ is build output (not tracked) must be built here, or the
+// presence check below would pass on a stale dist/ on a laptop and fail on a clean runner.
+step('the package builds, and the build passes its own check', () => {
+  const scripts = pkg.scripts ?? {};
+  if (!scripts.build) return 'no build step';
+  // execSync (a shell) because npm is npm.cmd on Windows, which execFileSync cannot spawn. Fixed strings, no input.
+  execSync('npm run build', { cwd: pkgDir, encoding: 'utf8', stdio: 'pipe' });
+  if (scripts['check:build']) execSync('npm run check:build', { cwd: pkgDir, encoding: 'utf8', stdio: 'pipe' });
+  return scripts['check:build'] ? 'build + check:build' : 'build';
+});
+
 step('every declared file is present', () => {
   const missing = [];
   for (const f of pkg.files ?? []) {
@@ -73,8 +84,9 @@ step('version is not already published', () => {
 });
 
 step('the gates still reject what they should', () => {
-  sh('bash', [join(root, 'tools/gate-tests.sh')], { cwd: root });
-  return '8 gate-failure tests pass';
+  const out = sh('bash', [join(root, 'tools/gate-tests.sh')], { cwd: root });
+  const m = /(\d+) passed, 0 failed/.exec(out);
+  return m ? `${m[1]} gate-failure tests pass` : 'gate-failure tests pass';
 });
 
 const w = Math.max(...steps.map(s => s[0].length));

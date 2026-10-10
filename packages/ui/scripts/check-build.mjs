@@ -49,6 +49,14 @@ try {
   bad(`server-rendering Button threw: ${e.message}`);
 }
 
+// (d) the declarations exist and name the public API, so a broken tsc step cannot pass quietly.
+try {
+  const dts = readFileSync(`${dist}index.d.ts`, 'utf8');
+  if (!/Button/.test(dts)) bad('dist/index.d.ts does not mention Button');
+} catch (e) {
+  bad(`dist/index.d.ts is unreadable: ${e.message}`);
+}
+
 // (c)
 let css = '';
 try {
