@@ -82,6 +82,16 @@ jobs:
       - name: Visual regression gate
         run: npm run check:visual
 
+      # The actual, expected and diff images of any screenshot that did not match,
+      # so a reviewer can look at them instead of reading a pixel count.
+      - name: Upload the visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: packages/ui/test-results/visual
+          if-no-files-found: ignore
+
       - name: Checks left the working tree clean
         run: |
           if [ -n "$(git status --porcelain)" ]; then
