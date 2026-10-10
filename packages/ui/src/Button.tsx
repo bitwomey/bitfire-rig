@@ -11,7 +11,7 @@ const variants = {
 };
 
 function Spinner() {
-  return <span aria-hidden className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />;
+  return <span aria-hidden className="inline-block size-4 animate-spin motion-reduce:animate-none rounded-full border-2 border-current border-t-transparent" />;
 }
 
 export function Button({ variant = 'primary', className, children, ...props }: BitButtonProps) {
