@@ -7,8 +7,6 @@ name: Visual baselines
 # CONTRIBUTING.md.
 
 on:
-  push:
-    branches: [issue-7-visual-regression]  # TEMPORARY bootstrap trigger, removed with the baselines commit
   workflow_dispatch:
     inputs:
       ref:
