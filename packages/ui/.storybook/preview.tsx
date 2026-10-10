@@ -1,6 +1,19 @@
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import '../src/theme.css';
+// Self-hosted IBM Plex, latin subset, only the weights tokens.json uses (sans
+// 200/300/400/500, mono 200/300/400, condensed 500, serif 400). Imported here
+// and nowhere else: @bitfire/ui ships no font files. Without them text falls
+// back to the OS font stack and screenshots differ between machines.
+import '@fontsource/ibm-plex-sans/latin-200.css';
+import '@fontsource/ibm-plex-sans/latin-300.css';
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-500.css';
+import '@fontsource/ibm-plex-mono/latin-200.css';
+import '@fontsource/ibm-plex-mono/latin-300.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-sans-condensed/latin-500.css';
+import '@fontsource/ibm-plex-serif/latin-400.css';
 
 // Under Vitest the mode is 'test' and VITE_A11Y_THEME ('dark' or 'light')
 // picks the theme for the whole run, set on the document. That matters for

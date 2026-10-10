@@ -24,3 +24,7 @@ debug-storybook.log
 
 # Library build output (npm run build --workspace @bitfire/ui)
 packages/ui/dist/
+
+# Visual regression: only the Linux baselines are committed (the renderer is pinned to Linux CI)
+packages/ui/visual/__screenshots__/*-win32.png
+packages/ui/visual/__screenshots__/*-darwin.png

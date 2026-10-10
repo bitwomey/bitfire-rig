@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from './Button';
 
 const meta = {
@@ -15,8 +15,17 @@ const button = (canvasElement: HTMLElement) => within(canvasElement).getAllByRol
 
 // Forced states are driven through real input so the data-* attributes React
 // Aria sets are the ones under test, not a hand-written class.
+// A simulated hover is sometimes not picked up on a slow runner, and without an
+// assertion the story would finish in whichever state it happened to reach, so
+// its screenshot would differ between runs. Re-issue the hover until it takes.
 const hover: Story['play'] = async ({ canvasElement }) => {
-  await userEvent.hover(button(canvasElement));
+  await waitFor(
+    async () => {
+      if (button(canvasElement).getAttribute('data-hovered') !== 'true') await userEvent.hover(button(canvasElement));
+      await expect(button(canvasElement)).toHaveAttribute('data-hovered', 'true');
+    },
+    { timeout: 8000, interval: 250 },
+  );
 };
 // The focus ring must actually paint: the data attribute alone does not prove it.
 const focusVisible: Story['play'] = async ({ canvasElement }) => {

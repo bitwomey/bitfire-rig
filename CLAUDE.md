@@ -32,7 +32,10 @@ contracts or document layout logic, so do not try to push them in there.
 That runs three gates: generated output is not stale, no raw colour outside
 the generated token file, and the gate suite still rejects what it should.
 CI runs exactly these. There is no check that exists only in CI and none that
-exists only locally, so a local failure is a guaranteed red PR.
+exists only locally, so a local failure is a guaranteed red PR. One declared
+exception: the visual regression gate (`npm run check:visual`) is pinned to the
+Linux renderer, so on Windows it prints that it is SKIPPED and CI runs it for
+real. See "Visual baselines" in CONTRIBUTING.md.
 
 **Do not push on a shallow pass.** Do not report that something works because
 the code looks right. Run it, read the output, and say what you observed. If

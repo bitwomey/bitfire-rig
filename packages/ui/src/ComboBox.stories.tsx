@@ -54,7 +54,7 @@ export const NoMatch: Story = {
 export const Selected: Story = {
   args: { defaultSelectedKey: 'Hunter' },
   play: async ({ canvasElement }) => {
-    await expect(input(canvasElement)).toHaveValue('Hunter');
+    await waitFor(() => expect(input(canvasElement)).toHaveValue('Hunter')); // waits for the collection (production build)
   },
 };
 export const FocusVisible: Story = { play: () => expectFocusRing() };

@@ -1,0 +1,50 @@
+name: Visual baselines
+
+# Regenerates the Linux screenshot baselines for a ref and uploads them as an
+# artifact. It does NOT commit or push anything: a human downloads the artifact,
+# replaces packages/ui/visual/__screenshots__ on a branch, and a reviewer looks
+# at every changed PNG in the pull request. See "Visual baselines" in
+# CONTRIBUTING.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch, tag or SHA to render baselines for (empty means the branch the workflow is run on)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  baselines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+
+      - name: Install the workspace
+        run: npm ci || npm install
+
+      # The same Chromium (and OS libraries) the CI gate uses.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Builds Storybook, deletes this platform's old PNGs, renders every story
+      # in both themes and writes new ones. The CI gate never runs this.
+      - name: Regenerate baselines
+        run: npm run visual:update
+
+      - name: Upload the regenerated snapshot folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: packages/ui/visual/__screenshots__
+          if-no-files-found: error

@@ -21,7 +21,8 @@ jobs:
     # GitHub's own guidance is to use self-hosted runners only with private
     # repos, because a fork can open a PR that runs arbitrary code on them.
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # The visual gate builds Storybook and takes ~180 screenshots on top of the rest.
+    timeout-minutes: 25
 
 
     steps:
@@ -71,6 +72,25 @@ jobs:
       # axe rule it was written to trip.
       - name: Accessibility gate
         run: npm run check:a11y
+
+      # Same npm script as the local `npm run check`. On Linux (this runner) it
+      # compares every story, both themes, against the committed baselines and
+      # proves a deliberate visual change is caught. It never writes a baseline:
+      # a missing or different screenshot fails. Only the visual-baselines
+      # workflow regenerates them. On Windows/macOS it is SKIPPED (the renderer
+      # is pinned to Linux): the one declared exception to "no check only in CI".
+      - name: Visual regression gate
+        run: npm run check:visual
+
+      # The actual, expected and diff images of any screenshot that did not match,
+      # so a reviewer can look at them instead of reading a pixel count.
+      - name: Upload the visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: packages/ui/test-results/visual
+          if-no-files-found: ignore
 
       - name: Checks left the working tree clean
         run: |

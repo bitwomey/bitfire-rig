@@ -40,6 +40,9 @@ right.
 | `@bitfire/ui` builds and exports its components | Proven locally — `npm run build:ui` emits `dist/index.js` (ESM), `dist/*.d.ts` (tsc) and `dist/styles.css`; `check:build` loads the build under plain Node, confirms all 27 exports, server-renders a Button, and was shown to fail for a missing export, a throwing Button, a missing token utility, a preflight reset in the CSS, and tokens.css leaking into the CSS. CI runs the same npm scripts. The release gate now builds the package and runs `check:build` before it checks that the declared files exist |
 | The compiled CSS works without Tailwind or preflight in the consumer | Proven for Button, TextField, Checkbox, Modal (plus a spot check of the other components) — a Tailwind-free Vite page was screenshotted in Edge, dark and light. That showed preflight had been hiding real defects, now fixed in the component classes. One browser, one page; a different reset in a consumer's own CSS has not been tried |
 | Components beyond that: behaviour and accessibility | Axe-checked per theme in the workbench (the accessibility gate above). Not exercised inside a real consumer application |
+| The visual regression machinery works | Proven locally on **Windows only**, against throwaway win32 baselines: 180 screenshots (90 stories x 2 themes) were generated, a second run matched them all, and a run with a global border-radius injected failed 17 of the 24 Button screenshots, every failure a `toHaveScreenshot` pixel mismatch, none a crash. Probed once on win32: animations disabled made 4 Spinner shots identical where allowing them gave 4 different ones; a shot taken before the story finished differed from one after; a full-page shot contains the portalled dialog that the story root excludes; with the fonts loaded the button rendered IBM Plex Sans, with them blocked Segoe UI. Caret hiding and `document.fonts.ready` were **not** shown to matter in any probe (kept as cheap safeguards). On win32 the real check is SKIPPED by design |
+| The committed visual baselines are right | **Not proven.** Linux baselines have not been produced yet (run the `visual-baselines` workflow). A baseline only proves a story has not changed since someone looked at it; it does not prove it was ever correct |
+| The visual gate is stable across CI runs and runner images | **Not proven.** Needs repeated Linux runs of the same commit |
 | Private registry auth, CI access | **Not proven** |
 
 ## The workbench
@@ -98,6 +101,42 @@ a portalled dialog; each must fail on `color-contrast` under light and pass
 under dark. The proofs set no accessibility setting of their own, so they fail
 only while the global one is on. Playwright needs its browser once:
 `npx playwright install chromium`.
+
+## Visual regression
+
+`npm run check:visual` builds the static Storybook, screenshots every story in
+both themes with Playwright's `toHaveScreenshot` (`packages/ui/visual/`) and
+compares each with the committed baseline in
+`packages/ui/visual/__screenshots__/`. It then re-runs a subset with a
+deliberate change injected (`VISUAL_PROOF=1`, a global border radius) and
+requires that run to fail by screenshot comparison.
+
+What is pinned: viewport 800x600, device scale factor 1, Playwright's
+`animations: 'disabled'`, the caret hidden, UTC and a fixed locale, the story's
+play function finished (Storybook's `storyRendered` event) and
+`document.fonts.ready` awaited before the shot, full-page captures (so portalled
+dialogs and popovers are in the frame), and self-hosted IBM Plex loaded only in
+`.storybook/preview.tsx` (`@fontsource/*` devDependencies, latin subset, the
+weights `tokens.json` uses). `@bitfire/ui` itself still ships no font files.
+`prefers-reduced-motion` is deliberately not emulated: the Spinner and Skeleton
+stories assert their animation is running, which reduced motion switches off.
+
+**Declared exception to "no check only in CI".** The baselines are drawn by
+the Linux Chromium on the GitHub `ubuntu-latest` runner, and file names carry
+the platform (`name--dark-linux.png`). Only the Linux ones are committed; the
+win32 and darwin patterns are gitignored. On any other OS `check:visual` prints
+that it was SKIPPED, why, and how to run it for real, and exits 0. The gate
+therefore really runs only in CI. Nothing weaker than that is acceptable here:
+a comparison on another OS would be meaningless or would tempt people to
+regenerate baselines locally. `VISUAL_ALLOW_NON_LINUX=1` runs the machinery
+locally against throwaway local baselines; it proves nothing about the
+committed ones.
+
+`npm run visual:update` regenerates the baselines (Linux only). CI never runs
+it, and never passes an update flag: a missing or different screenshot is a
+failure. The `visual-baselines` workflow (manual) runs the update on
+`ubuntu-latest` and uploads the folder as an artifact; see "Visual baselines"
+in CONTRIBUTING.md for the policy on accepting a new baseline.
 
 ## Public repo
 
