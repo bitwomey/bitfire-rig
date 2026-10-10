@@ -72,7 +72,7 @@ into a rubber stamp that stays green, which is worse than no gate.
 standards (STD-0013, a candidate) discourage. They stay because the baselines
 are the authoritative source of truth for this gate: they cannot be generated
 from anything else, and a reviewer needs to see them in the diff. They are kept
-small (viewport 800x600, about 9 KB each on average) to bound the cost.
+small (viewport 800x600, about 7 KB each on average on win32, 1.2 MB for 180) to bound the cost.
 
 **Determinism.** Fixed viewport and device scale factor, animations disabled,
 caret hidden, UTC and fixed locale, the play function finished (Storybook's
