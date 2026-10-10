@@ -1,5 +1,5 @@
 # Handover -- Session 3: foundation complete (issues #1 to #7)
-**Written 2026-10-10 at session end. Final.** Everything below is merged to `main` (head `5d5a53e`, after PR #36) except this handover (docs PR #35).
+**Written 2026-10-10 at session end; updated later the same day (the plan, issue #38, #15, #11).** Everything below is merged to `main` (head `5d5a53e`, after PR #36) except this handover (docs PR #35).
 
 ## TL;DR
 
@@ -68,15 +68,36 @@ Known small debts: README/release-gate counts were stale (fixed in #33); `npm ci
 
 `packages/tokens/src/tokens.json` (authoritative), `packages/tokens/dist/` (generated, incl. `tailwind.css`), `packages/ui/src` (components + stories, `index.ts` exports), `packages/ui/.storybook`, `packages/ui/visual` (Playwright spec, baselines in `__screenshots__`), `packages/ui/proof` (deliberately broken stories that prove gates fail), `research/primitive-trial` (the trial and its decision), `tools/` (generator, gates, release gate).
 
+## THE PLAN (read this first, every session)
+
+Ben's working plan is **not in the repo**. It is in his Dropbox:
+`/BITFire/Plans/UI Dev and Design System Integration/BITFire Build Rig — Architecture and Sequence v2 (current plan).md` (8 October 2026, v2). Read it with the Dropbox tools (`search` for its title, then `fetch`). Ben assumes each session is handed it; until now it was not, and an earlier session wrongly said "there is no written plan". It holds: the five gaps, the architecture ("edit an authoritative source, regenerate its derived outputs"), distribution by versioned packages, the UI-primitive trial, the workbench, the verification gates and their limits, the map layer, documents and decks, the **phases 0 to 5 with exit evidence**, and the debts with their blast radius.
+
+**Where the repo stands against its phases (checked 2026-10-10):**
+
+| Phase | Plan | State |
+|---|---|---|
+| 0 Establish the contract | sources, first consumer, schema | done (per the plan). The plan's **gating question is still open: what is the next real deliverable?** (application or document decides the first fixture) |
+| 1 Prove the foundation | token outputs, reproducibility, first checks | done |
+| 2 Prove the UI choice | trial against the strongest challenger | done: React Aria Components chosen over shadcn/ui (the plan's starting hypothesis was shadcn plus Base UI); evidence in `research/primitive-trial/DECISION.md` |
+| 3 Prove distribution and adoption | package, publish a candidate, clean install and upgrade, rollback, private access | **not done** beyond a local Verdaccio run. #3 and #4 are deferred by Ben. The plan says this phase "decides whether any of this saves work" |
+| 4 First supported starter | real workflow, workbench, agent guidance, CI gates | workbench and gates done (a11y per theme, visual, raw colour, stale output, build smoke test); AGENTS.md and CLAUDE.md exist; **no starter, no clean-install consumer check** |
+| 5 Expand on demand | second starter, more documents/decks, map pack, blocks | map work deferred by Ben; documents pipeline exists (`consumers/docs`) |
+
+**One change I would make to the plan (proposed to Ben 2026-10-10, awaiting his answer):** split Phase 3. **3a, installability from a tarball in a clean consumer** (`npm pack` both packages, install into a fresh directory, build and run it, in CI): it needs no registry and no repo transfer, and it is exactly the "clean install has never been performed" gap the plan names as the most important. **3b, the real registry, upgrade and rollback, private access**: stays deferred with #3 and #4. Otherwise follow the plan.
+
 ## Most useful next action
 
-**Ask Ben for the two things that unblock work:** the eight brand-asset files and a structure choice for #15 (suggestion: top-level `assets/`, no new package), and the colour-vision palettes, method and validator invocation for #11. Nothing else is live. If he would rather push the epic forward, the next real decisions are the deferred ones (#3 package scope `@bitfire` vs `@bitfire-org`, then the repo transfer).
+1. **Ask Ben the plan's gating question** (what is the next real deliverable?) and for a yes or no on splitting Phase 3. If yes, do 3a.
+2. **The design-system source of truth (issue #38):** repo owns token values, the artifact owns the brand book and prose, the skill is generated from the repo and applied through a Cowork proposal (the skill is a read-only cache; nothing here writes to it). Draft PR #39 has the `export` and `check` tool, parked behind: land the **skill-only values** in the repo first as their own PR. Ben's rulings so far: **the "never a dual-axis chart" rule is dropped** (use whatever chart suits); the fire-danger-rating colours are not a worry. Still open: where `brand-ember` is allowed (repo says wordmark, cover and brand marks only; the skill says also masthead and active nav), whether the 12 px weight-300 `caption` is an accepted exception to the 14 px floor, and where the remaining prose rules live. A candidate token: `opacity-context-dim` = 0.28 (the 28% exists only as text in the `focus` token's usage).
+3. **#15 brand assets:** PR #37 is open (assets from the design system artifact, hash-checked, in `assets/brand/`). Ben decides the structure and whether the tw-fixture uses them.
+4. **#11 colour-vision palettes:** blocked; the palettes, method and validator invocation are in neither the repo, the artifact nor Dropbox (the plan's debt line has only the 4.8 and 7.4 scores). Suggest closing as "regenerate when needed" if Ben cannot place them.
 
 ## Read these first
 
-1. This handover, then `memory/journal/2026-10-10_issue7_session-3-foundation-complete_b56105.md`.
+1. **The plan** (Dropbox path above), then this handover, then `memory/journal/2026-10-10_issue7_session-3-foundation-complete_b56105.md`.
 2. The decision logs `memory/decision_logs/2026-10-10_issue2_*`, `issue25_*`, `issue7_*`, `issue3_*`.
-3. `research/primitive-trial/DECISION.md` (why React Aria), CONTRIBUTING.md "Visual baselines", README.md "What is proven".
+3. `research/primitive-trial/DECISION.md` (why React Aria), CONTRIBUTING.md "Visual baselines" and "How the design system stays in sync" (on draft PR #39), README.md "What is proven".
 4. `handovers/HANDOVER_2026-10-08_issue1-review-fixes.md` (the earlier session).
 
 ## Phased plan for the next piece of work (#15, when Ben supplies the assets)
@@ -108,11 +129,13 @@ Last session (2026-10-09 to 10-10) finished the foundation and merged PRs #14 to
 
 Key decisions (Ben): React Aria over shadcn/ui; the repo stays public on bitwomey until refined, then it moves to BITFire-org (package scope @bitfire vs @bitfire-org is open); publishing (#3, #4) and all map work (#8 to #10) are deferred; Ember is the default skin; no employer product names in the repo.
 
-This session's mission: unblock the two issues waiting on me. #15 (brand assets) needs the eight logo files from the Claude Design system and a structure choice (suggest top-level `assets/`). #11 (colour-vision palettes) needs the deutan/protan/tritan palettes, the method and the validator invocation: a repo-wide search found none of it in the repo. Nothing else is live.
+The plan: Ben's working plan is in his Dropbox, not the repo: `/BITFire/Plans/UI Dev and Design System Integration/BITFire Build Rig — Architecture and Sequence v2 (current plan).md`. Read it first (Dropbox `search` for the title, then `fetch`). Phases 0 to 2 are done; Phase 3 (distribution: clean install, upgrade, rollback) is the one that decides whether any of this saves work and is not done; the handover has the table.
 
-Open questions to resolve BEFORE acting: where do the brand assets go; does the tw-fixture use them; where are the palettes and the validator. An unanswered question is a stop, not consent.
+This session's mission, in order: (1) ask Ben the plan's gating question (what is the next real deliverable?) and whether to split Phase 3 into 3a, a clean-install-from-tarball proof with no registry or transfer, and 3b, the real registry (deferred); if yes, do 3a. (2) The design-system source of truth (issue #38, draft PR #39): land the skill-only values in the repo as their own PR before anything generates the skill; the dual-axis rule is dropped. (3) #15 brand assets (PR #37) and #11 (palettes not found anywhere) wait on Ben.
 
-Required reading: handovers/HANDOVER_2026-10-10_foundation-complete.md, the journal above, memory/decision_logs/2026-10-10_*, research/primitive-trial/DECISION.md, CONTRIBUTING.md ("Visual baselines"), README.md ("What is proven").
+Open questions to resolve BEFORE acting: the next real deliverable; split Phase 3 yes or no; where `brand-ember` is allowed (repo: wordmark, cover and brand marks only; skill: also masthead and active nav); whether the 12 px weight-300 caption is an accepted exception; where the remaining prose rules live; the brand-assets structure. An unanswered question is a stop, not consent.
+
+Required reading: the plan (Dropbox, above), handovers/HANDOVER_2026-10-10_foundation-complete.md, the journal above, memory/decision_logs/2026-10-10_*, research/primitive-trial/DECISION.md, CONTRIBUTING.md ("Visual baselines"), README.md ("What is proven").
 
 Context: run `npm run check` from Git Bash with `export PATH="$PATH:/c/Program Files/nodejs"` (PowerShell cannot find node in the gate suite); `check:visual` is Linux-only and prints SKIPPED on Windows, CI runs it. Open PRs as `bit-author` (GH_TOKEN from skills/pr/gh_app_token.py --app author) and request @bitwomey; every PR gets a cold bit:pr-review; baselines change only through the Visual baselines workflow in a reviewed PR. Windows worktree removal needs the `\\?\` long-path trick.
 
