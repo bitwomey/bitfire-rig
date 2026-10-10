@@ -1,5 +1,5 @@
 # Handover -- Session 3: foundation complete (issues #1 to #7)
-**Written 2026-10-10. Progressive: updated at each milestone. Last updated after PR #34 merged.**
+**Written 2026-10-10. Progressive: updated at each milestone. Last updated after PR #36 (issue #30) was marked ready; Ben had not merged it yet.**
 
 ## TL;DR
 
@@ -38,9 +38,9 @@ The foundation work for the BITFire build rig (`bitwomey/bitfire-rig`) is done a
 
 | # | What |
 |---|---|
-| #30 | Button's pending spinner ignores `prefers-reduced-motion` (bug, small, live) |
-| #15 | Add BITFire brand assets (unlabelled, deferred off earlier branches) |
-| #11 | Re-examine per-type colour-vision palettes (protan/tritan failed the validator) |
+| #30 | Button's pending spinner ignores `prefers-reduced-motion`: **fixed in PR #36** (ready, CI green, cold review no blockers, awaiting Ben's merge). The story checks the stylesheet rule, not an emulated preference |
+| #15 | Add BITFire brand assets: **blocked on Ben**. The 8 logo files live in his Claude Design system, not in the repo; he must supply them and choose a structure (my suggestion: a top-level `assets/` folder, no new package). PNG lockups are binaries (STD-0013 trade-off) |
+| #11 | Re-examine per-type colour-vision palettes: research; investigation notes below |
 | #3, #4 | Publish packages / prove rollback on the real registry: **deferred** |
 | #8, #9, #10 | Cesium adapter, map asset sources, hatching channel: **deferred** |
 
@@ -64,6 +64,7 @@ Known small debts: README/release-gate counts were stale (fixed in #33); `npm ci
 
 ## Next
 
-1. #30 (reduced motion on Button pending spinner).
-2. Run `bit:session-end` properly (journal, memory, docs PR under `bit-author`).
-3. Then triage #15 and #11, or raise the deferred items when Ben decides.
+1. Merge PR #36 (Ben), then remove its local branch; this handover PR #35 is a draft docs PR, mark it ready when finalised.
+2. #11: see the investigation notes (added below when done).
+3. Run `bit:session-end` properly (journal, memory, docs PR under `bit-author`).
+4. #15 when Ben supplies the assets; the deferred items when he decides.
