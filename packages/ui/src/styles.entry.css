@@ -1,0 +1,12 @@
+/* Entry for dist/styles.css (see vite.lib.config.ts, mode "styles").
+   Deliberately NOT `@import "tailwindcss"`: that pulls in preflight, a global
+   reset that would restyle the consumer's whole page. Theme + utilities only.
+   Also deliberately not tokens.css: consumers import @bitfire/tokens/tokens.css
+   themselves, so the variables stay theirs to theme. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "@bitfire/tokens/tailwind.css";
+@source ".";
+@source not "./**/*.stories.tsx";
+@source not "./storyUtils.tsx";
