@@ -18,11 +18,12 @@ export default defineConfig({
   // never in the deliberate-change proof run.
   updateSnapshots: process.env.VISUAL_UPDATE === '1' && !process.env.VISUAL_PROOF ? 'all' : 'none',
   reporter: process.env.VISUAL_JSON ? [['list'], ['json', { outputFile: process.env.VISUAL_JSON }]] : 'list',
-  // Colours are compared exactly (threshold 0). Up to 50 pixels may differ: on
+  // Colours are compared exactly (threshold 0). Up to 20 pixels may differ: on
   // Linux the same Switch rendered 7 pixels apart between two runs, from edge
-  // anti-aliasing. A real change is far larger (a hover colour is ~4,000 pixels,
-  // a popover ~14,000), and the deliberate-change proof checks that it is caught.
-  expect: { toHaveScreenshot: { maxDiffPixels: 50, threshold: 0 } },
+  // anti-aliasing. Kept low on purpose: a button's corner radius going from 6 to
+  // 9 px changes about 40 pixels, so a looser limit (50 was tried) misses it.
+  // A hover colour is ~4,000 pixels and a popover ~14,000.
+  expect: { toHaveScreenshot: { maxDiffPixels: 20, threshold: 0 } },
   use: {
     viewport: { width: 800, height: 600 },
     deviceScaleFactor: 1,

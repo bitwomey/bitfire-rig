@@ -33,7 +33,7 @@ every story in both themes and compares each with a committed PNG in
 `packages/ui/visual/__screenshots__/` (files named `<story>--<theme>-linux.png`).
 
 **What it proves.** A story still renders exactly as it did when its baseline
-was accepted, to the pixel, on the pinned renderer. A deliberate visual change
+was accepted, to within 20 pixels (edge anti-aliasing noise, measured at 7) and with exact colours, on the pinned renderer. A deliberate visual change
 is caught (the check proves that on every run). **What it does not prove.**
 That a baseline was ever right. A wrong screen, once accepted, is guarded as
 faithfully as a correct one. Accepting every changed screenshot turns the gate
@@ -78,8 +78,9 @@ small (viewport 800x600, about 7 KB each on average on win32, 1.2 MB for 180) to
 caret hidden, UTC and fixed locale, the play function finished (Storybook's
 `storyRendered` event) and `document.fonts.ready` awaited before each shot,
 self-hosted IBM Plex loaded in the workbench only, full-page captures. If a
-screenshot is flaky, find out why. Do not widen the pixel tolerance, retry, or
-regenerate.
+screenshot is flaky, find out why (a diff-image artifact is uploaded when the
+gate fails). Do not widen the 20-pixel tolerance, retry, or regenerate: a
+looser limit hides small real changes such as a corner radius.
 
 ## Releasing
 
