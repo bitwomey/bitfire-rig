@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: Branch, tag or SHA to render baselines for (default: the branch the workflow is run on)
+        description: 'Branch, tag or SHA to render baselines for (empty means the branch the workflow is run on)'
         required: false
         default: ''
 
