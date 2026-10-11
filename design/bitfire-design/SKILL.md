@@ -106,7 +106,7 @@ Type scale (size / weight), from `tokens.json`:
 
 `@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: `Button`, `TextField`, `TextArea`, `Checkbox`, `RadioGroup`, `Switch`, `Select`, `ComboBox`, `Modal`, `DialogTrigger`, `Tabs`, `TabList`, `Tab`, `TabPanel`, `Link`, `Breadcrumbs`, `Nav`, `Pagination`, `EmptyState`, `Spinner`, `Skeleton`, `SkeletonText`, `SkeletonTable`, `SkeletonRegion`, `statusBadgeStyle`, `assertRequiredTokens`, `requiredTokens`. The capitalised names are components; the rest are helpers.
 
-Anything not in that list is not built yet. Build it on React Aria Components styled through the BITFire tokens, not on shadcn/ui, and see the brand book's component specs.
+This is what the rig builds today, not the whole system. The brand book's component specs (in the Design artifact's manifest) describe domain components that are not built in the rig yet, such as `FireDangerBadge`, `StatusBadge`, `MetricTile` and `DataTable`; read them there before building one from scratch. Build new components on React Aria Components styled through the BITFire tokens, not on shadcn/ui.
 
 Icons are Phosphor (MIT), 16 or 20px on the grid (weight rules are in the design rules below). Four gaps exist in geospatial and aviation; to draw one, use a 256×256 viewBox, round caps and joins, `currentColor`, strokes of 8/12/16/24 for thin/light/regular/bold. No multi-part machine icon survives 16px.
 
@@ -145,6 +145,41 @@ Icons are Phosphor (MIT), 16 or 20px on the grid (weight rules are in the design
 - **Icons:** Phosphor, regular weight by default, fill for the active state.
 - **Emphasis charts** dim everything but the focus with `opacity-context-dim`
   applied to `ink-subtle`.
+
+### Chart rules
+
+- **Categorical colour:** `viz-1` onward, in order, never cycled, at most four in
+  one chart. A fifth series folds into "Other", becomes facets, or changes form.
+- **Separation gate:** adjacent-pairs separation is the gate for bars, lines and
+  stacks. Scatter, bubble and choropleth forms cap at three series. No palette
+  separates all six slots from each other, so do not promise it.
+- **Sharing a region with a rating:** where `viz-*` and `fdr-*` genuinely share a
+  region (a classed map layer under a fire danger legend), use `sev-*` or a
+  single-hue ramp for the other layer, never the categorical set.
+- **New colours:** do not add one without running the validator.
+
+### Fire danger rules
+
+- `fdr-*` is for fire danger ratings only, never for anything else.
+- A map fill with no adjacent word gets hatching per band as the non-colour
+  channel. Hatching is not built yet (issue #10). Extreme against Moderate is
+  hard to tell apart under protanopia, so the word on every chip and hatching on
+  every map fill carry the meaning.
+- A status dot has a second channel in its fill: filled means resources are
+  actively suppressing, hollow means they are on scene and sizing up. Where that
+  cannot be derived from public feeds, use the filled dot rather than inferring.
+
+### Document and slide rules
+
+- Documents and decks always use the light theme values, whatever the on-screen
+  default. Hazard fills are theme-independent and print as they are.
+- A4 portrait pages: margins 22 mm outer, 26 mm top, 20 mm foot, a measure of 68
+  to 76 characters; print body is 10.5 pt on 15 pt leading in Plex Serif.
+- Slides are 16:9, authored at 1920 x 1080, with a 72 px safe margin and nothing
+  meaningful within 48 px of an edge. Body is 18 pt minimum and never below 14 pt.
+- Projected slides: `ink-subtle` is not used, `ink-muted` is the floor, and every
+  text pair clears 7:1 rather than 4.5:1. Dark slides suit a darkened room; use
+  light when the lighting cannot be controlled.
 
 ### Brand colour is not decoration
 

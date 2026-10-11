@@ -55,7 +55,7 @@ if (cmd === 'skill') {
     process.exit(1);
   }
   writeFileSync(target, body);
-  console.error(`ok: wrote ${target} (${body.length} bytes)`);
+  console.error(`ok: wrote ${target} (${Buffer.byteLength(body)} bytes)`);
   process.exit(0);
 }
 if (!cmd || !arg || !['export', 'check'].includes(cmd)) usage();

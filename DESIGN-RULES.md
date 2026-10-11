@@ -41,6 +41,41 @@ tokens is not in the skill.
 - **Emphasis charts** dim everything but the focus with `opacity-context-dim`
   applied to `ink-subtle`.
 
+## Chart rules
+
+- **Categorical colour:** `viz-1` onward, in order, never cycled, at most four in
+  one chart. A fifth series folds into "Other", becomes facets, or changes form.
+- **Separation gate:** adjacent-pairs separation is the gate for bars, lines and
+  stacks. Scatter, bubble and choropleth forms cap at three series. No palette
+  separates all six slots from each other, so do not promise it.
+- **Sharing a region with a rating:** where `viz-*` and `fdr-*` genuinely share a
+  region (a classed map layer under a fire danger legend), use `sev-*` or a
+  single-hue ramp for the other layer, never the categorical set.
+- **New colours:** do not add one without running the validator.
+
+## Fire danger rules
+
+- `fdr-*` is for fire danger ratings only, never for anything else.
+- A map fill with no adjacent word gets hatching per band as the non-colour
+  channel. Hatching is not built yet (issue #10). Extreme against Moderate is
+  hard to tell apart under protanopia, so the word on every chip and hatching on
+  every map fill carry the meaning.
+- A status dot has a second channel in its fill: filled means resources are
+  actively suppressing, hollow means they are on scene and sizing up. Where that
+  cannot be derived from public feeds, use the filled dot rather than inferring.
+
+## Document and slide rules
+
+- Documents and decks always use the light theme values, whatever the on-screen
+  default. Hazard fills are theme-independent and print as they are.
+- A4 portrait pages: margins 22 mm outer, 26 mm top, 20 mm foot, a measure of 68
+  to 76 characters; print body is 10.5 pt on 15 pt leading in Plex Serif.
+- Slides are 16:9, authored at 1920 x 1080, with a 72 px safe margin and nothing
+  meaningful within 48 px of an edge. Body is 18 pt minimum and never below 14 pt.
+- Projected slides: `ink-subtle` is not used, `ink-muted` is the floor, and every
+  text pair clears 7:1 rather than 4.5:1. Dark slides suit a darkened room; use
+  light when the lighting cannot be controlled.
+
 ## Brand colour is not decoration
 
 Ben, 2026-10-10: the brand is important and is not sprinkled around. If a use of
