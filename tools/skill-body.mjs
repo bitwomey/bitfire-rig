@@ -73,7 +73,14 @@ export function renderSkill() {
       ...T.type.groups.map((g) => `- ${g.name}: ${g.styles.map((s) => `\`${s.name}\` ${s.fontSize}/${s.fontWeight}`).join(', ')}`)].join('\n'),
 
     components: () => {
-      const names = [...read('packages/ui/src/index.ts').toString('utf8').matchAll(/export\s*\{([^}]*)\}/g)]
+      const src = read('packages/ui/src/index.ts').toString('utf8');
+      // Only `export { a, b } from` blocks are understood. Any other export form
+      // would be silently missing from the skill, so refuse it instead.
+      const stmts = src.match(/^export\b/gm) ?? [];
+      const blocks = [...src.matchAll(/^export\s*\{([^}]*)\}/gm)];
+      if (stmts.length !== blocks.length) throw new Error('packages/ui/src/index.ts has an export form skill-body.mjs does not read (use `export { ... } from`)');
+      if (blocks.some((m) => / as /.test(m[1]))) throw new Error('packages/ui/src/index.ts uses `export { x as y }`, which skill-body.mjs does not read');
+      const names = blocks
         .flatMap((m) => m[1].split(',').map((x) => x.trim()).filter((x) => x && !x.startsWith('type ')));
       if (!names.length) throw new Error('no exports found in packages/ui/src/index.ts');
       return names.map((n) => `\`${n}\``).join(', ');

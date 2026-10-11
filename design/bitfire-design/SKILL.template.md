@@ -70,7 +70,7 @@ Every number a reader compares, aligns or watches change is mono. Prose is sans.
 
 ## Components
 
-Built in `@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens): {{components}}.
+`@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: {{components}}. The capitalised names are components; the rest are helpers.
 
 Anything not in that list is not built yet. Build it on React Aria Components styled through the BITFire tokens, not on shadcn/ui, and see the brand book's component specs.
 

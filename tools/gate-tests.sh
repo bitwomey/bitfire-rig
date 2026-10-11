@@ -167,7 +167,9 @@ run "fresh generated skill body passes the stale check" 0 node tools/design-syst
 cp "$SKILL" "$TMP/SKILL.md"; sed -i 's/#080c0f/#00ff00/' "$TMP/SKILL.md"
 run "hand-edited skill body rejected" 1 node tools/design-system.mjs skill --check "$TMP/SKILL.md"
 mutate "d.color.tokens=d.color.tokens.filter(t=>t.name!=='canvas')"
+node tools/design-system.mjs skill - >/dev/null 2>"$TMP/skillerr"
 run "skill render refuses a missing token" 1 node tools/design-system.mjs skill -
+run "skill render names the missing token" 0 grep -q 'token "canvas"' "$TMP/skillerr"
 restore
 
 # The suite must leave the repo exactly as it found it. Compared against the

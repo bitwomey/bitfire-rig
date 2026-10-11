@@ -104,7 +104,7 @@ Type scale (size / weight), from `tokens.json`:
 
 ## Components
 
-Built in `@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens): `Button`, `TextField`, `TextArea`, `Checkbox`, `RadioGroup`, `Switch`, `Select`, `ComboBox`, `Modal`, `DialogTrigger`, `Tabs`, `TabList`, `Tab`, `TabPanel`, `Link`, `Breadcrumbs`, `Nav`, `Pagination`, `EmptyState`, `Spinner`, `Skeleton`, `SkeletonText`, `SkeletonTable`, `SkeletonRegion`, `statusBadgeStyle`, `assertRequiredTokens`, `requiredTokens`.
+`@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: `Button`, `TextField`, `TextArea`, `Checkbox`, `RadioGroup`, `Switch`, `Select`, `ComboBox`, `Modal`, `DialogTrigger`, `Tabs`, `TabList`, `Tab`, `TabPanel`, `Link`, `Breadcrumbs`, `Nav`, `Pagination`, `EmptyState`, `Spinner`, `Skeleton`, `SkeletonText`, `SkeletonTable`, `SkeletonRegion`, `statusBadgeStyle`, `assertRequiredTokens`, `requiredTokens`. The capitalised names are components; the rest are helpers.
 
 Anything not in that list is not built yet. Build it on React Aria Components styled through the BITFire tokens, not on shadcn/ui, and see the brand book's component specs.
 
