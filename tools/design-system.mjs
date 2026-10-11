@@ -8,6 +8,12 @@
 //   export <dir>   write <dir>/tokens.json (byte-identical to the repo's) and
 //                  <dir>/token-table.md (every colour token, both themes), for
 //                  publishing to the artifact and for the skill's table.
+//   skill <out>    render the bitfire-design skill body (tools/skill-body.mjs) to <out>,
+//                  or to stdout when <out> is "-". The skill is a read-only cache of
+//                  an account skill: nothing here writes to it; a Cowork session turns
+//                  the committed design/bitfire-design/SKILL.md into a proposal.
+//   skill --check <file>
+//                  exit 0 only if <file> is exactly what the repo would generate now.
 //   check <file>   compare a saved copy of the artifact's project/tokens.json with
 //                  the repo's; exit 0 only if the bytes match, and otherwise name
 //                  each token that differs.
@@ -21,9 +27,30 @@ const sha = (b) => createHash('sha256').update(b).digest('hex');
 const [cmd, arg] = process.argv.slice(2);
 
 const usage = () => {
-  console.error('usage: design-system.mjs export <dir> | check <artifact-tokens.json>');
+  console.error('usage: design-system.mjs export <dir> | check <artifact-tokens.json> | skill <out|-> | skill --check <file>');
   process.exit(2);
 };
+
+if (cmd === 'skill') {
+  const { renderSkill } = await import('./skill-body.mjs');
+  const checking = arg === '--check';
+  const target = checking ? process.argv[4] : arg;
+  if (!target) usage();
+  let body;
+  try { body = renderSkill(); } catch (e) { console.error(`skill: cannot render: ${e.message}`); process.exit(1); }
+  if (target === '-' && !checking) { process.stdout.write(body); process.exit(0); }
+  if (checking) {
+    let have;
+    try { have = readFileSync(target, 'utf8').split('\r\n').join('\n'); }
+    catch (e) { console.error(`skill --check: cannot read ${target}: ${e.message}`); process.exit(2); }
+    if (have === body) { console.error(`ok: ${target} matches the repo`); process.exit(0); }
+    console.error(`STALE: ${target} is not what the repo generates. Run: node tools/design-system.mjs skill ${target}`);
+    process.exit(1);
+  }
+  writeFileSync(target, body);
+  console.error(`ok: wrote ${target} (${body.length} bytes)`);
+  process.exit(0);
+}
 if (!cmd || !arg || !['export', 'check'].includes(cmd)) usage();
 
 const repoBytes = readFileSync(SRC);

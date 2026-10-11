@@ -160,6 +160,18 @@ node tools/design-system.mjs check "$TMP/ds/drifted.json" 2>"$TMP/dsout"
 run "a changed artifact value is reported as drift" 1 node tools/design-system.mjs check "$TMP/ds/drifted.json"
 run "the drift report names the token that differs" 0 grep -q "canvas" "$TMP/dsout"
 
+# The skill body is generated from the repo, so a hand-edited copy is stale output,
+# and a token the skill depends on disappearing must stop the render, not be skipped.
+SKILL=design/bitfire-design/SKILL.md
+run "fresh generated skill body passes the stale check" 0 node tools/design-system.mjs skill --check "$SKILL"
+cp "$SKILL" "$TMP/SKILL.md"; sed -i 's/#080c0f/#00ff00/' "$TMP/SKILL.md"
+run "hand-edited skill body rejected" 1 node tools/design-system.mjs skill --check "$TMP/SKILL.md"
+mutate "d.color.tokens=d.color.tokens.filter(t=>t.name!=='canvas')"
+node tools/design-system.mjs skill - >/dev/null 2>"$TMP/skillerr"
+run "skill render refuses a missing token" 1 node tools/design-system.mjs skill -
+run "skill render names the missing token" 0 grep -q 'token "canvas"' "$TMP/skillerr"
+restore
+
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
 # normal and is not this suite's debris.
