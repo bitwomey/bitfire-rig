@@ -121,8 +121,12 @@ copy is reported as drift.
 
 **Known limits.** CI cannot read the artifact (it sits behind claude.ai), so drift
 is not found on every push. The skill is a read-only cache of an account skill on
-claude.ai: nothing here writes to it. A generator in this repo emits the skill body
-to a file, and a Cowork session turns that into a proposal Ben approves.
+claude.ai: nothing here writes to it. The generator (`node tools/design-system.mjs skill <out>`, also run by
+`npm run generate`) renders `design/bitfire-design/SKILL.md` from the prose template
+beside it, `tokens.json`, `DESIGN-RULES.md` and the `@bitfire/ui` exports. That file
+is committed and covered by the stale check, so a token or rule change that is not
+regenerated fails the PR. A Cowork session turns the file into a proposal for the
+account skill, which Ben approves.
 
 ## Releasing
 
