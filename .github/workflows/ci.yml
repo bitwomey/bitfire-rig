@@ -53,6 +53,12 @@ jobs:
       - name: The built package exports, loads under Node and ships the right CSS
         run: npm run check:build
 
+      # Packs both packages and installs the tarballs into an empty directory
+      # outside the repo: the workspace links packages, so this is the only
+      # place a wrong files, exports or peer range would show. No registry.
+      - name: A clean install from the packed tarballs works
+        run: npm run check:install
+
       - name: The app consumer resolves and runs
         run: npm run check:app
 
