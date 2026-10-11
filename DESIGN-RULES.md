@@ -20,6 +20,10 @@ tokens is not in the skill.
 - **The type scale is light, not uniformly extra-light:** display-xl and
   display-lg 200, display-md 300, body 300, readouts 200 to 400. The tokens
   are the truth; do not quote "display 200" as a blanket rule.
+- **`viz-6` is orange, and that is accepted.** Warm colour otherwise means
+  severity, but the sixth categorical slot is orange and stays. Ben, 2026-10-11:
+  "If orange looks good, go with it." It is the last categorical slot, so a chart
+  with four or fewer series (the cap) never reaches it.
 - **Chart type is whatever suits the question.** There is no dual-axis rule.
 - **Fire danger values are reviewed, not verified against the AFAC document.**
   Ben confirmed them by inspection on 2026-10-08; the `fdr-*` tokens carry that
