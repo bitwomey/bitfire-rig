@@ -72,7 +72,7 @@ Every number a reader compares, aligns or watches change is mono. Prose is sans.
 
 `@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: {{components}}. The capitalised names are components; the rest are helpers.
 
-Anything not in that list is not built yet. Build it on React Aria Components styled through the BITFire tokens, not on shadcn/ui, and see the brand book's component specs.
+This is what the rig builds today, not the whole system. The brand book's component specs (in the Design artifact's manifest) describe domain components that are not built in the rig yet, such as `FireDangerBadge`, `StatusBadge`, `MetricTile` and `DataTable`; read them there before building one from scratch. Build new components on React Aria Components styled through the BITFire tokens, not on shadcn/ui.
 
 Icons are Phosphor (MIT), 16 or 20px on the grid (weight rules are in the design rules below). Four gaps exist in geospatial and aviation; to draw one, use a 256×256 viewBox, round caps and joins, `currentColor`, strokes of 8/12/16/24 for thin/light/regular/bold. No multi-part machine icon survives 16px.
 
