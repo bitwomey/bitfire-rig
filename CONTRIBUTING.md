@@ -126,7 +126,10 @@ claude.ai: nothing here writes to it. The generator (`node tools/design-system.m
 beside it, `tokens.json`, `DESIGN-RULES.md` and the `@bitfire/ui` exports. That file
 is committed and covered by the stale check, so a token or rule change that is not
 regenerated fails the PR. A Cowork session turns the file into a proposal for the
-account skill, which Ben approves.
+account skill, which Ben approves. The handoff copy adds the commit it was made
+from (`node tools/design-system.mjs skill <out> --sha $(git rev-parse HEAD)`), so a
+session that loads the skill can say which commit it carries. That makes staleness
+visible; it does not prove the skill was updated.
 
 ## Releasing
 

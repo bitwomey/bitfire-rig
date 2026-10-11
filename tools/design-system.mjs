@@ -12,6 +12,10 @@
 //                  or to stdout when <out> is "-". The skill is a read-only cache of
 //                  an account skill: nothing here writes to it; a Cowork session turns
 //                  the committed design/bitfire-design/SKILL.md into a proposal.
+//   skill <out> --sha <40-char commit>
+//                  the handoff copy: the same body plus a "Generated from bitfire-rig
+//                  <sha>" line, so a session that loads the skill can say which commit
+//                  it carries. Not committed (a file cannot hold its own commit).
 //   skill --check <file>
 //                  exit 0 only if <file> is exactly what the repo would generate now.
 //   check <file>   compare a saved copy of the artifact's project/tokens.json with
@@ -36,8 +40,11 @@ if (cmd === 'skill') {
   const checking = arg === '--check';
   const target = checking ? process.argv[4] : arg;
   if (!target) usage();
+  const si = process.argv.indexOf('--sha');
+  const sha = si > 0 ? process.argv[si + 1] : undefined;
+  if (si > 0 && checking) { console.error('skill: --sha is for the handoff copy; the committed file is checked without it'); process.exit(2); }
   let body;
-  try { body = renderSkill(); } catch (e) { console.error(`skill: cannot render: ${e.message}`); process.exit(1); }
+  try { body = renderSkill({ sha: si > 0 ? (sha ?? '') : undefined }); } catch (e) { console.error(`skill: cannot render: ${e.message}`); process.exit(1); }
   if (target === '-' && !checking) { process.stdout.write(body); process.exit(0); }
   if (checking) {
     let have;
