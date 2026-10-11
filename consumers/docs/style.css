@@ -114,7 +114,7 @@ blockquote p{margin:0 0 5pt;}
 blockquote .attrib{font-family:'PlexSans';font-size:8.5pt;color:var(--ink-subtle);}
 .pull{font-family:'PlexSans';font-weight:300;font-size:15pt;line-height:21pt;
   color:var(--ink);margin:14pt 0;padding:0 0 0 14pt;
-  border-left:3pt solid var(--brand-ember);break-inside:avoid;}
+  border-left:3pt solid var(--border);break-inside:avoid;}
 
 /* ---- FIGURES AND TABLES ---- */
 figure{margin:12pt 0;counter-increment:fig;break-inside:avoid;}
