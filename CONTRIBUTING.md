@@ -83,6 +83,42 @@ gate fails). Known limit: hover is baselined only by the `*-hovered` stories, so
 an element that wrongly stays hovered in another story is not caught. Do not widen the 20-pixel tolerance, retry, or regenerate: a
 looser limit hides small real changes such as a corner radius.
 
+## How the design system stays in sync
+
+The BITFire design system lives in three places: this repo, a Claude Design
+artifact (https://claude.ai/artifact/FvCg7Vws1achAViYQAZDmn) and the
+`bitfire-design` skill. They stay in step by giving each kind of thing one owner
+and publishing the rest from it.
+
+| Kind of thing | Owner | Everywhere else |
+| --- | --- | --- |
+| Token values (colours, type, spacing...) | **the repo** (`packages/tokens/src/tokens.json`) | the artifact's token view and the skill's token table are published from it |
+| Build rules that constrain how things are made (`DESIGN-RULES.md`) | **the repo** | the skill is generated from them |
+| Brand book and voice (README, colour method, voice) | **the artifact** | the repo and the skill point at it, never copy it |
+| Logos and brand files | **the artifact** | copied into `assets/brand/` with their SHA-256 |
+
+**To change a token** (you do not need to run anything): tell Claude what to
+change. Claude edits `tokens.json` in a pull request, the checks run, you review
+and merge, then Claude republishes the artifact from the repo and hands you the
+refreshed token table for the skill. You never edit the artifact's token view or
+the skill's table directly.
+
+**To see whether they have drifted:** save the artifact's `project/tokens.json` and
+run `node tools/design-system.mjs check <that file>`, which says "ok" or names each
+token that differs. Drift is detected on a schedule by Cowork, not by a step in
+every session.
+
+**What the tool does** (`tools/design-system.mjs`): `export <dir>` writes the
+artifact's `tokens.json` (byte-identical to the repo's) and a `token-table.md`
+listing every colour token for the skill; `check <file>` compares a saved copy of
+the artifact's file with the repo's. The gate-failure suite shows that a changed
+copy is reported as drift.
+
+**Known limits.** CI cannot read the artifact (it sits behind claude.ai), so drift
+is not found on every push. The skill is a read-only cache of an account skill on
+claude.ai: nothing here writes to it. A generator in this repo emits the skill body
+to a file, and a Cowork session turns that into a proposal Ben approves.
+
 ## Releasing
 
     node tools/release.mjs packages/tokens <registry>

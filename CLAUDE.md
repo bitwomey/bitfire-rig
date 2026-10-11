@@ -21,6 +21,20 @@ Design *values* live in `packages/tokens/src/tokens.json` and nowhere else.
 Everything in `packages/tokens/dist/` is generated — never hand-edit it. If a
 generated file is wrong, the generator is wrong.
 
+The BITFire design system also exists as a Claude Design artifact
+(https://claude.ai/artifact/FvCg7Vws1achAViYQAZDmn) and as the `bitfire-design`
+skill. Ownership is split by kind of thing, and never duplicated by hand:
+
+- **The repo owns token values.** The artifact's `project/tokens.json` is
+  published *from* `tokens.json` (`node tools/design-system.mjs export <dir>`) and
+  the skill's token table is generated from it. Never edit either by hand.
+- **The repo owns the build rules** (`DESIGN-RULES.md`), which the skill is generated from.
+- **The artifact owns the brand book and voice** (README, colour method, voice,
+  logos). The repo and the skill point at it and do not copy it.
+- If the artifact and the repo disagree about a token, the repo is right: run
+  `node tools/design-system.mjs check <saved artifact tokens.json>` and republish.
+  "How the design system stays in sync" in CONTRIBUTING.md has the steps.
+
 Components, templates, generators and test specifications are authored source
 in their own right. Tokens cannot express component behaviour, accessibility
 contracts or document layout logic, so do not try to push them in there.
