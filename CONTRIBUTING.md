@@ -95,6 +95,11 @@ artifact (https://claude.ai/artifact/FvCg7Vws1achAViYQAZDmn) and the
 `bitfire-design` skill. They stay in step by giving each kind of thing one owner
 and publishing the rest from it.
 
+A diagram of how a change goes from request to use, written by the Design session
+on 2026-10-11, is at https://claude.ai/artifact/MdzqtX1Rqogwr2suef6FAx (a private
+artifact on Ben's account). It is a dated snapshot: where it and this repo differ,
+the repo is right.
+
 | Kind of thing | Owner | Everywhere else |
 | --- | --- | --- |
 | Token values (colours, type, spacing...) | **the repo** (`packages/tokens/src/tokens.json`) | the artifact's token view and the skill's token table are published from it |
