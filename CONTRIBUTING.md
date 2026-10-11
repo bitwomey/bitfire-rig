@@ -10,6 +10,7 @@ here serves that.
     bash tools/gate-tests.sh
     npm run build:ui
     npm run check:build
+    npm run check:install
     npm run check:app
     npm run check:a11y
     npm run check:visual
@@ -17,7 +18,11 @@ here serves that.
 `npm run check` runs all of them, in that order. The build comes before the
 app consumer because the consumer imports the built `packages/ui/dist/`.
 `check:build` loads that build under plain Node and inspects `dist/styles.css`
-(see `packages/ui/scripts/check-build.mjs`). The accessibility gate needs
+(see `packages/ui/scripts/check-build.mjs`). `check:install` packs both packages
+and installs the tarballs into an empty directory outside the repo with
+`strict-peer-deps`, then renders a Button, resolves both CSS files and compiles a
+TypeScript import, and checks that React 18 is refused (`tools/check-install.mjs`;
+it needs the network and takes minutes on Windows). The accessibility gate needs
 Chromium once: `npx playwright install chromium`. CI runs exactly these. There
 is no check that only exists in CI, and none that only exists locally, with
 **one declared exception**: `check:visual` really runs only on Linux. Its
