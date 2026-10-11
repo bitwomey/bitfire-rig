@@ -112,6 +112,7 @@ try {
   });
 
   step('an incompatible install (React 18) is refused', () => {
+    const ui = JSON.parse(readFileSync(join(root, 'packages/ui/package.json'), 'utf8'));
     const bad = join(work, 'bad');
     mkdirSync(bad);
     writeJson(join(bad, 'package.json'), {
@@ -119,14 +120,14 @@ try {
       dependencies: {
         '@bitfire/tokens': `file:${fwd(packed.tokens)}`,
         '@bitfire/ui': `file:${fwd(packed.ui)}`,
-        react: '^18.0.0', 'react-dom': '^18.0.0', 'react-aria-components': '^1.22.0',
+        react: '^18.0.0', 'react-dom': '^18.0.0', 'react-aria-components': ui.peerDependencies['react-aria-components'],
       },
     });
     writeFileSync(join(bad, '.npmrc'), 'strict-peer-deps=true\n');
     try { sh('npm install --no-audit --no-fund', bad); }
     catch (e) {
       const text = `${e.stdout ?? ''}${e.stderr ?? ''}`;
-      if (!/ERESOLVE|peer/i.test(text)) throw new Error(`install failed, but not on a peer conflict: ${text.split('\n')[0]}`);
+      if (!/ERESOLVE/.test(text)) throw new Error(`install failed, but not on a peer conflict: ${text.split('\n')[0]}`);
       return 'refused on the peer conflict';
     }
     throw new Error('npm accepted React 18 against a React 19 peer range');
