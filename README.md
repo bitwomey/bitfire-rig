@@ -8,6 +8,7 @@ design tokens, components, and the checks that keep them honest.
     packages/tokens      @bitfire/tokens — generated CSS variables + typed exports
     packages/ui          @bitfire/ui     — authored React components (src/ is source;
                                            dist/ is a build output, not in git)
+    assets/brand         the BITFire logo set (SVG and PNG), copied from the design system
     tools/               generator, gates, release gate
     consumers/app        a fixture application consuming both packages
     consumers/docs       the document pipeline (markdown + bib -> PDF)
