@@ -171,6 +171,11 @@ node tools/design-system.mjs skill - >/dev/null 2>"$TMP/skillerr"
 run "skill render refuses a missing token" 1 node tools/design-system.mjs skill -
 run "skill render names the missing token" 0 grep -q 'token "canvas"' "$TMP/skillerr"
 restore
+SHA40=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+node tools/design-system.mjs skill "$TMP/handoff.md" --sha "$SHA40" 2>/dev/null
+run "handoff copy carries the source commit" 0 grep -q "bitfire-rig source: $SHA40" "$TMP/handoff.md"
+run "a short or malformed sha is rejected" 1 node tools/design-system.mjs skill - --sha abc123
+run "checking a committed copy with --sha is refused" 2 node tools/design-system.mjs skill --check "$SKILL" --sha "$SHA40"
 
 # The suite must leave the repo exactly as it found it. Compared against the
 # state at START, not against the last commit: uncommitted work in progress is
