@@ -105,6 +105,7 @@ the repo is right.
 | Token values (colours, type, spacing...) | **the repo** (`packages/tokens/src/tokens.json`) | the artifact's token view and the skill's token table are published from it |
 | Build rules that constrain how things are made (`DESIGN-RULES.md`) | **the repo** | the skill is generated from them |
 | Brand book and voice (README, colour method, voice) | **the artifact** | the repo and the skill point at it, never copy it |
+| Fire-domain components (Provenance, StatusBadge, FireDangerBadge, MetricTile, AlertBanner, DataTable, Panel, Toolbar, IconButton, LegendRamp) | **the repo** (`packages/ui`), moving in three waves (issues #60 to #69; decided 2026-10-16) | until one ships, the artifact's spec is its only description |
 | Logos and brand files | **the artifact** | copied into `assets/brand/` with their SHA-256 |
 
 **To change a token** (you do not need to run anything): tell Claude what to

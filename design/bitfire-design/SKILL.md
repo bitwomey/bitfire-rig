@@ -106,7 +106,7 @@ Type scale (size / weight), from `tokens.json`:
 
 `@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: `Button`, `TextField`, `TextArea`, `Checkbox`, `RadioGroup`, `Switch`, `Select`, `ComboBox`, `Modal`, `DialogTrigger`, `Tabs`, `TabList`, `Tab`, `TabPanel`, `Link`, `Breadcrumbs`, `Nav`, `Pagination`, `EmptyState`, `Spinner`, `Skeleton`, `SkeletonText`, `SkeletonTable`, `SkeletonRegion`, `statusBadgeStyle`, `assertRequiredTokens`, `requiredTokens`. The capitalised names are components; the rest are helpers.
 
-This is what the rig builds today, not the whole system. The brand book's component specs (in the Design artifact's manifest) describe domain components that are not built in the rig yet, such as `FireDangerBadge`, `StatusBadge`, `MetricTile` and `DataTable`; read them there before building one from scratch. Build new components on React Aria Components styled through the BITFire tokens, not on shadcn/ui.
+This is what the rig builds today, not the whole system. The brand book's component specs (in the Design artifact's manifest) describe fire-domain components that are being moved into the rig one by one (issues #60 to #69); anything not in the export list above is not built yet, so read its spec there before building one from scratch. Build new components on React Aria Components styled through the BITFire tokens, not on shadcn/ui.
 
 Icons are Phosphor (MIT), 16 or 20px on the grid (weight rules are in the design rules below). Four gaps exist in geospatial and aviation; to draw one, use a 256×256 viewBox, round caps and joins, `currentColor`, strokes of 8/12/16/24 for thin/light/regular/bold. No multi-part machine icon survives 16px.
 
