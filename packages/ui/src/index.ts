@@ -15,4 +15,5 @@ export { Pagination, type PaginationProps } from './Pagination';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { Spinner, type SpinnerProps } from './Spinner';
 export { Skeleton, SkeletonText, SkeletonTable, SkeletonRegion } from './Skeleton';
+export { Provenance, type ProvenanceProps, type ProvenanceLevel } from './Provenance';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadge';
