@@ -23,7 +23,6 @@ export function IconButton({ label, glyph, bordered = false, on = false, disable
     <RACButton
       aria-label={label}
       aria-pressed={on}
-      title={label}
       isDisabled={disabled}
       onPress={onClick as unknown as () => void}
       className={composeRenderProps(
