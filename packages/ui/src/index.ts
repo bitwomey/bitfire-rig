@@ -17,5 +17,6 @@ export { Spinner, type SpinnerProps } from './Spinner';
 export { Skeleton, SkeletonText, SkeletonTable, SkeletonRegion } from './Skeleton';
 export { Provenance, type ProvenanceProps, type ProvenanceLevel } from './Provenance';
 export { AlertBanner, type AlertBannerProps, type AlertTone } from './AlertBanner';
+export { MetricTile, type MetricTileProps, type MetricTileSize, type DeltaDirection } from './MetricTile';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';
