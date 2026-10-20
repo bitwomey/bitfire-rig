@@ -19,7 +19,7 @@ const bad = (m) => problems.push(m);
 const EXPECTED = [
   'Button', 'TextField', 'TextArea', 'Checkbox', 'RadioGroup', 'Switch', 'Select', 'ComboBox',
   'Modal', 'DialogTrigger', 'Tabs', 'TabList', 'Tab', 'TabPanel', 'Link', 'Breadcrumbs', 'Nav',
-  'Pagination', 'Provenance', 'EmptyState', 'Spinner', 'Skeleton', 'SkeletonText', 'SkeletonTable', 'SkeletonRegion',
+  'Pagination', 'Provenance', 'StatusBadge', 'EmptyState', 'Spinner', 'Skeleton', 'SkeletonText', 'SkeletonTable', 'SkeletonRegion',
   'statusBadgeStyle', 'assertRequiredTokens', 'requiredTokens',
 ];
 
