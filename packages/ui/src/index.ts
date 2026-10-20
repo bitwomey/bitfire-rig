@@ -22,5 +22,6 @@ export { DataTable, type DataTableProps, type DataTableColumn, type DataTableRow
 export { IconButton, type IconButtonProps } from './IconButton';
 export { LegendRamp, type LegendRampProps, type LegendRampSwatch } from './LegendRamp';
 export { Panel, type PanelProps } from './Panel';
+export { Toolbar, ToolbarSpacer, type ToolbarProps, type ToolbarVariant } from './Toolbar';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';
