@@ -20,5 +20,6 @@ export { AlertBanner, type AlertBannerProps, type AlertTone } from './AlertBanne
 export { MetricTile, type MetricTileProps, type MetricTileSize, type DeltaDirection } from './MetricTile';
 export { DataTable, type DataTableProps, type DataTableColumn, type DataTableRow } from './DataTable';
 export { IconButton, type IconButtonProps } from './IconButton';
+export { FireDangerBadge, type FireDangerBadgeProps, type FireDangerRating } from './FireDangerBadge';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';
