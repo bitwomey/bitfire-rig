@@ -18,5 +18,6 @@ export { Skeleton, SkeletonText, SkeletonTable, SkeletonRegion } from './Skeleto
 export { Provenance, type ProvenanceProps, type ProvenanceLevel } from './Provenance';
 export { AlertBanner, type AlertBannerProps, type AlertTone } from './AlertBanner';
 export { MetricTile, type MetricTileProps, type MetricTileSize, type DeltaDirection } from './MetricTile';
+export { DataTable, type DataTableProps, type DataTableColumn, type DataTableRow } from './DataTable';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';
