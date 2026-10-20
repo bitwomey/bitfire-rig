@@ -19,5 +19,6 @@ export { Provenance, type ProvenanceProps, type ProvenanceLevel } from './Proven
 export { AlertBanner, type AlertBannerProps, type AlertTone } from './AlertBanner';
 export { MetricTile, type MetricTileProps, type MetricTileSize, type DeltaDirection } from './MetricTile';
 export { DataTable, type DataTableProps, type DataTableColumn, type DataTableRow } from './DataTable';
+export { IconButton, type IconButtonProps } from './IconButton';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';
