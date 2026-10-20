@@ -30,13 +30,3 @@ export const StatusVertical: Story = {
 export const SeverityHorizontal: Story = {
   args: { swatches: SEV_SWATCHES, orientation: 'horizontal' },
 };
-
-export const RawColors: Story = {
-  args: {
-    swatches: [
-      { color: '#ff0000', label: 'Red (raw)' },
-      { color: '#00ff00', label: 'Green (raw)' },
-      { color: '#0000ff', label: 'Blue (raw)' },
-    ],
-  },
-};
