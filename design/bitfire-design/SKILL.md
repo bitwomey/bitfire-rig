@@ -104,7 +104,7 @@ Type scale (size / weight), from `tokens.json`:
 
 ## Components
 
-`@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: `Button`, `TextField`, `TextArea`, `Checkbox`, `RadioGroup`, `Switch`, `Select`, `ComboBox`, `Modal`, `DialogTrigger`, `Tabs`, `TabList`, `Tab`, `TabPanel`, `Link`, `Breadcrumbs`, `Nav`, `Pagination`, `EmptyState`, `Spinner`, `Skeleton`, `SkeletonText`, `SkeletonTable`, `SkeletonRegion`, `Provenance`, `DataTable`, `statusBadgeStyle`, `assertRequiredTokens`, `requiredTokens`. The capitalised names are components; the rest are helpers.
+`@bitfire/ui` (React Aria Components styled with Tailwind 4 utilities and the tokens) exports: `Button`, `TextField`, `TextArea`, `Checkbox`, `RadioGroup`, `Switch`, `Select`, `ComboBox`, `Modal`, `DialogTrigger`, `Tabs`, `TabList`, `Tab`, `TabPanel`, `Link`, `Breadcrumbs`, `Nav`, `Pagination`, `EmptyState`, `Spinner`, `Skeleton`, `SkeletonText`, `SkeletonTable`, `SkeletonRegion`, `Provenance`, `DataTable`, `StatusBadge`, `statusBadgeStyle`, `assertRequiredTokens`, `requiredTokens`. The capitalised names are components; the rest are helpers.
 
 This is what the rig builds today, not the whole system. The brand book's component specs (in the Design artifact's manifest) describe fire-domain components that are being moved into the rig one by one (issues #60 to #69); anything not in the export list above is not built yet, so read its spec there before building one from scratch. Build new components on React Aria Components styled through the BITFire tokens, not on shadcn/ui.
 

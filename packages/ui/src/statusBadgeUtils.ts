@@ -9,7 +9,7 @@ const TONES: readonly string[] = ['ok', 'warn', 'danger', 'info'];
 
 export function statusBadgeStyle(tone: StatusTone = 'ok', suppressing = true) {
   if (!TONES.includes(tone)) throw new Error(`unknown tone "${tone}"`);
-  const colour = v(`status-${tone === 'info' ? 'ok' : tone}`);
+  const colour = v(`status-${tone}`);
   return {
     color: v('ink'),
     background: v('surface-raised'),
@@ -22,10 +22,10 @@ export function statusBadgeStyle(tone: StatusTone = 'ok', suppressing = true) {
 // Proves the dependency is load-bearing: this fails if tokens drops a name.
 export function assertRequiredTokens(): number {
   const need = ['ink', 'surface-raised', 'border-hairline',
-                'status-ok', 'status-warn', 'status-danger'];
+                'status-ok', 'status-warn', 'status-danger', 'status-info'];
   const missing = need.filter((n) => !(tokenNames as readonly string[]).includes(n));
   if (missing.length) throw new Error(`@bitfire/ui requires tokens not present: ${missing.join(', ')}`);
   return need.length;
 }
 
-export const requiredTokens = 6;
+export const requiredTokens = 7;
