@@ -30,8 +30,8 @@ export const Basic: Story = {
     rows: FIRE_ROWS,
   },
   play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getByText('Toodyay')).toBeInTheDocument();
-    await expect(within(canvasElement).getByText('FFDI')).toBeInTheDocument();
+    await expect(within(canvasElement).getByRole('grid', { name: 'Fire danger by location' })).toBeInTheDocument();
+    await expect(within(canvasElement).getAllByRole('columnheader')).toHaveLength(5);
   },
 };
 
@@ -52,8 +52,10 @@ export const SelectedRow: Story = {
     selectedIndex: 1,
   },
   play: async ({ canvasElement }) => {
-    const row = canvasElement.querySelector('[aria-selected="true"]');
-    await expect(row).toBeInTheDocument();
+    await expect(within(canvasElement).getByRole('grid', { name: /Chittering selected/ })).toBeInTheDocument();
+    const rows = within(canvasElement).getAllByRole('row');
+    const selectedRow = rows.slice(1).find((r) => r.getAttribute('aria-selected') === 'true');
+    await expect(selectedRow).toBeDefined();
   },
 };
 
@@ -95,7 +97,8 @@ export const NodeCells: Story = {
     ],
   },
   play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getByText('Muchea')).toBeInTheDocument();
+    await expect(within(canvasElement).getByRole('grid', { name: /incidents/ })).toBeInTheDocument();
+    await expect(within(canvasElement).getAllByRole('columnheader')).toHaveLength(3);
   },
 };
 
