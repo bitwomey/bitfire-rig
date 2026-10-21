@@ -134,6 +134,18 @@ Icons are Phosphor (MIT), 16 or 20px on the grid (weight rules are in the design
   Ben confirmed them by inspection on 2026-10-08; the `fdr-*` tokens carry that
   provenance. Say "reviewed by inspection" in anything public-facing, never
   "verified against the AFAC style guide".
+- **The four-slot categorical palette passes CVD separation; no per-type tokens
+  are added.** Measured with `validate_palette.js` (OKLab ΔE ×100) on
+  2026-10-20 against `viz-1`…`viz-4` (the four-series cap):
+  dark mode all-pairs worst ΔE: deutan 9.8, tritan 8.0, normal 15.3 — all pass
+  (tritan is at the 6–8 floor: secondary encoding required in dark theme).
+  Light mode all-pairs worst ΔE: protan 6.8, tritan 17.0, normal 15.5 — all pass
+  (protan is at the 6–8 floor: secondary encoding required in light theme).
+  `viz-1` (#4ca6ea) and `viz-3` (#b6ab00) contrast 2.2:1 and 2.0:1 against the
+  light surface — direct labels or a table view are required in light theme.
+  Slots 5 and 6 are beyond the cap; their all-pairs failures are expected and
+  already covered by the four-series cap rule. Separate deutan / protan / tritan
+  alternate token sets are not needed.
 
 ### Process rules
 
@@ -152,7 +164,8 @@ Icons are Phosphor (MIT), 16 or 20px on the grid (weight rules are in the design
   one chart. A fifth series folds into "Other", becomes facets, or changes form.
 - **Separation gate:** adjacent-pairs separation is the gate for bars, lines and
   stacks. Scatter, bubble and choropleth forms cap at three series. No palette
-  separates all six slots from each other, so do not promise it.
+  separates all six slots from each other, so do not promise it. The four-slot
+  cap is the CVD gate mechanism — see the ruling above for measured scores.
 - **Sharing a region with a rating:** where `viz-*` and `fdr-*` genuinely share a
   region (a classed map layer under a fire danger legend), use `sev-*` or a
   single-hue ramp for the other layer, never the categorical set.
