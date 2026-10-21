@@ -6,18 +6,20 @@
   "license": "MIT",
   "workspaces": [
     "packages/*",
-    "consumers/*"
+    "consumers/*",
+    "starters/*"
   ],
   "scripts": {
     "generate": "node tools/generate.mjs packages/tokens/src/tokens.json packages/tokens/dist && node tools/design-system.mjs skill design/bitfire-design/SKILL.md",
     "check:stale": "node tools/check-stale.mjs packages/tokens/src/tokens.json packages/tokens/dist && node tools/design-system.mjs skill --check design/bitfire-design/SKILL.md",
-    "check:colour": "node tools/check-rawcolour.mjs packages fixtures consumers",
+    "check:colour": "node tools/check-rawcolour.mjs packages fixtures consumers starters",
     "check:gates": "bash tools/gate-tests.sh",
     "build:ui": "npm run build --workspace @bitfire/ui",
     "check:build": "npm run check:build --workspace @bitfire/ui",
     "check:app": "node consumers/app/src/app.mjs",
     "check:install": "node tools/check-install.mjs",
-    "check": "npm run check:stale && npm run check:colour && npm run check:gates && npm run build:ui && npm run check:build && npm run check:install && npm run check:app && npm run check:a11y && npm run check:visual",
+    "check:starter": "npm run build --workspace @bitfire/starter-fire-dashboard",
+    "check": "npm run check:stale && npm run check:colour && npm run check:gates && npm run build:ui && npm run check:build && npm run check:install && npm run check:app && npm run check:starter && npm run check:a11y && npm run check:visual",
     "app": "node consumers/app/src/app.mjs",
     "check:a11y": "npm run check:a11y --workspace @bitfire/ui",
     "check:visual": "npm run check:visual --workspace @bitfire/ui",
