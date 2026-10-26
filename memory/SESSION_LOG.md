@@ -4,6 +4,12 @@ Newest first.
 
 ---
 
+## 2026-10-26 — Session 6: Wave 3 landed on main (#84, PR #86)
+
+Landed LegendRamp, Panel and Toolbar on `main` (PR #86, merged; PRs #77–#79 had been stacked and never reached `main`). A cold review found Panel and Toolbar used Tailwind classes that generate no CSS, so their dividers and shadows did not render; fixed in the same PR with 14 regenerated Linux baselines. PR #87 (hatching, #10) also merged. Open issues: #3, #4, #8, #9 (all deferred). Unfixed notes and ticket candidates are in the handover. Not verified: no cold review of the final head; one `check:a11y` failure did not reproduce. Handover: `handovers/HANDOVER_2026-10-26_wave3-landed.md`.
+
+---
+
 ## 2026-10-20 — Session 5: Wave 4 complete (FireDangerBadge, fire-dashboard starter, CVD measurement)
 
 Merged PRs #80 (FireDangerBadge #60), #82 (fire-dashboard starter #59), #83 (CVD measurement #11). Closed issues #38, #59, #60, #11. main at `c9e5488`. All actionable issues now closed; only deferred items remain (#10 hatching, #9 map sources, #8 Cesium, #3/#4 registry). Incident: PR #81 auto-closed when base branch deleted on merge — rebased and opened #82. Memory rule saved for stacked-PR retarget. CVD measurement: viz-1..4 passes all-pairs at four-slot cap; no per-type tokens needed. Handover: `handovers/HANDOVER_2026-10-20_wave4-complete.md`.
