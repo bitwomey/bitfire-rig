@@ -1,8 +1,8 @@
 /* GENERATED FILE — do not edit.
    Edit packages/tokens/src/tokens.json and re-run the generator.
-   source 976f85633630 · generator 1.1.0 */
-export const sourceHash = "976f85633630";
-export const generatorVersion = "1.1.0";
+   source 2286bcf526a3 · generator 1.2.0 */
+export const sourceHash = "2286bcf526a3";
+export const generatorVersion = "1.2.0";
 export const themes = ["dark","light"];
 export const tokenNames = [
   "border",
@@ -24,6 +24,8 @@ export const tokenNames = [
   "focus",
   "focus-ring",
   "focus-wash",
+  "hatch-pitch-dense",
+  "hatch-pitch-sparse",
   "ink",
   "ink-muted",
   "ink-on-deep",

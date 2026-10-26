@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 
-const GENERATOR_VERSION = '1.1.0';
+const GENERATOR_VERSION = '1.2.0';
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
 const ALIAS_RE = /^\{([a-z0-9.-]+)\}$/;
 const COLOR_RE = /^(#[0-9a-fA-F]{3,8}|(rgba?|oklch|hsla?)\([0-9a-zA-Z%.,\/\s-]*\)|\{[a-z0-9.-]+\}|transparent|currentColor)$/;
@@ -80,14 +80,14 @@ for (const tok of T.color.tokens) {
 // Returns true when the value is valid; pushes an error otherwise.
 function checkScale(group, name, v) {
   const before = errors.length;
-  if (group === 'spacing' || group === 'radius' || group === 'stroke') checkLen(name, v, group);
+  if (group === 'spacing' || group === 'radius' || group === 'stroke' || group === 'hatch') checkLen(name, v, group);
   else if (group === 'opacity' && !OPACITY_RE.test(String(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
   else if (group === 'zIndex' && !ZINDEX_RE.test(String(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
   else if (group === 'shadow' && !(typeof v === 'string' && SHADOW_RE.test(v))) errors.push(`${group}: "${name}" bad value "${v}"`);
   return errors.length === before;
 }
 const scales = [];
-for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'zIndex']) {
+for (const group of ['spacing', 'radius', 'shadow', 'opacity', 'stroke', 'hatch', 'zIndex']) {
   for (const tok of (T[group]?.tokens ?? [])) {
     checkName(tok.name, group);
     // Shadow tokens carry per-theme values; route them into the theme blocks
