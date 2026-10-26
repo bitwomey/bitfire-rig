@@ -20,6 +20,9 @@ export { AlertBanner, type AlertBannerProps, type AlertTone } from './AlertBanne
 export { MetricTile, type MetricTileProps, type MetricTileSize, type DeltaDirection } from './MetricTile';
 export { DataTable, type DataTableProps, type DataTableColumn, type DataTableRow } from './DataTable';
 export { IconButton, type IconButtonProps } from './IconButton';
+export { LegendRamp, type LegendRampProps, type LegendRampSwatch } from './LegendRamp';
+export { Panel, type PanelProps } from './Panel';
+export { Toolbar, ToolbarSpacer, type ToolbarProps, type ToolbarVariant } from './Toolbar';
 export { FireDangerBadge, type FireDangerBadgeProps, type FireDangerRating } from './FireDangerBadge';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';
