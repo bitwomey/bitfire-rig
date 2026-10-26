@@ -58,9 +58,9 @@ try {
   const patterns = bands.slice(1).map((b) => img[b]);
   if (patterns.some((p) => !p)) bad('a hatched band has no backgroundImage');
   if (new Set(patterns).size !== patterns.length) bad('two bands share one hatching pattern');
-  for (const b of ['extreme', 'catastrophic']) {
-    if ((img[b] ?? '').split('repeating-linear-gradient').length !== 3) bad(`hazardFillStyle("${b}") should have two hatch arms`);
-  }
+  const arms = (b) => (img[b] ?? '').split('repeating-linear-gradient').length - 1;
+  for (const b of ['moderate', 'high']) if (arms(b) !== 1) bad(`hazardFillStyle("${b}") should have one hatch arm`);
+  for (const b of ['extreme', 'catastrophic']) if (arms(b) !== 2) bad(`hazardFillStyle("${b}") should have two hatch arms`);
 } catch (e) {
   bad(`hazardFillStyle threw: ${e.message}`);
 }

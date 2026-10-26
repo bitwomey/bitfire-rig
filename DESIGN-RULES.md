@@ -79,8 +79,10 @@ tokens is not in the skill.
   ink `ink-on-warm` (`ink-on-deep` on Catastrophic). The pattern is chosen by
   band, never by colour, so it never re-tints the ramp. Judged by eye in the
   `HazardFill` stories, over a stand-in basemap and under an approximate
-  deuteranopia matrix; not measured, and not yet tried on the Cesium ion
-  basemap in the Plume UI.
+  deuteranopia matrix, so separation between bands is not measured. Computed:
+  the hatch ink against its own fill is 5.35:1 on Moderate, 11.68:1 on High,
+  6.53:1 on Extreme and 5.83:1 on Catastrophic, all above 3:1. Not
+  yet tried on the Cesium ion basemap in the Plume UI.
 - A status dot has a second channel in its fill: filled means resources are
   actively suppressing, hollow means they are on scene and sizing up. Where that
   cannot be derived from public feeds, use the filled dot rather than inferring.
