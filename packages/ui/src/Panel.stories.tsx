@@ -44,7 +44,7 @@ export const BodyFlush: Story = {
     children: (
       <table className="w-full">
         <tbody>
-          <tr className="border-b border-hairline">
+          <tr className="border-b border-border-hairline">
             <td className="px-4 py-2 caption text-ink">Row 1</td>
             <td className="px-4 py-2 caption text-ink-muted">Value</td>
           </tr>

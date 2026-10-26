@@ -37,7 +37,7 @@ export function Panel({
       {hasHeader && (
         <div className="flex items-start justify-between gap-3 border-b border-border-hairline px-4 py-3">
           <div className="flex flex-col gap-0.5">
-            {eyebrow && <p className="eyebrow text-ink-muted uppercase tracking-wide">{eyebrow}</p>}
+            {eyebrow && <p className="eyebrow text-ink-muted uppercase">{eyebrow}</p>}
             {title && <h3 className="body font-medium text-ink">{title}</h3>}
           </div>
           {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
