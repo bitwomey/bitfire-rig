@@ -70,9 +70,17 @@ tokens is not in the skill.
 
 - `fdr-*` is for fire danger ratings only, never for anything else.
 - A map fill with no adjacent word gets hatching per band as the non-colour
-  channel. Hatching is not built yet (issue #10). Extreme against Moderate is
-  hard to tell apart under protanopia, so the word on every chip and hatching on
-  every map fill carry the meaning.
+  channel: `HazardFill` / `hazardFillStyle` in `@bitfire/ui`. Extreme against
+  Moderate is hard to tell apart under protanopia, so the word on every chip and
+  hatching on every map fill carry the meaning. The patterns differ in
+  structure, not only density: No Rating plain, Moderate one sparse diagonal
+  arm, High one dense arm, Extreme two sparse arms (crosshatch), Catastrophic
+  two dense arms. Pitches are the `hatch-pitch-*` tokens, strokes `stroke-hair`,
+  ink `ink-on-warm` (`ink-on-deep` on Catastrophic). The pattern is chosen by
+  band, never by colour, so it never re-tints the ramp. Judged by eye in the
+  `HazardFill` stories, over a stand-in basemap and under an approximate
+  deuteranopia matrix; not measured, and not yet tried on the Cesium ion
+  basemap in the Plume UI.
 - A status dot has a second channel in its fill: filled means resources are
   actively suppressing, hollow means they are on scene and sizing up. Where that
   cannot be derived from public feeds, use the filled dot rather than inferring.

@@ -24,5 +24,6 @@ export { LegendRamp, type LegendRampProps, type LegendRampSwatch } from './Legen
 export { Panel, type PanelProps } from './Panel';
 export { Toolbar, ToolbarSpacer, type ToolbarProps, type ToolbarVariant } from './Toolbar';
 export { FireDangerBadge, type FireDangerBadgeProps, type FireDangerRating } from './FireDangerBadge';
+export { HazardFill, hazardFillStyle, type HazardFillProps } from './HazardFill';
 export { StatusBadge, type StatusBadgeProps } from './StatusBadge';
 export { statusBadgeStyle, assertRequiredTokens, requiredTokens, type StatusTone } from './statusBadgeUtils';

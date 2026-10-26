@@ -19,7 +19,7 @@ const bad = (m) => problems.push(m);
 const EXPECTED = [
   'Button', 'TextField', 'TextArea', 'Checkbox', 'RadioGroup', 'Switch', 'Select', 'ComboBox',
   'Modal', 'DialogTrigger', 'Tabs', 'TabList', 'Tab', 'TabPanel', 'Link', 'Breadcrumbs', 'Nav',
-  'Pagination', 'Provenance', 'AlertBanner', 'MetricTile', 'DataTable', 'IconButton', 'LegendRamp', 'Panel', 'Toolbar', 'ToolbarSpacer', 'FireDangerBadge', 'StatusBadge', 'EmptyState', 'Spinner', 'Skeleton', 'SkeletonText', 'SkeletonTable', 'SkeletonRegion',
+  'Pagination', 'Provenance', 'AlertBanner', 'MetricTile', 'DataTable', 'IconButton', 'LegendRamp', 'Panel', 'Toolbar', 'ToolbarSpacer', 'FireDangerBadge', 'HazardFill', 'hazardFillStyle', 'StatusBadge', 'EmptyState', 'Spinner', 'Skeleton', 'SkeletonText', 'SkeletonTable', 'SkeletonRegion',
   'statusBadgeStyle', 'assertRequiredTokens', 'requiredTokens',
 ];
 
@@ -47,6 +47,22 @@ try {
   if (!/<button[^>]*>.*Go<\/button>/.test(html)) bad(`server-rendered Button is not a <button> containing "Go": ${html}`);
 } catch (e) {
   bad(`server-rendering Button threw: ${e.message}`);
+}
+
+// (e) every band is told apart without colour: no hatch for No Rating, and a pattern per other band
+// that differs from every other band's, with two arms for Extreme and Catastrophic.
+try {
+  const bands = ['no-rating', 'moderate', 'high', 'extreme', 'catastrophic'];
+  const img = Object.fromEntries(bands.map((b) => [b, lib.hazardFillStyle(b).backgroundImage]));
+  if (img['no-rating'] !== undefined) bad('hazardFillStyle("no-rating") should carry no hatching');
+  const patterns = bands.slice(1).map((b) => img[b]);
+  if (patterns.some((p) => !p)) bad('a hatched band has no backgroundImage');
+  if (new Set(patterns).size !== patterns.length) bad('two bands share one hatching pattern');
+  for (const b of ['extreme', 'catastrophic']) {
+    if ((img[b] ?? '').split('repeating-linear-gradient').length !== 3) bad(`hazardFillStyle("${b}") should have two hatch arms`);
+  }
+} catch (e) {
+  bad(`hazardFillStyle threw: ${e.message}`);
 }
 
 // (d) the declarations exist and name the public API, so a broken tsc step cannot pass quietly.
