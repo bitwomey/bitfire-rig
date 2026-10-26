@@ -15,8 +15,8 @@ export type ToolbarProps = {
 export function Toolbar({ children, variant = 'docked', label, className }: ToolbarProps) {
   const shell =
     variant === 'overlay'
-      ? 'bg-surface-raised shadow-panel rounded-lg z-[var(--z-map-overlay)] p-1'
-      : 'bg-surface-raised border-b border-hairline px-2 py-1';
+      ? 'bg-surface-raised shadow-[var(--shadow-panel)] rounded-lg z-[var(--z-map-overlay)] p-1'
+      : 'bg-surface-raised border-b border-border-hairline px-2 py-1';
 
   return (
     <RACToolbar
