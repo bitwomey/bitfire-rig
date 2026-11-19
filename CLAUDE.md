@@ -102,3 +102,8 @@ reintroduce them.
 Do one issue per branch. If you find a second problem while working, say so
 and open an issue for it rather than widening the PR. A PR that fixes the
 thing it says it fixes is reviewable; one that fixes four things is not.
+
+## Where work happens (Ben's rule, 2026-11-19)
+
+- All Claude work lives under `C:\Projects` (throwaway files go in the session scratchpad or `%TEMP%`). Never create folders or files on the `C:\` root.
+- Anything you create for testing, review checkouts, probes, scripts or coverage output (for example `NODE_V8_COVERAGE`) is yours to delete when the task finishes. Remove git worktrees you added. Leave nothing behind.
